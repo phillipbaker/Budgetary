@@ -24,30 +24,22 @@ import SwiftUI
 
 struct CurrencyTextField: UIViewRepresentable {
     @Binding var text: String
-    let category: CategoryPresentation
-    let monthYear: MonthYear
     let currencyCode: String
-
     let onTextChanged: ((String) -> Void)?
-    let onUpdateAssignedValue: () -> Void
+    let onUpdateAssignedAmount: () -> Void
     
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
+        textField.text = text
         textField.textAlignment = .right
         textField.font = .preferredFont(forTextStyle: .subheadline)
-        textField.text = text
         textField.delegate = context.coordinator
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textIsChanging), for: .editingChanged)
-        
-        let hostingController = UIHostingController(
-            rootView: BudgetaryNumberPad(
-                target: textField,
-                cancel: { text = context.coordinator.lastCommittedText }
-            )
-        )
-        textField.inputView = hostingController.view
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-
+        textField.inputView = UIHostingController(rootView: BudgetaryNumberPad(
+            target: textField,
+            cancel: { text = context.coordinator.lastCommittedText }
+        )).view
+        textField.inputView?.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }
     
@@ -60,38 +52,31 @@ struct CurrencyTextField: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return Coordinator(
             text: $text,
-            category: category,
-            monthYear: monthYear,
             currencyCode: currencyCode,
             onTextChanged: onTextChanged,
-            onUpdateAssignedValue: onUpdateAssignedValue
+            onUpdateAssignedAmount: onUpdateAssignedAmount
         )
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
         @Binding var text: String
-        let category: CategoryPresentation
-        let monthYear: MonthYear
         let currencyCode: String
-        private var isFirstKeyPress = true
         let onTextChanged: ((String) -> Void)?
-        let onUpdateAssignedValue: () -> Void
+        let onUpdateAssignedAmount: () -> Void
+        
         var lastCommittedText: String
+        private var isFirstKeyPress = true
         
         init(
             text: Binding<String>,
-            category: CategoryPresentation,
-            monthYear: MonthYear,
             currencyCode: String,
             onTextChanged: ((String) -> Void)?,
-            onUpdateAssignedValue: @escaping () -> Void
+            onUpdateAssignedAmount: @escaping () -> Void
         ) {
             self._text = text
-            self.category = category
-            self.monthYear = monthYear
             self.currencyCode = currencyCode
             self.onTextChanged = onTextChanged
-            self.onUpdateAssignedValue = onUpdateAssignedValue
+            self.onUpdateAssignedAmount = onUpdateAssignedAmount
             self.lastCommittedText = text.wrappedValue
         }
         
@@ -112,7 +97,7 @@ struct CurrencyTextField: UIViewRepresentable {
         }
         
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            onUpdateAssignedValue()
+            onUpdateAssignedAmount()
             textField.resignFirstResponder()
             return true
         }

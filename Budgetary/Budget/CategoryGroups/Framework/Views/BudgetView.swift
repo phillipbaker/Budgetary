@@ -170,7 +170,6 @@ struct BudgetView: View {
                                     monthYear: budget.monthYear,
                                     category: category,
                                     intent: intent,
-                                    destination: destination,
                                     assignedValues: $assignedValues
                                 )
                             }

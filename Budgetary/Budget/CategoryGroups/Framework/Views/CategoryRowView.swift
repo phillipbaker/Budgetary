@@ -14,7 +14,6 @@ struct CategoryRowView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     let intent: (BudgetIntent) -> Void
-    let destination: (BudgetViewModel.Destination) -> Void
     
     @Binding var assignedValues: [String: String]
     
@@ -56,7 +55,6 @@ struct CategoryRowView: View {
                             monthYear: monthYear,
                             currencyCode: "GBP",
                             intent: intent,
-                            destination: destination,
                             assignedValues: $assignedValues,
                             isTextFieldFocused: _isTextFieldFocused
                         )
@@ -96,9 +94,6 @@ struct CategoryRowView: View {
             }
         }
         .tint(.primary)
-//        .sheet(item: $destination) { category in
-//            CategoryRowDetailView(category: category)
-//        }
     }
     
     var isXL: Bool {
@@ -115,7 +110,6 @@ struct CategoryRowView: View {
         monthYear: .currentMonthYear,
         category: .cellPhones,
         intent: { _ in },
-        destination: { _ in },
         assignedValues: .constant([:])
     )
     .padding()

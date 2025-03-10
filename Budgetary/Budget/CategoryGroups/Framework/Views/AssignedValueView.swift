@@ -12,7 +12,6 @@ struct AssignMoneyView: View {
     let monthYear: MonthYear
     let currencyCode: String
     let intent: (BudgetIntent) -> Void
-    let destination: (BudgetViewModel.Destination) -> Void
     
     @Binding var assignedValues: [String: String]
     
@@ -25,22 +24,22 @@ struct AssignMoneyView: View {
             .foregroundStyle(.red)
             .hidden()
             .overlay(alignment: .trailing) {
-                CurrencyTextField(
-                    text: bindingFor(monthYear: monthYear, category: category),
-                    category: category,
-                    monthYear: monthYear,
-                    currencyCode: currencyCode,
-                    onTextChanged: { newValue in
-                        updateLocalValue(newValue)
-                    },
-                    onUpdateAssignedValue: {
-                        updateAssignedAmount()
-                    }
-                )
-                .id(monthYear)
-                .offset(x: -4)
-                .fontWeight(.semibold)
-                .focused($isTextFieldFocused)
+                VStack {
+                    CurrencyTextField(
+                        text: bindingFor(monthYear: monthYear, category: category),
+                        currencyCode: currencyCode,
+                        onTextChanged: { newValue in
+                            updateLocalValue(newValue)
+                        },
+                        onUpdateAssignedAmount: {
+                            updateAssignedAmount()
+                        }
+                    )
+                    .id(monthYear)
+                    .offset(x: -4)
+                    .fontWeight(.semibold)
+                    .focused($isTextFieldFocused)
+                }
             }
             .frame(minWidth: 112, alignment: .trailing)
             .font(.subheadline)
@@ -65,9 +64,5 @@ struct AssignMoneyView: View {
         let key = "\(monthYear.description)-\(category.id.description)"
         guard let newValue = assignedValues[key] else { return }
         intent(.updateAssignedAmount(categoryId: self.category.id, monthYear: monthYear, amount: newValue))
-    }
-    
-    private func initializeAssignedValues() {
-        assignedValues.removeAll()
     }
 }
