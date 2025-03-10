@@ -68,7 +68,7 @@ struct MonthPickerView: View {
                 }
             }
         }
-        .frame(maxWidth: 300)
+        .frame(maxWidth: 400)
         .padding()
         .background(Color(.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -83,8 +83,10 @@ struct MonthPickerView: View {
             DragGesture()
                 .onEnded { value in
                     if value.translation.width > 50 {
+                        guard !(year == months.first?.monthYear.year) else { return }
                         self.decrementYear()
                     } else if value.translation.width < -50 {
+                        guard !(year == months.last?.monthYear.year) else { return }
                         self.incrementYear()
                     }
                 }

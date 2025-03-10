@@ -24,24 +24,3 @@ struct NumberView: View {
             .padding(.vertical, 2)
     }
 }
-
-struct AssignedValueView: View {
-    @Binding var text: String
-    let currencyCode: String
-    
-    var body: some View {
-        Text("£9,999,999.99")
-            .foregroundStyle(.red)
-            .hidden()
-            .overlay(alignment: .trailing) {
-                CurrencyTextField(text: $text, currencyCode: currencyCode)
-                    .offset(x: -4)
-                    .background(.red)
-            }
-            .frame(minWidth: 112, alignment: .trailing)
-            .font(.subheadline)
-            .fontWeight(.semibold)
-            .padding(.vertical, 2)
-            .background(.green)
-    }
-}

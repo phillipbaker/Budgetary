@@ -7,24 +7,31 @@
 
 import Dependencies
 
-class BudgetLocalDatagateway: BudgetDataSourceLocal {
+actor BudgetLocalDatagateway: BudgetDataSourceLocal {
     var dao: BudgetDao
     var mapper: BudgetMapperPlain
+    
+    private let (stream, continuation) = AsyncStream.makeStream(of: BudgetPlain.self, bufferingPolicy: .bufferingNewest(1))
     
     init(dao: BudgetDao, mapper: BudgetMapperPlain) {
         self.dao = dao
         self.mapper = mapper
+        Task { await startStreaming() }
+    }
+    
+    func startStreaming() async {
+        for await budgetPlain in dao.streamBudget() {
+            //            let budgetPlain = mapper.mapDbToPlain(budgetDb: budgetDb)
+            continuation.yield(budgetPlain)
+        }
+        
+        continuation.onTermination = { @Sendable reason in
+            // Handle any necessary cleanup
+            print("budgets gateway stream terminated with reason: ", reason)
+        }
     }
     
     func budgetStream() async -> AsyncStream<BudgetPlain> {
-        let (stream, continuation) = AsyncStream.makeStream(of: BudgetPlain.self)
-        
-        for await budgetPlain in await dao.streamBudget() {
-            //            let budgetPlain = mapper.mapDbToPlain(budgetDb: budgetDb)
-            continuation.yield(budgetPlain)
-            return stream
-        }
-        continuation.finish()
         return stream
     }
     

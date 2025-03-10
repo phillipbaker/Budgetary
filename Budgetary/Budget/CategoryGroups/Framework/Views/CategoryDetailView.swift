@@ -38,14 +38,15 @@ final class CategoryDetailModel: Identifiable {
 }
 
 struct CategoryDetailView: View {
-    @Bindable var model: CategoryDetailModel
+//    @Bindable var model: CategoryDetailModel
+//    let category: CategoryPresentation
     
     var body: some View {
         NavigationStack {
             List {
                 Section {
                     VStack(spacing: 16) {
-                        Text("How much do you need for \(model.category.name)?")
+                        Text("How much do you need for [insery name here]?")
                             .font(.headline)
                         
                         Text("When you create target, we’ll let you know how much money to set aside to stay on track over time.")
@@ -53,7 +54,7 @@ struct CategoryDetailView: View {
                             .foregroundStyle(.secondary)
                         
                         Button {
-                            model.createTargetButtonTapped()
+//                            model.createTargetButtonTapped()
                         } label: {
                             Text("Create Target")
                                 .font(.headline)
@@ -69,7 +70,7 @@ struct CategoryDetailView: View {
                         .fontWeight(.semibold)
                 }
                 Section {
-                    Text(model.category.name)
+                    Text("name")
                 } header: {
                     Text("Notes")
                         .textCase(.none)
@@ -79,34 +80,34 @@ struct CategoryDetailView: View {
                 
                 Section {
                     Button {
-                        model.renameCategoryButtonTapped()
+//                        model.renameCategoryButtonTapped()
                     } label: {
                         Label("Rename Category", systemImage: "square.and.pencil")
                             .symbolVariant(.fill)
                     }
                     
                     Button {
-                        model.hideCategoryButtonTapped()
+//                        model.hideCategoryButtonTapped()
                     } label: {
                         Label("Hide Category", systemImage: "eye.slash")
                             .symbolVariant(.fill)
                     }
                     
                     Button {
-                        model.deleteCategoryButtonTapped()
+//                        model.deleteCategoryButtonTapped()
                     } label: {
                         Label("Delete Category", systemImage: "trash")
                             .symbolVariant(.fill)
                     }
                 }
             }
-            .navigationTitle(model.category.name)
+            .navigationTitle("name")
             .navigationBarTitleDisplayMode(.inline)
             
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        model.doneEditingButtonTapped()
+//                        model.doneEditingButtonTapped()
                     } label: {
                         Text("Done")
                             .fontWeight(.semibold)
@@ -118,5 +119,5 @@ struct CategoryDetailView: View {
 }
 
 #Preview {
-    CategoryDetailView(model: CategoryDetailModel(category: .cellPhones))
+    CategoryDetailView()
 }

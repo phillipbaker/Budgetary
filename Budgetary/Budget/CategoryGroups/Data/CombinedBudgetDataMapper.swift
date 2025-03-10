@@ -5,7 +5,7 @@
 //  Created by Phillip Baker on 04/11/2024.
 //
 
-public class CombinedBudgetDataMapper {
+final public class CombinedBudgetDataMapper: Sendable {
     func map(
         budgetPlain: BudgetPlain,
         payeesPlain: [PayeePlain],

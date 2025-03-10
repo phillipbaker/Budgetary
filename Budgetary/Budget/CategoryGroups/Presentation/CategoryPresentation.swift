@@ -15,11 +15,14 @@ public struct CategoryPresentation: Equatable, Identifiable {
     let assigned: [MonthYear: AssignedPresentation]
     let activity: [MonthYear: ActivityPresentation]
     let available: [MonthYear: AvailablePresentation]
-//    let monthTotals: [MonthYear: CategoryMonthTotals]
+    
+    init(id: String, name: String, notes: String, isHidden: Bool, assigned: [MonthYear : AssignedPresentation], activity: [MonthYear : ActivityPresentation], available: [MonthYear : AvailablePresentation]) {
+        self.id = id
+        self.name = name
+        self.notes = notes
+        self.isHidden = isHidden
+        self.assigned = assigned
+        self.activity = activity
+        self.available = available
+    }
 }
-//
-//public struct CategoryMonthTotals: Equatable {
-//    let assigned: String
-//    let activity: String
-//    let available: String
-//}

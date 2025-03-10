@@ -13,34 +13,24 @@ class BudgetDao {
     private var container: ModelContainer
     let mapper: BudgetMapperPlain
     
+    private let (stream, continuation) = AsyncStream.makeStream(of: BudgetPlain.self)
+    
     init(container: ModelContainer, mapper: BudgetMapperPlain) {
         self.container = container
         self.mapper = mapper
+        startStreaming()
     }
     
-    @MainActor
+    func startStreaming() {
+        continuation.yield(mapper.mapDbToPlain(budgetDb: mock))
+    }
+
     func streamBudget() -> AsyncStream<BudgetPlain> {
-        let (stream, continuation) = AsyncStream.makeStream(of: BudgetPlain.self)
-        
-//        let budget = FetchDescriptor<BudgetDb>()
-        
-//        do {
-//            let results = try container.mainContext.fetch(budget)
-//            
-//            for result in results {
-//                let budgetPlain = mapper.mapDbToPlain(budgetDb: result)
-//                continuation.yield(budgetPlain)
-//            }
-            
-            continuation.yield(mapper.mapDbToPlain(budgetDb: .mock))
-//        } catch {
-//            print(error)
-//        }
         return stream
     }
     
     func findBudget(by id: String) -> BudgetDb {
-        return .mock
+        return mock
     }
     
     func create(budget: BudgetDb) {
@@ -54,4 +44,6 @@ class BudgetDao {
     func delete(budget: BudgetDb) {
         
     }
+    
+    private var mock: BudgetDb = .mock
 }

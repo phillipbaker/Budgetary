@@ -12,4 +12,5 @@ public enum BudgetIntent: Sendable {
     case filterButtonTapped(monthYear: MonthYear, filterId: String)
     case monthPickerMonthSelected(monthYear: MonthYear, filterId: String)
     case clearFilterButtonTapped(monthYear: MonthYear)
+    case updateAssignedAmount(categoryId: String, monthYear: MonthYear, amount: String)
 }

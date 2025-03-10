@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct CategoryRowView: View {
-    var monthYear: MonthYear
-    var category: CategoryPresentation
+    let monthYear: MonthYear
+    let category: CategoryPresentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @State var destination: Destination? = nil
-    @State var text: String
-
-    enum Destination {
-        case detail(CategoryPresentation)
-    }
+    let intent: (BudgetIntent) -> Void
+    let destination: (BudgetViewModel.Destination) -> Void
+    
+    @Binding var assignedValues: [String: String]
+    
+    @FocusState private var isTextFieldFocused: Bool
     
     var body: some View {
         let rowLayout = isXL
@@ -30,7 +30,7 @@ struct CategoryRowView: View {
         : AnyLayout(HStackLayout(spacing: 4))
         
         Button {
-            destination = .detail(category)
+            isTextFieldFocused = true
         } label: {
             rowLayout {
                 Text(category.name)
@@ -51,10 +51,17 @@ struct CategoryRowView: View {
                                 .font(.caption)
                         }
 
-                        AssignedValueView(text: $text, currencyCode: "GBP")
+                        AssignMoneyView(
+                            category: category,
+                            monthYear: monthYear,
+                            currencyCode: "GBP",
+                            intent: intent,
+                            destination: destination,
+                            assignedValues: $assignedValues,
+                            isTextFieldFocused: _isTextFieldFocused
+                        )
                     }
-                    
-                    
+
                     if horizontalSizeClass == .regular {
                         VStack(alignment: .trailing, spacing: 4) {
                             if isXL {
@@ -87,7 +94,6 @@ struct CategoryRowView: View {
                     }
                 }
             }
-
         }
         .tint(.primary)
 //        .sheet(item: $destination) { category in
@@ -105,6 +111,12 @@ struct CategoryRowView: View {
 }
 
 #Preview {
-    CategoryRowView(monthYear: .currentMonthYear, category: .cellPhones, text: "12.34")
-        .padding()
+    CategoryRowView(
+        monthYear: .currentMonthYear,
+        category: .cellPhones,
+        intent: { _ in },
+        destination: { _ in },
+        assignedValues: .constant([:])
+    )
+    .padding()
 }

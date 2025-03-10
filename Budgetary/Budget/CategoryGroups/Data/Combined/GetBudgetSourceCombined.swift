@@ -4,16 +4,17 @@
 //
 //  Created by Phillip Baker on 04/11/2024.
 //
-
 import AsyncAlgorithms
 import Dependencies
 
-public class GetBudgetSourceCombined: GetBudgetSource {
+final public class GetBudgetSourceCombined: GetBudgetSource {
     let budgetDataSourceLocal: BudgetDataSourceLocal
     let payeesDataSourceLocal: PayeesDataSourceLocal
     let budgetAccountsDataSourceLocal: BudgetAccountsDataSourceLocal
     let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal
     let mapper: CombinedBudgetDataMapper
+    
+    let (combinedBudgetDataStream, continuation) = AsyncStream.makeStream(of: CombinedBudgetData.self, bufferingPolicy: .bufferingNewest(1))
     
     public init(
         budgetDataSourceLocal: BudgetDataSourceLocal,
@@ -27,26 +28,31 @@ public class GetBudgetSourceCombined: GetBudgetSource {
         self.budgetAccountsDataSourceLocal = budgetAccountsDataSourceLocal
         self.categoryGroupsDataSourceLocal = categoryGroupsDataSourceLocal
         self.mapper = mapper
+        Task { await startStreaming() }
     }
     
-    public func budgetData() async -> AsyncStream<CombinedBudgetData> {
+    func startStreaming() async {
         let budgetStream = await budgetDataSourceLocal.budgetStream()
         let payeesStream = await payeesDataSourceLocal.payeesStream()
         let budgetAccountsStream = await budgetAccountsDataSourceLocal.budgetAccountsStream()
         let categoryGroupsStream = await categoryGroupsDataSourceLocal.categoryGroupsStream()
         
-        let (combinedBudgetDataStream, continuation) = AsyncStream.makeStream(of: CombinedBudgetData.self)
-        
-        for await ((budgetPlain, payeesPlain, budgetAccountsPlain), categoryGroupsPlain) in combineLatest(combineLatest(budgetStream, payeesStream, budgetAccountsStream), categoryGroupsStream) {
+        for await ((budgetPlain, payeesPlain, categoryGroupsPlain), budgetAccountsPlain) in combineLatest(combineLatest(budgetStream, payeesStream, categoryGroupsStream), budgetAccountsStream) {
             continuation.yield(mapper.map(
                 budgetPlain: budgetPlain,
                 payeesPlain: payeesPlain,
                 budgetAccountsPlain: budgetAccountsPlain,
                 categoryGroupsPlain: categoryGroupsPlain
             ))
-            return combinedBudgetDataStream
         }
-        continuation.finish()
+        
+        continuation.onTermination = { @Sendable reason in
+            // Handle any necessary cleanup
+            print("combinedStream terminated with reason: ", reason)
+        }
+    }
+    
+    public func budgetData() async -> AsyncStream<CombinedBudgetData> {
         return combinedBudgetDataStream
     }
 }

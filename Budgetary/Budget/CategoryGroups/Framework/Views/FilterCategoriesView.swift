@@ -16,43 +16,50 @@ struct FilterCategoriesView: View {
     let destination: (BudgetViewModel.Destination) -> Void
     
     var body: some View {
-        ScrollView(.horizontal) {
-            LazyHStack {
-                ForEach(CategoryFilterPresentation.allCases) { filter in
-                    Button {
-                        filterIntent(filter.id)
+        ScrollViewReader { value in
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    ForEach(CategoryFilterPresentation.allCases) { filter in
+                        Button {
+                            filterIntent(filter.id)
+                        } label: {
+                            Text(filter.rawValue)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 12)
+                                .foregroundStyle(foreground(for: filter))
+                                .background(background(for: filter))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                    }
+                    
+                    Menu {
+                        Button {
+                            destination(.manageFilters)
+                        } label: {
+                            Label("Manage Filters", systemImage: "pencil")
+                        }
+                        
+                        Button {
+                            destination(.newFilter)
+                        } label: {
+                            Label("New Filter", systemImage: "plus.circle")
+                        }
                     } label: {
-                        Text(filter.rawValue)
-                            .font(.subheadline)
+                        Image(systemName: "line.3.horizontal.decrease.circle")
+                            .font(.title3)
+                            .tint(.primary)
                             .fontWeight(.semibold)
                             .padding(.vertical, 6)
                             .padding(.horizontal, 12)
-                            .foregroundStyle(foreground(for: filter))
-                            .background(background(for: filter))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .foregroundStyle(.secondary.opacity(0.8))
                     }
                 }
-                
-                Menu {
-                    Button {
-                        destination(.manageFilters)
-                    } label: {
-                        Label("Manage Filters", systemImage: "pencil")
-                    }
-                    
-                    Button {
-                        destination(.newFilter)
-                    } label: {
-                        Label("New Filter", systemImage: "plus.circle")
-                    }
-                } label: {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
-                        .font(.title3)
-                        .tint(.primary)
-                        .fontWeight(.semibold)
-                        .padding(.vertical, 6)
-                        .padding(.horizontal, 12)
-                        .foregroundStyle(.secondary.opacity(0.8))
+            }
+            .onChange(of: filter) {
+                withAnimation {
+                    value.scrollTo(filter.id, anchor: .trailing)
                 }
             }
         }

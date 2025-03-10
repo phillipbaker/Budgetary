@@ -17,4 +17,8 @@ extension MonthYear {
     static var oct2024: MonthYear {
         MonthYear(month: 10, year: 2024)
     }
+    
+    static var apr2025: MonthYear {
+        MonthYear(month: 4, year: 2025)
+    }
 }

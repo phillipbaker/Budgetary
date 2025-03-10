@@ -35,7 +35,7 @@ struct CategoryGroupRowView: View {
                     Text("Assigned")
                         .offset(x: -4)
                         .font(.caption)
-                    NumberView(number: group.assignedTotal[monthYear] ?? "")
+                    NumberView(number: group.assignedTotal[monthYear] ?? "Error")
                 }
                 
                 if horizontalSizeClass == .regular {
@@ -43,7 +43,7 @@ struct CategoryGroupRowView: View {
                         Text("Activity")
                             .offset(x: -4)
                             .font(.caption)
-                        NumberView(number: group.activityTotal[monthYear] ?? "")
+                        NumberView(number: group.activityTotal[monthYear] ?? "Error")
                     }
                 }
                 

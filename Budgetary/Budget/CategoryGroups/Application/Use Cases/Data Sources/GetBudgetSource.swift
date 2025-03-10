@@ -7,6 +7,6 @@
 
 import Dependencies
 
-public protocol GetBudgetSource {
+public protocol GetBudgetSource: Sendable {
     func budgetData() async -> AsyncStream<CombinedBudgetData>
 }

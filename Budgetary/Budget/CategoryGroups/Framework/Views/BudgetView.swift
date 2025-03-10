@@ -14,7 +14,7 @@ struct BudgetRootView: View {
     init(viewModel: BudgetViewModel) {
         self.viewModel = viewModel
         viewModel.handle(intent: .getBudget(
-            monthYear: .oct2024,
+            monthYear: .currentMonthYear,
             filterId: CategoryFilter.allCategories.id))
     }
     
@@ -50,9 +50,19 @@ struct BudgetRootView: View {
                                                 viewModel.handle(destination: nil)
                                             }
                                         )
+                                        .overlay(
+                                            Rectangle()
+                                                .frame(height: 1) // Border height
+                                                .foregroundColor(Color.gray.opacity(0.5))
+                                                .offset(y: -1),
+                                            alignment: .top
+                                        )
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: -2)
+                                        .edgesIgnoringSafeArea(.bottom)
+                                        .background(Color.black.opacity(0.3)) // Background overlay for sheet effect
                                     }
                             }
-
+                            
                             if budget.monthYear != .currentMonthYear {
                                 TodayButton(
                                     intent: { intent in viewModel.handle(intent: intent) },
@@ -66,12 +76,15 @@ struct BudgetRootView: View {
                         BudgetMenu(destination: { destination in viewModel.handle(destination: destination)} )
                     }
                 }
-//                .sheet(item: $viewModel.destination.categoryDetail) { $detailModel in
-//                    CategoryDetailView(model: detailModel)
-//                }
-//                .sheet(item: $viewModel.destination.editCategories) {
-//                    EditCategoriesView(viewModel: <#EditCategoriesViewModel#>)
-//                }
+                //                .sheet(isPresented: Binding($viewModel.destination.moveMoney), onDismiss: {  }) {
+                //                    MoveMoneyView()
+                //                }
+                //                .sheet(isPresented: Binding($viewModel.destination.categoryDetail)) {
+                //                    CategoryDetailView()
+                //                }
+                //                .sheet(item: $viewModel.destination.editCategories) {
+                //                    EditCategoriesView(viewModel: <#EditCategoriesViewModel#>)
+                //                }
                 //
                 //            .sheet(item: $viewModel.destination.assignMoney) {
                 //                AssignMoneyView(monthYear: budget.monthYear, categoryGroups: <#[CategoryGroupPresentation]#>, readyToAssign: <#ReadyToAssignPresentation#>)
@@ -101,30 +114,33 @@ struct BudgetView: View {
     let intent: (BudgetIntent) -> Void
     var destination: (BudgetViewModel.Destination?) -> Void
     
+    @State private var assignedValues: [String: String] = [:]
+    @State private var keyboardHeight: CGFloat = 0
+    
     var body: some View {
         List {
             Section {
                 // TODO: Fix need for this ?? default value
                 ReadyToAssignView(readyToAssign: budget.readyToAssign[budget.monthYear] ?? ReadyToAssignPresentation(
-                            readyToAssignFromLastMonth: "",
-                            cashOverspendingFromLastMonth: "",
-                            inflowThisMonth: "",
-                            assignedThisMonth: "",
-                            assignedInFuture: "",
-                            readyToAssignThisMonth: "",
-                            lightModeForegroundColor: .red,
-                            darkModeForegroundColor: .red,
-                            lightModeBackgroundColor: .red,
-                            darkModeBackgroundColor: .red,
-                            message: "",
-                            destination: .assignMoney
-                        ),
-                    buttonAction: {
-                        destination(
-                            budget
-                                .readyToAssign[budget.monthYear]?.destination
-                        )
-                    }
+                    readyToAssignFromLastMonth: "",
+                    cashOverspendingFromLastMonth: "",
+                    inflowThisMonth: "",
+                    assignedThisMonth: "",
+                    assignedInFuture: "",
+                    readyToAssignThisMonth: "",
+                    lightModeForegroundColor: .red,
+                    darkModeForegroundColor: .red,
+                    lightModeBackgroundColor: .red,
+                    darkModeBackgroundColor: .red,
+                    message: "",
+                    destination: .assignMoney
+                ),
+                                  buttonAction: {
+                    destination(
+                        budget
+                            .readyToAssign[budget.monthYear]?.destination
+                    )
+                }
                 )
             }
             .padding(.horizontal)
@@ -144,44 +160,54 @@ struct BudgetView: View {
             .listRowBackground(Color(.systemGroupedBackground))
             
             Section {
-                ForEach(budget.categoryGroups) { group in
-                    Section {
-                        ForEach(group.categories) { category in
-                            CategoryRowView(
-                                monthYear: budget.monthYear,
-                                category: category,
-                                text: category.assigned[budget.monthYear]?.assignedThisMonth ?? "0.00"
-                            )
+                if budget.categoryGroups.isEmpty {
+                    CategoryListEmptyView(filter: budget.filter, monthYear: budget.monthYear, intent: intent)
+                } else {
+                    ForEach(budget.categoryGroups) { group in
+                        Section {
+                            ForEach(group.categories) { category in
+                                CategoryRowView(
+                                    monthYear: budget.monthYear,
+                                    category: category,
+                                    intent: intent,
+                                    destination: destination,
+                                    assignedValues: $assignedValues
+                                )
+                            }
+                            .transition(.move(edge: .top))
+                        } header: {
+                            CategoryGroupRowView(group: group, monthYear: budget.monthYear)
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: dynamicTypeSize >= .xLarge && horizontalSize == .compact ? .trailing : .leading
+                                )
+                                .listRowBackground(Color(.systemGroupedBackground))
+                                .listSectionSeparator(.hidden)
                         }
-                        .transition(.move(edge: .top))
-                    } header: {
-                        CategoryGroupRowView(group: group, monthYear: budget.monthYear)
-                            .frame(
-                                maxWidth: .infinity,
-                                alignment: dynamicTypeSize >= .xLarge && horizontalSize == .compact ? .trailing : .leading
-                            )
-                            .listRowBackground(Color(.systemGroupedBackground))
-                            .listSectionSeparator(.hidden)
                     }
                 }
             }
             
             Section {
                 if budget.filter != .allCategories && !budget.categoryGroups.isEmpty {
-                    Button("Clear Filter", action: { intent(.clearFilterButtonTapped(monthYear: budget.monthYear)) })
+                    Button("Clear Filter") {
+                        intent(.clearFilterButtonTapped(monthYear: budget.monthYear))
+                    }
                 }
             }
         }
         .listStyle(.grouped)
         .listSectionSpacing(16)
         .contentMargins(.top, 12)
-        
+        .safeAreaPadding(.bottom, 24) // causing a jolt on keyboard dismiss
         .gesture(
             DragGesture()
                 .onEnded { value in
                     if value.translation.width > 50 {
+                        guard budget.monthYear > budget.start && budget.monthYear <= budget.end else { return }
                         intent(.budgetSwipedLeftGesture(monthYear: budget.monthYear, filterId: budget.filter.id))
                     } else if value.translation.width < -50 {
+                        guard budget.monthYear >= budget.start && budget.monthYear < budget.end else { return }
                         intent(.budgetSwipedRightGesture(monthYear: budget.monthYear, filterId: budget.filter.id))
                     }
                 }

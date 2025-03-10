@@ -26,20 +26,3 @@ struct ReadyToAssignButtonLabel: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
-
-//#Preview {
-//    ReadyToAssignButtonLabel(
-//        readyToAssign: ReadyToAssignPresentation(
-//            availableToAssignFromLastMonth: <#T##String#>,
-//            cashOverspendingFromLastMonth: <#T##String#>,
-//            inflowThisMonth: <#T##String#>,
-//            assignedThisMonth: <#T##String#>,
-//            assignedInFuture: <#T##String#>,
-//            readyToAssignThisMonth: <#T##String#>,
-//            lightModeForegroundColor: <#T##Color#>,
-//            darkModeForegroundColor: <#T##Color#>,
-//            lightModeBackgroundColor: <#T##Color#>,
-//            darkModeBackgroundColor: <#T##Color#>
-//        )
-//    )
-//}

@@ -5,7 +5,7 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
-class CategoryGroupsMapperPlain {
+final class CategoryGroupsMapperPlain: Sendable {
     func mapDbToPlain(categoryGroupsDb: [CategoryGroupDb]) -> [CategoryGroupPlain] {
         return categoryGroupsDb.map { categoryGroupDb in
             mapDbToPlain(categoryGroupDb: categoryGroupDb)
@@ -48,12 +48,12 @@ class CategoryGroupsMapperPlain {
             id: categoryGroupPlain.id,
             name: categoryGroupPlain.name,
             isHidden: categoryGroupPlain.isHidden,
-            categories: mapPlainToDb(categoriePlain: categoryGroupPlain.categories)
+            categories: mapPlainToDb(categoriesPlain: categoryGroupPlain.categories)
         )
     }
     
-    func mapPlainToDb(categoriePlain: [CategoryPlain]) -> [CategoryDb] {
-        return categoriePlain.map { categoryPlain in
+    func mapPlainToDb(categoriesPlain: [CategoryPlain]) -> [CategoryDb] {
+        return categoriesPlain.map { categoryPlain in
             mapPlainToDb(categoryPlain: categoryPlain)
         }
     }

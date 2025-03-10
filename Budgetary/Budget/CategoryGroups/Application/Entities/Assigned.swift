@@ -14,4 +14,14 @@ public struct Assigned: Equatable, Hashable, Sendable {
     let spentLastMonth: Decimal
     let averageAssigned: Decimal
     let averageSpent: Decimal
+    
+    func updateAssignedThisMonth(to amount: Decimal) -> Assigned {
+        return Assigned(
+            assignedThisMonth: amount,
+            assignedLastMonth: assignedLastMonth,
+            spentLastMonth: spentLastMonth,
+            averageAssigned: averageAssigned,
+            averageSpent: averageSpent
+        )
+    }
 }

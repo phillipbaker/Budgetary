@@ -5,10 +5,10 @@
 //  Created by Phillip Baker on 04/11/2024.
 //
 
-public protocol BudgetDataSourceLocal {
+public protocol BudgetDataSourceLocal: Sendable {
     func budgetStream() async -> AsyncStream<BudgetPlain>
-    func findBudget(by id: String) -> BudgetPlain
-    func create(budget: BudgetPlain)
-    func update(budget: BudgetPlain)
-    func delete(budget: BudgetPlain)
+    func findBudget(by id: String) async -> BudgetPlain
+    func create(budget: BudgetPlain) async
+    func update(budget: BudgetPlain) async
+    func delete(budget: BudgetPlain) async
 }

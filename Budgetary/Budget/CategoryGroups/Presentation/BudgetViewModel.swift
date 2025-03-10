@@ -13,12 +13,13 @@ import SwiftUINavigation
 public final class BudgetViewModel {
     @ObservationIgnored private var stateMapper: BudgetStateMapper
     @ObservationIgnored private var getBudgetUseCase: GetBudget
+    @ObservationIgnored private var assignMoneyUseCase: AssignMoney
     
     var state: BudgetState
     var destination: Destination?
     
     @CasePathable
-    enum Destination: String, Identifiable {
+    enum Destination: String {
         case monthPicker
         case assignMoney
         case editCategories
@@ -27,6 +28,8 @@ public final class BudgetViewModel {
         case newFilter
         case manageFilters
         case categoryDetail
+        case autoAssign
+        case moveMoney
         
         var id: String { rawValue }
     }
@@ -35,11 +38,13 @@ public final class BudgetViewModel {
         state: BudgetState = .loading,
         stateMapper: BudgetStateMapper,
         getBudgetUseCase: GetBudget,
+        assignMoneyUseCase: AssignMoney,
         destination: Destination? = nil
     ) {
         self.state = state
         self.stateMapper = stateMapper
         self.getBudgetUseCase = getBudgetUseCase
+        self.assignMoneyUseCase = assignMoneyUseCase
         self.destination = destination
     }
 
@@ -59,6 +64,8 @@ public final class BudgetViewModel {
                 await getBudget(for: monthYear, filteredBy: filterId)
             case let .clearFilterButtonTapped(monthYear):
                 await getBudget(for: monthYear, filteredBy: CategoryFilter.allCategories.id)
+            case let .updateAssignedAmount(categoryId: categoryId, monthYear: monthYear, amount: amount):
+                await assignMoneyUseCase.update(assignedValue: amount, to: categoryId, for: monthYear)
             }
         }
     }
@@ -81,37 +88,25 @@ public final class BudgetViewModel {
             self.destination = .manageFilters
         case .categoryDetail:
             self.destination = .categoryDetail
+        case .autoAssign:
+            self.destination = .autoAssign
+        case .moveMoney:
+            self.destination = .moveMoney
         case .none:
             self.destination = nil
         }
     }
-
+    
+    // need some task mangement here? Don’t want to add a new listener every time this is called...
     private func getBudget(for monthYear: MonthYear, filteredBy filterId: String) async {
-        for await budget in await getBudgetUseCase.budget(for: monthYear, filteredBy: filterId) {
+        for await budget in getBudgetUseCase.budget(for: monthYear, filteredBy: filterId) {
             // not handling errors
             // need to make it throw and catch all the way through the app
             // or wrap budget in a result type with error adn handle that here
             // switch result
-            // case rror self.state = .error(typeOfError)
+            // case error self.state = .error(typeOfError)
             // case success self.state = self.stateMapper.map(budget: budget)
             self.state = self.stateMapper.map(budget: budget)
         }
     }
 }
-
-//actor IntentHandler {
-//    func handle(intent: BudgetIntent, viewModel: BudgetViewModel) async {
-//        switch intent {
-//        case let .getBudget(monthYear, filterId):
-//            await viewModel.getBudget(for: monthYear, filteredBy: filterId)
-//        case let .budgetSwipedLeftGesture(monthYear, filterId):
-//            await viewModel.handle(intent: .budgetSwipedLeftGesture(monthYear: monthYear, filterId: filterId))
-//        case let .budgetSwipedRightGesture(monthYear, filterId):
-//            await viewModel.handle(intent: .budgetSwipedRightGesture(monthYear: monthYear, filterId: filterId))
-//        case let .filterButtonTapped(monthYear, filterId):
-//            await viewModel.handle(intent: .filterButtonTapped(monthYear: monthYear, id: filterId))
-//        case let .clearFilterButtonTapped(monthYear):
-//            await viewModel.handle(intent: .clearFilterButtonTapped(monthYear: monthYear))
-//        }
-//    }
-//}

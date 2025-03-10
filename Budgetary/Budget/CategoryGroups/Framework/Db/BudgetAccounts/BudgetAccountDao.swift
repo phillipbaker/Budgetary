@@ -11,16 +11,21 @@ import SwiftData
 
 class BudgetAccountDao {
     private var container: ModelContainer
-    let mapper = BudgetAccountsMapperPlain()
+    let mapper: BudgetAccountsMapperPlain
     
-    init(container: ModelContainer) {
+    private let (stream, continuation) = AsyncStream.makeStream(of: [BudgetAccountPlain].self)
+    
+    init(container: ModelContainer, mapper: BudgetAccountsMapperPlain) {
         self.container = container
+        self.mapper = mapper
+        startStreaming()
     }
     
-    @MainActor
+    func startStreaming() {
+        continuation.yield(mapper.mapDbToPlain(budgetAccountsDb: mock))
+    }
+    
     func streamBudgetAccounts() -> AsyncStream<[BudgetAccountPlain]> {
-        let (stream, continuation) = AsyncStream.makeStream(of: [BudgetAccountPlain].self)
-        continuation.yield(mapper.mapDbToPlain(budgetAccountsDb: .mock))
         return stream
     }
     
@@ -45,4 +50,6 @@ class BudgetAccountDao {
     func delete(budgetAccount: BudgetAccountDb) {
         
     }
+    
+    private var mock: [BudgetAccountDb] = .mock
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class BudgetMapper {
+final public class BudgetMapper: Sendable {
     // MARK: - Combined Budget Data to Budget
     
     func mapBudget(
@@ -15,7 +15,7 @@ public class BudgetMapper {
         filteredBy filter: CategoryFilter,
         from data: CombinedBudgetData
     ) -> Budget {
-        let budget = Budget(
+        return Budget(
             id: data.budgetPlain.id,
             monthYear: monthYear,
             filter: filter,
@@ -23,9 +23,8 @@ public class BudgetMapper {
             categoryGroups: mapCategoryGroups(for: monthYear, filteredBy: filter, from: data),
             settings: mapBudgetSettings(plain: data.budgetPlain.settings),
             start: mapBudgetStart(from: data),
-            end: .currentMonthYear.advanced(by: 1)
+            end: mapBudgetEnd(from: data)
         )
-        return budget
     }
     
     // MARK: - Budget Settings Plain to Entity
@@ -440,7 +439,6 @@ public class BudgetMapper {
         let transactions = data.budgetAccountsPlain.flatMap(\.transactions)
         
         for monthYear in budgetRange(from: data) {
-            print(monthYear)
             let previousMonth = monthYear.advanced(by: -1)
             
             // Inflows for monthYear
@@ -450,21 +448,12 @@ public class BudgetMapper {
                 readyToAssignFromLastMonth = lastMonth.availableToAssignFromLastMonth + lastMonth.inflowThisMonth - lastMonth.assignedThisMonth - lastMonth.cashOverspendingLastMonth
             }
             
-//            let readyToAssignFromLastMonth = (readyToAssign[previousMonth]?.availableToAssignFromLastMonth ?? 0.00) + (readyToAssign[previousMonth]?.inflowThisMonth ?? 0.00) - readyToAssign[previousMonth]?.assignedThisMonth ?? 0.00 - readyToAssign[previousMonth]?.cashOverspendingLastMonth ?? 0.00
-            print("availableToAssignFromLastMonth for \(monthYear):", readyToAssignFromLastMonth)
-            
             let inflowThisMonth = inflow(for: monthYear, from: transactions)
-            print("inflowThisMonth for \(monthYear):", inflowThisMonth)
-            
             let totalInflowsThisMonth = readyToAssignFromLastMonth + inflowThisMonth
-            print("totalInflowsThisMonth for \(monthYear):", totalInflowsThisMonth)
             
             // Outflows for monthYear
             let cashOverspendingLastMonth = cashOverspendingLastMonth(for: monthYear, from: data)
-            print("cashOverspendingLastMonth for \(monthYear):", cashOverspendingLastMonth)
             let assignedThisMonth = assignedThisMonth(for: monthYear, in: categories)
-            print("assignedThisMonth for \(monthYear):", assignedThisMonth)
-            
             let assignedInFuture: Decimal = {
                 // Calculate inflow/outflow balance for current month excluding assignedInFuture
                 let currentMonthReadyToAssignBalance = (readyToAssignFromLastMonth + inflowThisMonth) - (cashOverspendingLastMonth + assignedThisMonth)
@@ -481,14 +470,10 @@ public class BudgetMapper {
                 // Set assignedInFuture be the actual value up to the point it zeros out current month inflow/outflow
                 let assignedInFuture = min(currentMonthReadyToAssignBalance, assignedInFutureTotal)
                 
-                print("assignedInFuture for \(monthYear):", assignedInFuture)
                 return assignedInFuture
             }()
             
             let totalOutflowsThisMonth = cashOverspendingLastMonth + assignedThisMonth + assignedInFuture
-            print("totalOutflowsThisMonth for \(monthYear):", totalOutflowsThisMonth)
-            
-            print("readyToAssignThisMonth for \(monthYear):", totalInflowsThisMonth - totalOutflowsThisMonth)
             
             readyToAssign[monthYear] = ReadyToAssign(
                 availableToAssignFromLastMonth: readyToAssignFromLastMonth,
@@ -538,7 +523,7 @@ public class BudgetMapper {
     }
     
     func budgetRange(from data: CombinedBudgetData) -> ClosedRange<MonthYear> {
-        return mapBudgetStart(from: data)...MonthYear.currentMonthYear.advanced(by: 1)
+        return mapBudgetStart(from: data)...mapBudgetEnd(from: data)
     }
     
     func mapBudgetStart(from data: CombinedBudgetData) -> MonthYear {
@@ -556,5 +541,14 @@ public class BudgetMapper {
         ?? MonthYear(from: .now.advanced(by: Double(-365 * 24 * 60 * 60)))
         
         return min(earliestActivityMonthYear, earliestAssignedMonthYear)
+    }
+    
+    func mapBudgetEnd(from data: CombinedBudgetData) -> MonthYear {
+        let latestAssignedMonthYear = data.categoryGroupsPlain
+            .flatMap { $0.categories } // [Categories]
+            .flatMap { $0.assigned } // [MonthYear: Decimal]
+            .compactMap { $0.key }.sorted(by: <) // [MonthYear] ordered chronologically
+            .last ?? .currentMonthYear // MonthYear?
+        return max(latestAssignedMonthYear.advanced(by: 1), .currentMonthYear.advanced(by: 1))
     }
 }

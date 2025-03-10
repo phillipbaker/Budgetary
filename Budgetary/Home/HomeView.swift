@@ -9,34 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    @State var budgetViewModel = BudgetViewModel(
-        stateMapper: BudgetStateMapper(mapper: BudgetPresentationMapper()),
-        getBudgetUseCase: GetBudget(
-            source: GetBudgetSourceCombined(
-                budgetDataSourceLocal: BudgetLocalDatagateway(
-                    dao: BudgetDao(
-                        container: try! ModelContainer(),
-                        mapper: BudgetMapperPlain()
-                    ),
-                    mapper: BudgetMapperPlain()
-                ),
-                payeesDataSourceLocal: PayeesLocalDataGateway(
-                    dao: PayeeDao(container: try! ModelContainer()),
-                    mapper: PayeesMapperPlain()
-                ),
-                budgetAccountsDataSourceLocal: BudgetAccountsLocalDataGateway(
-                    dao: BudgetAccountDao(container: try! ModelContainer()),
-                    mapper: BudgetAccountsMapperPlain()
-                ),
-                categoryGroupsDataSourceLocal: CategoryGroupsLocalDataGateway(
-                    dao: CategoryGroupDao(container: try! ModelContainer()),
-                    mapper: CategoryGroupsMapperPlain()
-                ),
-                mapper: CombinedBudgetDataMapper()
-            ),
-            mapper: BudgetMapper()
-        )
-    )
+    @State var budgetViewModel: BudgetViewModel
     @Bindable var model: HomeViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     

@@ -7,25 +7,33 @@
 
 import Dependencies
 
-class PayeesLocalDataGateway: PayeesDataSourceLocal {
+actor PayeesLocalDataGateway: PayeesDataSourceLocal {
     var dao: PayeeDao
     var mapper: PayeesMapperPlain
+    
+    private let (stream, continuation) = AsyncStream.makeStream(of: [PayeePlain].self, bufferingPolicy: .bufferingNewest(1))
     
     init(dao: PayeeDao, mapper: PayeesMapperPlain) {
         self.dao = dao
         self.mapper = mapper
+        Task { await startStreaming() }
+    }
+    
+    func startStreaming() async {
+        for await payeesPlain in dao.streamPayees() {
+            //            let payeesPlain = payeesDb.map { payeeDb in
+            //                self.mapper.map(payeeDb: payeeDb)
+            //            }
+            continuation.yield(payeesPlain)
+        }
+        
+        continuation.onTermination = { @Sendable reason in
+            // Handle any necessary cleanup
+            print("payees gateway stream terminated with reason: ", reason)
+        }
     }
     
     func payeesStream() async -> AsyncStream<[PayeePlain]> {
-        let (stream, continuation) = AsyncStream.makeStream(of: [PayeePlain].self)
-        for await payeesPlain in await dao.streamPayees() {
-//            let payeesPlain = payeesDb.map { payeeDb in
-//                self.mapper.map(payeeDb: payeeDb)
-//            }
-            continuation.yield(payeesPlain)
-            return stream
-        }
-        continuation.finish()
         return stream
     }
     

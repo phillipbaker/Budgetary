@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct CategoryListEmptyView: View {
-    @Binding var filter: CategoryFilter
-    @Binding var selectedMonthYear: MonthYear
+    var filter: CategoryFilterPresentation
+    var monthYear: MonthYear
+    
+    let intent: (BudgetIntent) -> Void
     
     var body: some View {
         VStack(spacing: 24) {
@@ -19,23 +21,23 @@ struct CategoryListEmptyView: View {
                 .imageScale(.large)
             
             // Fix with grammar agreement?
-            // Put current month year and/or selectedMonthYear into Environemnt for global use?
-            if selectedMonthYear == .currentMonthYear {
+            // Put current month year and/or monthYear into Environemnt for global use?
+            if monthYear == .currentMonthYear {
                 Text("You have no \(filter.rawValue) categories this month.")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
-            } else if selectedMonthYear.year == .currentYear && selectedMonthYear.month != .currentMonth {
-                Text("You had no \(filter.rawValue) categories in \(selectedMonthYear.monthWide).")
+            } else if monthYear.year == .currentYear && monthYear.month != .currentMonth {
+                Text("You had no \(filter.rawValue) categories in \(monthYear.monthWide).")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
             } else {
-                Text("You had no \(filter.rawValue) categories in \(selectedMonthYear.description)")
+                Text("You had no \(filter.rawValue) categories in \(monthYear.description)")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
             }
             
             Button {
-                filter = .allCategories
+                intent(.clearFilterButtonTapped(monthYear: monthYear))
             } label: {
                 Text("View All Categories")
                     .font(.subheadline)
@@ -49,5 +51,5 @@ struct CategoryListEmptyView: View {
 }
 
 #Preview {
-    CategoryListEmptyView(filter: .constant(.allCategories), selectedMonthYear: .constant(.currentMonthYear))
+    CategoryListEmptyView(filter: CategoryFilterPresentation.allCategories, monthYear: MonthYear.currentMonthYear, intent: {_ in })
 }

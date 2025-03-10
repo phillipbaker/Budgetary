@@ -5,21 +5,49 @@
 //  Created by Phillip Baker on 09/01/2025.
 //
 
+import UIKit
+
+//class CurrencyUITextField: UITextField {
+//    @Binding var value: String?
+//    
+//    init(value: Binding<String?>) {
+//        self._value = value
+//        super.init(frame: .zero)
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//}
+
 import SwiftUI
 
 struct CurrencyTextField: UIViewRepresentable {
     @Binding var text: String
+    let category: CategoryPresentation
+    let monthYear: MonthYear
     let currencyCode: String
+
+    let onTextChanged: ((String) -> Void)?
+    let onUpdateAssignedValue: () -> Void
     
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
-        textField.delegate = context.coordinator
-        textField.keyboardType = .numberPad
         textField.textAlignment = .right
-        textField.addTarget(context.coordinator, action: #selector(Coordinator.textIsChanging), for: .editingChanged)
         textField.font = .preferredFont(forTextStyle: .subheadline)
         textField.text = text
+        textField.delegate = context.coordinator
+        textField.addTarget(context.coordinator, action: #selector(Coordinator.textIsChanging), for: .editingChanged)
         
+        let hostingController = UIHostingController(
+            rootView: BudgetaryNumberPad(
+                target: textField,
+                cancel: { text = context.coordinator.lastCommittedText }
+            )
+        )
+        textField.inputView = hostingController.view
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+
         return textField
     }
     
@@ -29,27 +57,50 @@ struct CurrencyTextField: UIViewRepresentable {
         }
     }
     
-    func makeCoordinator() -> Coordinate {
-        return Coordinator(text: $text, currencyCode: currencyCode)
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(
+            text: $text,
+            category: category,
+            monthYear: monthYear,
+            currencyCode: currencyCode,
+            onTextChanged: onTextChanged,
+            onUpdateAssignedValue: onUpdateAssignedValue
+        )
     }
     
-    class Coordinate: NSObject, UITextFieldDelegate {
+    class Coordinator: NSObject, UITextFieldDelegate {
         @Binding var text: String
+        let category: CategoryPresentation
+        let monthYear: MonthYear
         let currencyCode: String
-        
         private var isFirstKeyPress = true
+        let onTextChanged: ((String) -> Void)?
+        let onUpdateAssignedValue: () -> Void
+        var lastCommittedText: String
         
-        init(text: Binding<String>, currencyCode: String) {
+        init(
+            text: Binding<String>,
+            category: CategoryPresentation,
+            monthYear: MonthYear,
+            currencyCode: String,
+            onTextChanged: ((String) -> Void)?,
+            onUpdateAssignedValue: @escaping () -> Void
+        ) {
             self._text = text
+            self.category = category
+            self.monthYear = monthYear
             self.currencyCode = currencyCode
-        }
-        
-        @objc func textIsChanging(_ textField: UITextField) {
-            text = textField.text ?? "0.00"
+            self.onTextChanged = onTextChanged
+            self.onUpdateAssignedValue = onUpdateAssignedValue
+            self.lastCommittedText = text.wrappedValue
         }
         
         func textFieldDidBeginEditing(_ textField: UITextField) {
             isFirstKeyPress = true
+        }
+        
+        @objc func textIsChanging(_ textField: UITextField) {
+            onTextChanged?(textField.text ?? "Error")
         }
         
         func textFieldDidChangeSelection(_ textField: UITextField) {
@@ -60,22 +111,31 @@ struct CurrencyTextField: UIViewRepresentable {
             }
         }
         
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            onUpdateAssignedValue()
+            textField.resignFirstResponder()
+            return true
+        }
+        
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             /// This method is called before the UITextField text changes. It returns `TRUE` to change text according to user input.
             /// We are manually updating the text so we return `FALSE`
-
-            if isFirstKeyPress {
-                // Create a decimal whole number value from the `string` input character
-                // For example "£34.56" becomes 3456.
+            
+            if isFirstKeyPress && string != "" {
+                // Create a new decimal whole number value from the first `string` input character
                 let decimalValue = decimalWholeNumber(from: string)
+
+                let updatedString = currencyString(for: currencyCode, from: decimalValue)
                 
-                // Set the textField text to the new value, restoring 2 decimal places and adding currency symbol
-                textField.text = currencyString(for: currencyCode, from: decimalValue)
-                                                                         
+                if let range = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument) {
+                    textField.replace(range, withText: updatedString)
+                }
+                
                 isFirstKeyPress = false
                 return false
             }
             
+            // If not first key press or first key press is "" (delete), edit existing textField value
             let input = (textField.text! as NSString).replacingCharacters(in: range, with: string)
             let decimalValue = decimalWholeNumber(from: input)
             let updatedString = currencyString(for: currencyCode, from: decimalValue)
@@ -85,6 +145,10 @@ struct CurrencyTextField: UIViewRepresentable {
             }
             
             return false
+        }
+        
+        func textFieldDidEndEditing(_ textField: UITextField) {
+            lastCommittedText = text
         }
         
         private func currencyString(for code: String, from decimal: Decimal) -> String {
