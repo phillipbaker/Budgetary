@@ -169,8 +169,9 @@ struct BudgetView: View {
                                 CategoryRowView(
                                     monthYear: budget.monthYear,
                                     category: category,
-                                    intent: intent,
-                                    assignedValues: $assignedValues
+                                    onTextChanged: { newValue in updateLocalValue(for: category, to: newValue) },
+                                    onUpdateAssignedAmount: { updateAssignedAmount(for: category) },
+                                    assignedValue: bindingFor(monthYear: budget.monthYear, category: category)
                                 )
                             }
                             .transition(.move(edge: .top))
@@ -211,6 +212,25 @@ struct BudgetView: View {
                     }
                 }
         )
+    }
+    
+    private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<String> {
+        let key = "\(monthYear.description)-\(category.id.description)"
+        return Binding(
+            get: { assignedValues[key, default: category.assigned[monthYear]?.assignedThisMonth ?? ""] },
+            set: { assignedValues[key] = $0 }
+        )
+    }
+
+    private func updateLocalValue(for category: CategoryPresentation, to newValue: String) {
+        let key = "\(budget.monthYear.description)-\(category.id.description)"
+        assignedValues[key] = newValue
+    }
+    
+    private func updateAssignedAmount(for category: CategoryPresentation) {
+        let key = "\(budget.monthYear.description)-\(category.id.description)"
+        guard let newValue = assignedValues[key] else { return }
+        intent(.updateAssignedAmount(categoryId: category.id, monthYear: budget.monthYear, amount: newValue))
     }
 }
 

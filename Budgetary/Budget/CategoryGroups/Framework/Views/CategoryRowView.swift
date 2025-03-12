@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct CategoryRowView: View {
-    let monthYear: MonthYear
-    let category: CategoryPresentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    let intent: (BudgetIntent) -> Void
+    let monthYear: MonthYear
+    let category: CategoryPresentation
+    let onTextChanged: ((String) -> Void)?
+    let onUpdateAssignedAmount: () -> Void
     
-    @Binding var assignedValues: [String: String]
+    @Binding var assignedValue: String
     
     @FocusState private var isTextFieldFocused: Bool
     
@@ -51,11 +52,11 @@ struct CategoryRowView: View {
                         }
 
                         AssignMoneyView(
-                            category: category,
                             monthYear: monthYear,
                             currencyCode: "GBP",
-                            intent: intent,
-                            assignedValues: $assignedValues,
+                            onTextChanged: onTextChanged,
+                            onUpdateAssignedAmount: onUpdateAssignedAmount,
+                            assignedValue: $assignedValue,
                             isTextFieldFocused: _isTextFieldFocused
                         )
                     }
@@ -109,8 +110,9 @@ struct CategoryRowView: View {
     CategoryRowView(
         monthYear: .currentMonthYear,
         category: .cellPhones,
-        intent: { _ in },
-        assignedValues: .constant([:])
+        onTextChanged: { _ in },
+        onUpdateAssignedAmount: {},
+        assignedValue: .constant("")
     )
     .padding()
 }

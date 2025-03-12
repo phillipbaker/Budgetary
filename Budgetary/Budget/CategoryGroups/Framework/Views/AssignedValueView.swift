@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct AssignMoneyView: View {
-    let category: CategoryPresentation
     let monthYear: MonthYear
     let currencyCode: String
-    let intent: (BudgetIntent) -> Void
+    let onTextChanged: ((String) -> Void)?
+    let onUpdateAssignedAmount: () -> Void
     
-    @Binding var assignedValues: [String: String]
-    
-    @State private var amount: Decimal = 0.00
-    
+    @Binding var assignedValue: String
     @FocusState var isTextFieldFocused: Bool
     
     var body: some View {
@@ -26,14 +23,10 @@ struct AssignMoneyView: View {
             .overlay(alignment: .trailing) {
                 VStack {
                     CurrencyTextField(
-                        text: bindingFor(monthYear: monthYear, category: category),
+                        text: $assignedValue,
                         currencyCode: currencyCode,
-                        onTextChanged: { newValue in
-                            updateLocalValue(newValue)
-                        },
-                        onUpdateAssignedAmount: {
-                            updateAssignedAmount()
-                        }
+                        onTextChanged: onTextChanged,
+                        onUpdateAssignedAmount: onUpdateAssignedAmount
                     )
                     .id(monthYear)
                     .offset(x: -4)
@@ -45,24 +38,5 @@ struct AssignMoneyView: View {
             .font(.subheadline)
             .fontWeight(.semibold)
             .padding(.vertical, 2)
-    }
-    
-    private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<String> {
-        let key = "\(monthYear.description)-\(category.id.description)"
-        return Binding(
-            get: { assignedValues[key, default: category.assigned[monthYear]?.assignedThisMonth ?? ""] },
-            set: { assignedValues[key] = $0 }
-        )
-    }
-    
-    private func updateLocalValue(_ newValue: String) {
-        let key = "\(monthYear.description)-\(category.id.description)"
-        assignedValues[key] = newValue
-    }
-    
-    private func updateAssignedAmount() {
-        let key = "\(monthYear.description)-\(category.id.description)"
-        guard let newValue = assignedValues[key] else { return }
-        intent(.updateAssignedAmount(categoryId: self.category.id, monthYear: monthYear, amount: newValue))
     }
 }
