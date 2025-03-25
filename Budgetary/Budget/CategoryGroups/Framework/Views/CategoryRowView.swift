@@ -10,15 +10,21 @@ import SwiftUI
 struct CategoryRowView: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     let monthYear: MonthYear
     let category: CategoryPresentation
-    let onTextChanged: ((String) -> Void)?
-    let onUpdateAssignedAmount: () -> Void
     
-    @Binding var assignedValue: String
+    enum FocusedField: Hashable {
+        case primary(id: UUID?)
+        case secondary(id: UUID?)
+    }
     
-    @FocusState private var isTextFieldFocused: Bool
+    @State private var rowID: UUID = UUID()
+    
+    @FocusState var focus: FocusedField?
+    @Binding var assignedLocalValue: AssignedValue
+    
+    let intent: (BudgetIntent) -> Void
     
     var body: some View {
         let rowLayout = isXL
@@ -30,7 +36,7 @@ struct CategoryRowView: View {
         : AnyLayout(HStackLayout(spacing: 4))
         
         Button {
-            isTextFieldFocused = true
+            focus = .primary(id: rowID)
         } label: {
             rowLayout {
                 Text(category.name)
@@ -50,17 +56,18 @@ struct CategoryRowView: View {
                             Text("Assigned")
                                 .font(.caption)
                         }
-
+                        
                         AssignMoneyView(
+                            rowID: $rowID,
                             monthYear: monthYear,
+                            category: category,
                             currencyCode: "GBP",
-                            onTextChanged: onTextChanged,
-                            onUpdateAssignedAmount: onUpdateAssignedAmount,
-                            assignedValue: $assignedValue,
-                            isTextFieldFocused: _isTextFieldFocused
+                            intent: intent,
+                            localValue: $assignedLocalValue,
+                            focus: _focus
                         )
                     }
-
+                    
                     if horizontalSizeClass == .regular {
                         VStack(alignment: .trailing, spacing: 4) {
                             if isXL {
@@ -107,12 +114,18 @@ struct CategoryRowView: View {
 }
 
 #Preview {
+    @Previewable @State var assignedLocalValue = AssignedValue(
+        primary: "9.99",
+        secondary: "0.00",
+        operation: "",
+        lastCommitted: "0.00"
+    )
+    
     CategoryRowView(
         monthYear: .currentMonthYear,
         category: .cellPhones,
-        onTextChanged: { _ in },
-        onUpdateAssignedAmount: {},
-        assignedValue: .constant("")
+        assignedLocalValue: $assignedLocalValue,
+        intent: { _ in }
     )
     .padding()
 }

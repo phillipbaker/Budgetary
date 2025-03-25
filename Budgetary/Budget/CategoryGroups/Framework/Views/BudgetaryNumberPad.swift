@@ -9,9 +9,12 @@ import SwiftUI
 import SwiftUINavigation
 
 struct BudgetaryNumberPad: View {
+    @Environment(\.colorScheme) var colorScheme
     weak var target: (UIKeyInput & UIResponder)?
     
-    let cancel: () -> Void
+    let onCancel: () -> Void
+    let onEquals: () -> Void
+    let onOperation: (String) -> Void
     
     @State var destination: Destination? = nil
     
@@ -22,143 +25,56 @@ struct BudgetaryNumberPad: View {
     }
     
     var body: some View {
-        Grid(verticalSpacing: 16) {            
+        Grid(verticalSpacing: 24) {
             GridRow {
-                Button {
-                    destination = nil
-                } label: {
-                    DetailButtonLabel(label: "Assign", systemImage: "banknote")
-                }
-                
-                Button {
-                    
-                } label: {
-                    DetailButtonLabel(label: "Auto-Assign", systemImage: "bolt.fill")
-                }
-                
-                Button {
-                    destination = .moveMoney
-                } label: {
-                    DetailButtonLabel(label: "Move Money", systemImage: "arrowshape.right.fill")
-                }
-                
-                Button {
-                    destination = .detail
-                } label: {
-                    DetailButtonLabel(label: "Details", systemImage: "ellipsis")
-                }
+                KeypadNavigationButton(title: "Assign", image: "banknote", action: { destination = nil })
+                KeypadNavigationButton(title: "Auto-Assign", image: "bolt.fill", action: {})
+                KeypadNavigationButton(title: "Move Money", image: "arrowshape.right.fill", action: { destination = .moveMoney })
+                KeypadNavigationButton(title: "Details", image: "ellipsis", action: { destination = .detail })
             }
             .frame(maxWidth: .infinity)
             
             GridRow {
-                Button("7") { insert("7") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("8") { insert("8") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("9") { insert("9") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("-") { insert("-") }
-                    .font(.title)
-                    .fontWeight(.medium)
+                NumberButton(number: "7", insert: insert)
+                NumberButton(number: "8", insert: insert)
+                NumberButton(number: "9", insert: insert)
+                OperationButton(title: "-", image: "minus", action: { operation in onOperation(operation) })
             }
             .frame(maxWidth: .infinity)
             
             GridRow {
-                Button("4") { insert("4") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("5") { insert("5") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("6") { insert("6") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("+") { insert("+") }
-                    .font(.title)
-                    .fontWeight(.medium)
+                NumberButton(number: "4", insert: insert)
+                NumberButton(number: "5", insert: insert)
+                NumberButton(number: "6", insert: insert)
+                OperationButton(title: "+", image: "plus", action: { operation in onOperation(operation) })
             }
             .frame(maxWidth: .infinity)
             
             GridRow {
-                Button("1") { insert("1") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("2") { insert("2") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("3") { insert("3") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button("=") { }
-                    .font(.title)
-                    .fontWeight(.medium)
+                NumberButton(number: "1", insert: insert)
+                NumberButton(number: "2", insert: insert)
+                NumberButton(number: "3", insert: insert)
+                EqualsButton(action: onEquals)
             }
             .frame(maxWidth: .infinity)
             
             GridRow {
-                Button {
-                    cancel()
-                    resignFocus()
-                } label: {
-                    Image(systemName: "x.circle.fill")
-                        .tint(.secondary.opacity(0.8))
-                }
-                
-                Button("0") { insert("0") }
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .tint(.primary)
-                
-                Button {
-                    deleteButtonTapped()
-                } label: {
-                    Image(systemName: "delete.left")
-                        .tint(.primary)
-                }
-                
-                Button("Done") {
-                    guard let textField = target as? UITextField else { return }
-                    if let delegate = textField.delegate {
-                        _ = delegate.textFieldShouldReturn?(textField)
-                    }
-                }
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .buttonStyle(.borderedProminent)
+                CancelButton(onCancel: onCancel)
+                NumberButton(number: "0", insert: insert)
+                DeleteButton(onDelete: deleteButtonTapped)
+                DoneButton(onSubmit: doneButtonTapped)
             }
             .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.white)
-        .padding()
-        .overlay(
+        .padding(8)
+        .background(colorScheme == .light ? .white : Color(.tertiarySystemBackground))
+        .overlay(alignment: .top) {
             Rectangle()
                 .frame(height: 1) // Border height
-                .foregroundColor(Color.gray.opacity(0.25))
-                .offset(y: -1),
-            alignment: .top
-        )
+                .foregroundColor(Color.secondary.opacity(0.25))
+                .offset(y: -1)
+        }
         .sheet(isPresented: Binding($destination.moveMoney), onDismiss: { resignFocus() }) {
             MoveMoneyView()
         }
@@ -242,6 +158,13 @@ struct BudgetaryNumberPad: View {
         }
     }
     
+    private func doneButtonTapped() {
+        guard let textField = target as? UITextField else { return }
+        if let delegate = textField.delegate {
+            _ = delegate.textFieldShouldReturn?(textField)
+        }
+    }
+    
     private func deleteButtonTapped() {
         if let targetTextInput = target as? UITextInput {
             let selectedTextRange = targetTextInput.selectedTextRange
@@ -263,6 +186,130 @@ struct BudgetaryNumberPad: View {
                 textInput(targetTextInput, replaceTextAt: rangeToDelete, with: "")
             }
         }
-        
+    }
+}
+
+struct KeypadNavigationButton: View {
+    let title: String
+    let image: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: image)
+                    .frame(minWidth: 28, minHeight: 20)
+                    .font(.title2)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 28)
+                    .background(.secondary.opacity(0.16))
+                    .tint(.secondary)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                Text(title)
+                    .font(.caption)
+                    .fontWeight(.regular)
+                    .tint(.secondary)
+            }
+        }
+    }
+}
+
+struct OperationButton: View {
+    let title: String
+    let image: String
+    let action: ((String) -> Void)
+    @State private var isTapped: Bool = false
+    
+    var body: some View {
+        Button {
+            action(title)
+            isTapped.toggle()
+        } label: {
+            Image(systemName: image)
+        }
+        .font(.title)
+        .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+    }
+}
+
+struct EqualsButton: View {
+    let action: () -> Void
+    @State private var isTapped: Bool = false
+    
+    var body: some View {
+        Button {
+            action()
+            isTapped.toggle()
+        } label: {
+            Image(systemName: "equal")
+        }
+        .font(.title)
+        .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+    }
+}
+
+struct NumberButton: View {
+    let number: String
+    let insert: ((String) -> Void)
+    @State private var isTapped: Bool = false
+    
+    var body: some View {
+        Button(number) {
+            insert(number)
+            isTapped.toggle()
+        }
+        .font(.title)
+        .tint(.primary)
+        .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+    }
+}
+
+struct CancelButton: View {
+    let onCancel: () -> Void
+    @State private var isTapped: Bool = false
+    
+    var body: some View {
+        Button {
+            onCancel()
+            isTapped.toggle()
+        } label: {
+            Image(systemName: "x.circle.fill")
+                .tint(.secondary.opacity(0.6))
+        }
+        .font(.title)
+        .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+    }
+}
+
+struct DeleteButton: View {
+    let onDelete: () -> Void
+    @State private var isTapped: Bool = false
+    
+    var body: some View {
+        Button {
+            onDelete()
+            isTapped.toggle()
+        } label: {
+            Image(systemName: "delete.left")
+        }
+        .font(.title)
+        .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+    }
+}
+
+struct DoneButton: View {
+    let onSubmit: () -> Void
+    @State private var isTapped: Bool = false
+    
+    var body: some View {
+        Button("done") {
+            onSubmit()
+            isTapped.toggle()
+        }
+        .font(.body)
+        .fontWeight(.semibold)
+        .buttonStyle(.borderedProminent)
+        .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
     }
 }

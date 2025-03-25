@@ -15,7 +15,8 @@ struct BudgetRootView: View {
         self.viewModel = viewModel
         viewModel.handle(intent: .getBudget(
             monthYear: .currentMonthYear,
-            filterId: CategoryFilter.allCategories.id))
+            filterId: CategoryFilter.allCategories.id)
+        )
     }
     
     var body: some View {
@@ -114,7 +115,8 @@ struct BudgetView: View {
     let intent: (BudgetIntent) -> Void
     var destination: (BudgetViewModel.Destination?) -> Void
     
-    @State private var assignedValues: [String: String] = [:]
+    @State private var assignedValues: [String: AssignedValue] = [:]
+    
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
@@ -169,9 +171,8 @@ struct BudgetView: View {
                                 CategoryRowView(
                                     monthYear: budget.monthYear,
                                     category: category,
-                                    onTextChanged: { newValue in updateLocalValue(for: category, to: newValue) },
-                                    onUpdateAssignedAmount: { updateAssignedAmount(for: category) },
-                                    assignedValue: bindingFor(monthYear: budget.monthYear, category: category)
+                                    assignedLocalValue: bindingFor(monthYear: budget.monthYear, category: category),
+                                    intent: intent
                                 )
                             }
                             .transition(.move(edge: .top))
@@ -214,23 +215,19 @@ struct BudgetView: View {
         )
     }
     
-    private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<String> {
+    private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<AssignedValue> {
         let key = "\(monthYear.description)-\(category.id.description)"
+        
         return Binding(
-            get: { assignedValues[key, default: category.assigned[monthYear]?.assignedThisMonth ?? ""] },
+            get: { assignedValues[key, default:
+                    AssignedValue(
+                        primary: category.assigned[monthYear]?.assignedThisMonth ?? "",
+                        secondary: Decimal(0).formatted(.currency(code: "GBP")),
+                        operation: "",
+                        lastCommitted: Decimal(0).formatted(.currency(code: "GBP"))
+                    )]},
             set: { assignedValues[key] = $0 }
         )
-    }
-
-    private func updateLocalValue(for category: CategoryPresentation, to newValue: String) {
-        let key = "\(budget.monthYear.description)-\(category.id.description)"
-        assignedValues[key] = newValue
-    }
-    
-    private func updateAssignedAmount(for category: CategoryPresentation) {
-        let key = "\(budget.monthYear.description)-\(category.id.description)"
-        guard let newValue = assignedValues[key] else { return }
-        intent(.updateAssignedAmount(categoryId: category.id, monthYear: budget.monthYear, amount: newValue))
     }
 }
 
