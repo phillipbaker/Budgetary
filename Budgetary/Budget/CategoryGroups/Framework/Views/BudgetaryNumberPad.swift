@@ -27,10 +27,10 @@ struct BudgetaryNumberPad: View {
     var body: some View {
         Grid(verticalSpacing: 24) {
             GridRow {
-                KeypadNavigationButton(title: "Assign", image: "banknote", action: { destination = nil })
-                KeypadNavigationButton(title: "Auto-Assign", image: "bolt.fill", action: {})
-                KeypadNavigationButton(title: "Move Money", image: "arrowshape.right.fill", action: { destination = .moveMoney })
-                KeypadNavigationButton(title: "Details", image: "ellipsis", action: { destination = .detail })
+                KeypadNavigationButton(title: "Assign", image: "banknote", action: { destination = nil }, tint: Color.accentColor)
+                KeypadNavigationButton(title: "Auto-Assign", image: "bolt.fill", action: {}, tint: .secondary)
+                KeypadNavigationButton(title: "Move Money", image: "arrowshape.right.fill", action: { destination = .moveMoney }, tint: .secondary)
+                KeypadNavigationButton(title: "Details", image: "ellipsis", action: { destination = .detail }, tint: .secondary)
             }
             .frame(maxWidth: .infinity)
             
@@ -193,6 +193,7 @@ struct KeypadNavigationButton: View {
     let title: String
     let image: String
     let action: () -> Void
+    let tint: Color
     
     var body: some View {
         Button(action: action) {
@@ -203,7 +204,7 @@ struct KeypadNavigationButton: View {
                     .padding(.vertical, 8)
                     .padding(.horizontal, 28)
                     .background(.secondary.opacity(0.16))
-                    .tint(.secondary)
+                    .tint(tint)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 
                 Text(title)
