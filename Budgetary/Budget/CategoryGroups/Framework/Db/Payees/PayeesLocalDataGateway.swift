@@ -5,8 +5,6 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
-import Dependencies
-
 actor PayeesLocalDataGateway: PayeesDataSourceLocal {
     var dao: PayeeDao
     var mapper: PayeesMapperPlain

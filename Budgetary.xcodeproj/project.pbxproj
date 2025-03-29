@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F81B80982C96AD84007B8899 /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = F81B80972C96AD84007B8899 /* IdentifiedCollections */; };
-		F822E8E72CAEC4F6009D4E04 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = F822E8E62CAEC4F6009D4E04 /* Dependencies */; };
-		F822E8E92CAEC4F6009D4E04 /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = F822E8E82CAEC4F6009D4E04 /* DependenciesMacros */; };
-		F822E8EB2CAEC4F6009D4E04 /* DependenciesTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = F822E8EA2CAEC4F6009D4E04 /* DependenciesTestSupport */; };
 		F82CA7E92CF89104000C4E24 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = F82CA7E82CF89104000C4E24 /* AsyncAlgorithms */; };
 		F880099E2CFF1CE1004E8F61 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F880099D2CFF1CE1004E8F61 /* SwiftUINavigation */; };
 /* End PBXBuildFile section */
@@ -62,9 +58,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F81B80982C96AD84007B8899 /* IdentifiedCollections in Frameworks */,
-				F822E8E92CAEC4F6009D4E04 /* DependenciesMacros in Frameworks */,
-				F822E8E72CAEC4F6009D4E04 /* Dependencies in Frameworks */,
 				F880099E2CFF1CE1004E8F61 /* SwiftUINavigation in Frameworks */,
 				F82CA7E92CF89104000C4E24 /* AsyncAlgorithms in Frameworks */,
 			);
@@ -74,7 +67,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F822E8EB2CAEC4F6009D4E04 /* DependenciesTestSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,9 +129,6 @@
 			);
 			name = Budgetary;
 			packageProductDependencies = (
-				F81B80972C96AD84007B8899 /* IdentifiedCollections */,
-				F822E8E62CAEC4F6009D4E04 /* Dependencies */,
-				F822E8E82CAEC4F6009D4E04 /* DependenciesMacros */,
 				F82CA7E82CF89104000C4E24 /* AsyncAlgorithms */,
 				F880099D2CFF1CE1004E8F61 /* SwiftUINavigation */,
 			);
@@ -165,7 +154,6 @@
 			);
 			name = BudgetaryTests;
 			packageProductDependencies = (
-				F822E8EA2CAEC4F6009D4E04 /* DependenciesTestSupport */,
 			);
 			productName = BudgetaryTests;
 			productReference = F8BBE8802C64047A00E6F3C0 /* BudgetaryTests.xctest */;
@@ -227,8 +215,6 @@
 			);
 			mainGroup = F8BBE8662C64047800E6F3C0;
 			packageReferences = (
-				F81B80962C96AD84007B8899 /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
-				F822E8E52CAEC4F6009D4E04 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 				F82CA7E72CF89104000C4E24 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 				F880099C2CFF1CE1004E8F61 /* XCRemoteSwiftPackageReference "swift-navigation" */,
 			);
@@ -641,22 +627,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F81B80962C96AD84007B8899 /* XCRemoteSwiftPackageReference "swift-identified-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-identified-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
-		F822E8E52CAEC4F6009D4E04 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-dependencies.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.1;
-			};
-		};
 		F82CA7E72CF89104000C4E24 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
@@ -676,26 +646,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F81B80972C96AD84007B8899 /* IdentifiedCollections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F81B80962C96AD84007B8899 /* XCRemoteSwiftPackageReference "swift-identified-collections" */;
-			productName = IdentifiedCollections;
-		};
-		F822E8E62CAEC4F6009D4E04 /* Dependencies */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F822E8E52CAEC4F6009D4E04 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = Dependencies;
-		};
-		F822E8E82CAEC4F6009D4E04 /* DependenciesMacros */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F822E8E52CAEC4F6009D4E04 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = DependenciesMacros;
-		};
-		F822E8EA2CAEC4F6009D4E04 /* DependenciesTestSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F822E8E52CAEC4F6009D4E04 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = DependenciesTestSupport;
-		};
 		F82CA7E82CF89104000C4E24 /* AsyncAlgorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F82CA7E72CF89104000C4E24 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;

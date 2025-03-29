@@ -5,8 +5,6 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
-import Dependencies
-
 actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
     let dao: CategoryGroupDao
     let mapper: CategoryGroupsMapperPlain

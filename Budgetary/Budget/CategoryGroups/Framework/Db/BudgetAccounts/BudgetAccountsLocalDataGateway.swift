@@ -5,8 +5,6 @@
 //  Created by Phillip Baker on 04/11/2024.
 //
 
-import Dependencies
-
 actor BudgetAccountsLocalDataGateway: BudgetAccountsDataSourceLocal {
     var dao: BudgetAccountDao
     var mapper: BudgetAccountsMapperPlain
