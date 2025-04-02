@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct BudgetMenu: View {
-    var destination: (BudgetViewModel.Destination) -> Void
+    @Environment(BudgetCoordinator.self) var coordinator
     
     var body: some View {
         Menu {
             Button {
-                destination(.editCategories)
+                coordinator.editCateogoriesButtonTapped()
             } label: {
                 Label("Edit Categories", systemImage: "pencil")
             }
@@ -38,5 +38,5 @@ struct BudgetMenu: View {
 }
 
 #Preview {
-    BudgetMenu(destination: { _ in })
+    BudgetMenu()
 }

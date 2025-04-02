@@ -5,14 +5,14 @@
 //  Created by Phillip Baker on 02/11/2024.
 //
 
-public class LoadCategoryGroupsUseCase {
-    var source: LoadCategoryGroupsSource
-    var mapper: BudgetMapper
+import Factory
+
+public final class LoadCategoryGroupsUseCase {
+    let source: LoadCategoryGroupsSource = Container.shared.loadCategoryGroupsSource()
+    let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-    public init(source: LoadCategoryGroupsSource, mapper: BudgetMapper) {
-        self.source = source
-        self.mapper = mapper
+    func load() async -> [EditableCategoryGroup] {
+        let categoryGroupsPlain = await source.allCategoryGroups()
+        return mapper.map(categoryGroupsPlain: categoryGroupsPlain)
     }
-    
-    func load() {}
 }

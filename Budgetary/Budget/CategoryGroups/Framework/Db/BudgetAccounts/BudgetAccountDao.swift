@@ -5,18 +5,18 @@
 //  Created by Phillip Baker on 04/11/2024.
 //
 
+import Factory
 import Foundation
 import SwiftData
 
 class BudgetAccountDao {
     private var container: ModelContainer
-    let mapper: BudgetAccountsMapperPlain
+    let mapper: BudgetAccountsMapperPlain = Container.shared.budgetAccountsMapperPlain()
     
     private let (stream, continuation) = AsyncStream.makeStream(of: [BudgetAccountPlain].self)
     
-    init(container: ModelContainer, mapper: BudgetAccountsMapperPlain) {
+    init(container: ModelContainer) {
         self.container = container
-        self.mapper = mapper
         startStreaming()
     }
     

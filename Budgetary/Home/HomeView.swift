@@ -9,14 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    @State var budgetViewModel: BudgetViewModel
-    @Bindable var model: HomeViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
         TabView {
             Tab("Budget", systemImage: "banknote") {
-                BudgetRootView(viewModel: budgetViewModel)
+                BudgetRootView()
             }
             .customizationBehavior(.disabled, for: .sidebar, .tabBar)
             
@@ -50,7 +48,3 @@ struct HomeView: View {
         .tabViewStyle(.sidebarAdaptable)
     }
 }
-
-//#Preview {
-//    HomeView(model: .init())
-//}

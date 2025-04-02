@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F817EAEF2D9C484A002B572C /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = F817EAEE2D9C484A002B572C /* Factory */; };
 		F82CA7E92CF89104000C4E24 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = F82CA7E82CF89104000C4E24 /* AsyncAlgorithms */; };
 		F880099E2CFF1CE1004E8F61 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F880099D2CFF1CE1004E8F61 /* SwiftUINavigation */; };
 /* End PBXBuildFile section */
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F817EAEF2D9C484A002B572C /* Factory in Frameworks */,
 				F880099E2CFF1CE1004E8F61 /* SwiftUINavigation in Frameworks */,
 				F82CA7E92CF89104000C4E24 /* AsyncAlgorithms in Frameworks */,
 			);
@@ -131,6 +133,7 @@
 			packageProductDependencies = (
 				F82CA7E82CF89104000C4E24 /* AsyncAlgorithms */,
 				F880099D2CFF1CE1004E8F61 /* SwiftUINavigation */,
+				F817EAEE2D9C484A002B572C /* Factory */,
 			);
 			productName = Budgetary;
 			productReference = F8BBE86F2C64047800E6F3C0 /* Budgetary.app */;
@@ -217,6 +220,7 @@
 			packageReferences = (
 				F82CA7E72CF89104000C4E24 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 				F880099C2CFF1CE1004E8F61 /* XCRemoteSwiftPackageReference "swift-navigation" */,
+				F817EAED2D9C484A002B572C /* XCRemoteSwiftPackageReference "Factory" */,
 			);
 			productRefGroup = F8BBE8702C64047800E6F3C0 /* Products */;
 			projectDirPath = "";
@@ -627,6 +631,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F817EAED2D9C484A002B572C /* XCRemoteSwiftPackageReference "Factory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hmlongco/Factory.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.3;
+			};
+		};
 		F82CA7E72CF89104000C4E24 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
@@ -646,6 +658,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F817EAEE2D9C484A002B572C /* Factory */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F817EAED2D9C484A002B572C /* XCRemoteSwiftPackageReference "Factory" */;
+			productName = Factory;
+		};
 		F82CA7E82CF89104000C4E24 /* AsyncAlgorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F82CA7E72CF89104000C4E24 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;

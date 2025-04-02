@@ -15,11 +15,4 @@ public struct CategoryGroupPresentation: Equatable, Identifiable {
     let activityTotal: [MonthYear: String]
     let availableTotal: [MonthYear: String]
     let categories: [CategoryPresentation]
-//    let categoryGroupMonths: [MonthYear: CategoryGroupMonthTotals]
 }
-
-//public struct CategoryGroupMonthTotals: Equatable {
-//    let assignedTotal: String
-//    let activityTotal: String
-//    let availableTotal: String
-//}

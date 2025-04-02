@@ -5,15 +5,15 @@
 //  Created by Phillip Baker on 04/11/2024.
 //
 
+import Factory
+
 actor BudgetLocalDatagateway: BudgetDataSourceLocal {
-    var dao: BudgetDao
-    var mapper: BudgetMapperPlain
+    let dao: BudgetDao = Container.shared.budgetDao()
+    let mapper: BudgetMapperPlain = Container.shared.budgetMapperPlain()
     
     private let (stream, continuation) = AsyncStream.makeStream(of: BudgetPlain.self, bufferingPolicy: .bufferingNewest(1))
     
-    init(dao: BudgetDao, mapper: BudgetMapperPlain) {
-        self.dao = dao
-        self.mapper = mapper
+    init() {
         Task { await startStreaming() }
     }
     

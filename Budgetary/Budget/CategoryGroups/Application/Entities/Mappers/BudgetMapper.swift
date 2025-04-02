@@ -138,20 +138,6 @@ final public class BudgetMapper: Sendable {
         return totals
     }
     
-    //    func mapGroupAssignedTotal(for categories: [Category]) -> [MonthYear: Decimal] {
-    //        return categories
-    //            .flatMap { $0.assigned } // [Dictionary<MonthYear, Assigned>.Element]
-    //            .map { ($0.key, $0.value.assignedThisMonth) } // [(MonthYear, Decimal)]
-    //            .reduce(into: [MonthYear: Decimal]()) { groupTotal, categoryValues in
-    //                let (monthYear, categoryAssignedThisMonth) = categoryValues
-    //                if let existingValue = groupTotal[monthYear] {
-    //                    groupTotal[monthYear] = existingValue + categoryAssignedThisMonth
-    //                } else {
-    //                    groupTotal[monthYear] = categoryAssignedThisMonth
-    //                }
-    //            } // [MonthYear : Decimal]
-    //    }
-    
     func mapAssigned(for category: CategoryPlain, from data: CombinedBudgetData) -> [MonthYear: Assigned] {
         var assigned: [MonthYear: Assigned] = [:]
         
@@ -193,26 +179,6 @@ final public class BudgetMapper: Sendable {
         }
         return totals
     }
-    //    func mapGroupActivityTotal(for categories: [Category]) -> [MonthYear: Decimal] {
-    //        let flattened = categories.flatMap { $0.activity }
-    //        let sanitized = flattened.reduce(into: [MonthYear: Decimal]()) { result, entry in
-    //            result[entry.key, default: 0.00] += entry.value.total
-    //        }
-    //        return sanitized
-    //    }
-    //    func mapGroupActivityTotal(for categories: [Category]) -> [MonthYear: Decimal] {
-    //        return categories
-    //            .flatMap { $0.activity } // [Dictionary<MonthYear, Activity>.Element]
-    //            .map { ($0.key, $0.value.total) } // [(MonthYear, Decimal)]
-    //            .reduce(into: [MonthYear: Decimal]()) { groupTotal, categoryValues in
-    //                let (monthYear, categoryActivityTotal) = categoryValues
-    //                if let existingValue = groupTotal[monthYear] {
-    //                    groupTotal[monthYear] = existingValue + categoryActivityTotal
-    //                } else {
-    //                    groupTotal[monthYear] = categoryActivityTotal
-    //                }
-    //            } // [MonthYear : Decimal]
-    //    }
     
     // TODO: This functionalit is duplicated on line 284-ish activity(for category:, in monthYear:, from: data) - fifure out how to consolidate for all of my uses in the simplest/most efficeint/DRY way...
     func mapActivity(for category: CategoryPlain, from data: CombinedBudgetData) -> [MonthYear: Activity] {
@@ -266,16 +232,6 @@ final public class BudgetMapper: Sendable {
         )
     }
     
-    //    func map(categoryId: String, categoryGroupsPlain: [CategoryGroupPlain]) -> TransactionCategory? {
-    //
-    //        guard let categoryPlain = categoryGroupsPlain
-    //            .flatMap { $0.categories }
-    //            .filter { !$0.isHidden }
-    //            .first(where: { $0.id == categoryId })
-    //        else { return nil }
-    //        return map(categoryPlain: categoryPlain)
-    //    }
-    
     func map(categoryPlain: CategoryPlain) -> TransactionCategory {
         return TransactionCategory(id: categoryPlain.id, name: categoryPlain.name)
     }
@@ -292,16 +248,6 @@ final public class BudgetMapper: Sendable {
     
     // MARK: Available
     
-    //    func mapGroupAvailableTotal(for categories: [Category]) -> [MonthYear: Decimal] {
-    //        return categories
-    //            .flatMap { $0.available } // [Dictionary<MonthYear, Activity>.Element]
-    //            .map { ($0.key, $0.value.total) } // [(MonthYear, Decimal)]
-    //            .reduce(into: [MonthYear: Decimal]()) { groupTotal, categoryValues in
-    //                let (monthYear, categoryAvailableTotal) = categoryValues
-    //                groupTotal[monthYear, default: 0.00] += categoryAvailableTotal
-    //            } // [MonthYear : Decimal]
-    //    }
-    
     func mapGroupAvailableTotal(for categories: [Category]) -> [MonthYear: Decimal] {
         var totals: [MonthYear: Decimal] = [:]
         
@@ -317,14 +263,6 @@ final public class BudgetMapper: Sendable {
         }
         return totals
     }
-    
-    //    func mapGroupAvailableTotal(for categories: [Category]) -> [MonthYear: Decimal] {
-    //        let flattened = categories.flatMap { $0.available }
-    //        let sanitized = flattened.reduce(into: [MonthYear: Decimal]()) { result, entry in
-    //            result[entry.key, default: 0.00] += entry.value.total
-    //        }
-    //        return sanitized
-    //    }
     
     func mapAvailable(for category: CategoryPlain, from data: CombinedBudgetData) -> [MonthYear: Available] {
         
@@ -352,15 +290,6 @@ final public class BudgetMapper: Sendable {
         }
         return available
     }
-    
-    //    func available(for monthYear: MonthYear) -> Decimal {
-    //        let previousMonth = monthYear.advanced(by: -1)
-    //        var availableFromPreviousMonth: Decimal = 0.00
-    //        if let previousMonthAvailable = self.available[previousMonth], previousMonthAvailable > 0.00 {
-    //            availableFromPreviousMonth = previousMonthAvailable
-    //        }
-    //        return availableFromPreviousMonth + (self.assigned[monthYear] ?? 0.00) + (activity[monthYear] ?? 0.00)
-    //    }
     
     // MARK: - Budget Accounts Plain to Entity
     

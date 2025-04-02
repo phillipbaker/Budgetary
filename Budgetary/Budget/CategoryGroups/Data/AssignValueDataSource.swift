@@ -5,14 +5,11 @@
 //  Created by Phillip Baker on 15/02/2025.
 //
 
+import Factory
 import Foundation
 
-public class AssignMoneyDataSource: AssignValueSource {
-    let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal
-    
-    init(categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal) {
-        self.categoryGroupsDataSourceLocal = categoryGroupsDataSourceLocal
-    }
+public final class AssignMoneyDataSource: AssignMoneySource {
+    let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
     public func findCategory(by id: String) async -> CategoryPlain? {
         await categoryGroupsDataSourceLocal.findCategory(by: id)

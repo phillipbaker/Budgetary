@@ -42,7 +42,7 @@ extension ReadyToAssignPresentation {
         darkModeForegroundColor: .accentColor,
         lightModeBackgroundColor: .secondary,
         darkModeBackgroundColor: .secondary,
-        message: "Message..",
-        destination: .assignMoney
+        message: "Message.."
+//        destination: .assignMoney
     )
 }

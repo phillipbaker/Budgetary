@@ -11,8 +11,8 @@ extension View {
     /// Mirror changes in the view model focused field to the view @FocusState property.
     /// Mirror changes in the view @FocusState property to the view model focused field.
     func bind(
-        _ focusState: FocusState<FocusedField?>.Binding,
-        to focus: Binding<FocusedField?>
+        _ focusState: FocusState<EditCategoriesViewModel.FocusedField?>.Binding,
+        to focus: Binding<EditCategoriesViewModel.FocusedField?>
     ) -> some View {
         self
             .onChange(of: focus.wrappedValue) { _, newValue in

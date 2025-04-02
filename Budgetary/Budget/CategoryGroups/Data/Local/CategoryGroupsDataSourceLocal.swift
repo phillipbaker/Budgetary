@@ -7,6 +7,7 @@
 
 public protocol CategoryGroupsDataSourceLocal: Sendable {
     func categoryGroupsStream() async -> AsyncStream<[CategoryGroupPlain]>
+    func allCategoryGroups() async -> [CategoryGroupPlain]
     func findCategoryGroup(by id: String) async -> CategoryGroupPlain
     func findCategory(by id: String) async -> CategoryPlain
     func create(categoryGroup: CategoryGroupPlain) async

@@ -1,19 +1,19 @@
 //
-//  CategoryGroupsMapperPlain.swift
+//  CategoryGroupsLocalDataGateway.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 05/11/2024.
 //
 
+import Factory
+
 actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
-    let dao: CategoryGroupDao
-    let mapper: CategoryGroupsMapperPlain
+    let dao: CategoryGroupDao = Container.shared.categoryGroupDao()
+    let mapper: CategoryGroupsMapperPlain = Container.shared.categoryGroupsMapperPlain()
     
     private let (stream, continuation) = AsyncStream.makeStream(of: [CategoryGroupPlain].self, bufferingPolicy: .bufferingNewest(1))
     
-    init(dao: CategoryGroupDao, mapper: CategoryGroupsMapperPlain) {
-        self.dao = dao
-        self.mapper = mapper
+    init() {
         Task { await startStreaming() }
     }
     
@@ -32,6 +32,11 @@ actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
         }
     }
     
+    func allCategoryGroups() -> [CategoryGroupPlain] {
+        let categoryGroupsDb = dao.allCategoryGroups()
+        return mapper.mapDbToPlain(categoryGroupsDb: categoryGroupsDb)
+    }
+    
     func findCategoryGroup(by id: String) -> CategoryGroupPlain {
         let categoryGroupDb = dao.findCategoryGroup(by: id)
         return mapper.mapDbToPlain(categoryGroupDb: categoryGroupDb)
@@ -43,6 +48,8 @@ actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
     }
     
     func update(category: CategoryPlain) {
+        print("update category called in gateway")
+        print("name in gateway:", category.name)
         let categoryDb = mapper.mapPlainToDb(categoryPlain: category)
         dao.update(category: categoryDb)
     }

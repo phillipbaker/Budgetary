@@ -4,29 +4,20 @@
 //
 //  Created by Phillip Baker on 04/11/2024.
 //
-import AsyncAlgorithms
 
-final public class GetBudgetSourceCombined: GetBudgetSource {
-    let budgetDataSourceLocal: BudgetDataSourceLocal
-    let payeesDataSourceLocal: PayeesDataSourceLocal
-    let budgetAccountsDataSourceLocal: BudgetAccountsDataSourceLocal
-    let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal
-    let mapper: CombinedBudgetDataMapper
-    
+import AsyncAlgorithms
+import Factory
+
+public final class GetBudgetSourceCombined: GetBudgetSource, Sendable {
+    let budgetDataSourceLocal: BudgetDataSourceLocal = Container.shared.budgetDataSourceLocal()
+    let payeesDataSourceLocal: PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
+    let budgetAccountsDataSourceLocal: BudgetAccountsDataSourceLocal = Container.shared.budgetAccountsDataSourceLocal()
+    let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
+    let mapper: CombinedBudgetDataMapper = Container.shared.combinedBudgetDataMapper()
+
     let (combinedBudgetDataStream, continuation) = AsyncStream.makeStream(of: CombinedBudgetData.self, bufferingPolicy: .bufferingNewest(1))
     
-    public init(
-        budgetDataSourceLocal: BudgetDataSourceLocal,
-        payeesDataSourceLocal: PayeesDataSourceLocal,
-        budgetAccountsDataSourceLocal: BudgetAccountsDataSourceLocal,
-        categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal,
-        mapper: CombinedBudgetDataMapper
-    ) {
-        self.budgetDataSourceLocal = budgetDataSourceLocal
-        self.payeesDataSourceLocal = payeesDataSourceLocal
-        self.budgetAccountsDataSourceLocal = budgetAccountsDataSourceLocal
-        self.categoryGroupsDataSourceLocal = categoryGroupsDataSourceLocal
-        self.mapper = mapper
+    public init() {
         Task { await startStreaming() }
     }
     

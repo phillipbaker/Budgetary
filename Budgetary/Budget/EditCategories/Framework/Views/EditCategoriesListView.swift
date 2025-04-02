@@ -7,70 +7,80 @@
 
 import SwiftUI
 
-//struct EditCategoriesListView: View {
-//    var groups: [CategoryGroupPresentation]
-//    var intent: (EditCategoriesIntent) -> Void
-//    
-//    @FocusState var focusedField: FocusedField?
-//    let resignFocus: () -> Void
-//
-//    var body: some View {
-//        List {
-//            Button("Add Group") {
+struct EditCategoriesListView: View {
+    @Environment(BudgetCoordinator.self) var coordinator
+//    @Bindable var viewModel: EditCategoriesViewModel
+    
+    let groups: [EditableCategoryGroupPresentation]
+    let intent: (EditCategoriesIntent) -> Void
+    
+    @State private var localValues: [String: String] = [:]
+    
+//    @FocusState var focusedField: EditCategoriesViewModel.FocusedField?
+    let resignFocus: () -> Void
+
+    var body: some View {
+        List {
+            Button("Add Group") {
 //                withAnimation { intent(.addGroup) }
-//            }
-//            ForEach(groups) { group in
-//                Section {
-//                    ForEach(group.categories) { category in
-//                        EditCategoryRow(
-//                            category: category,
-//                            renameCategory: { category, newName in
-//                                intent(.renameCategory(category, newName))
-//                            },
-//                            editedName: category.name,
-//                            focusedField: _focusedField
-//                        )
-//                    }
-//                    .onMove { source, destination in
-//                        intent(.reorderCategories(group, source, destination))
-//                    }
-//                } header: {
-//                    EditCategoryGroupRow(
-//                        group: group,
-//                        intent: { rowIntent in intent(rowIntent) },
-//                        editedName: group.name,
+            }
+            ForEach(groups) { group in
+                Section {
+                    ForEach(group.categories) { category in
+                        EditCategoryRow(
+                            id: category.id,
+                            intent: intent,
+                            editedName: bindingFor(category: category)
+                            //                            focusedField: _focusedField
+                        )
+                    }
+                    .onMove { _, _ in
+                        //                        intent(.reorderCategories(group, source, destination))
+                    }
+                } header: {
+                    EditCategoryGroupRow(
+                        group: group,
+                        intent: { _ in /*rowIntent in intent(rowIntent)*/ },
+                        editedName: group.name
 //                        focusedField: _focusedField
-//                    )
-//                    EditCategoryGroupRow(
-//                        group: group,
-//                        focusedField: _focusedField,
-//                        addGroup: { id in intent(.addCategory(id: id)) },
-//                        removeGroup: { id in intent(.removeGroup(id: id)) }
-//                    )
+                    )
 //                    .background(
 //                        focusedField == .listRow(group.id)
 //                        ? Color(.systemFill)
 //                        : Color.clear
 //                    )
-//                }
-//            }
+                }
+            }
 //            .onMove { source, destination in
-//                intent(.reorderGroups(source, destination))
+////                intent(.reorderGroups(source, destination))
 //            }
-//        }
-//        .padding(.horizontal, 8)
-//        .listStyle(.plain)
-//        
-//        .onTapGesture {
+        }
+        .padding(.horizontal, 8)
+        .listStyle(.plain)
+        
+        .onTapGesture {
 //            resignFocus()
-//        }
-//    }
-//}
-//
-//#Preview {
-//    EditCategoriesListView(
-//        groups: [.obligations, .trueExpenses, .monthlyExpenses, .fun],
-//        intent: { _ in },
-//        resignFocus: {}
-//    )
-//}
+        }
+        
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                DoneButton(onSubmit: coordinator.doneEditingCategoriesButtonTapped)
+            }
+        }
+    }
+    
+    private func bindingFor(category: EditableCategoryPresentation) -> Binding<String> {
+        return Binding(
+            get: { localValues[category.id, default: category.name] },
+            set: { localValues[category.id] = $0 }
+        )
+    }
+}
+
+#Preview {
+    EditCategoriesListView(
+        groups: [EditableCategoryGroupPresentation.obligations, .trueExpenses, .monthlyExpenses, .fun],
+        intent: { _ in },
+        resignFocus: {}
+    )
+}

@@ -5,46 +5,20 @@
 //  Created by Phillip Baker on 12/08/2024.
 //
 
+import Factory
 import SwiftUI
 import SwiftUINavigation
 
 @Observable
 public final class BudgetViewModel {
-    @ObservationIgnored private var stateMapper: BudgetStateMapper
-    @ObservationIgnored private var getBudgetUseCase: GetBudget
-    @ObservationIgnored private var assignMoneyUseCase: AssignMoney
+    @ObservationIgnored private let stateMapper: BudgetStateMapper = Container.shared.budgetStateMapper()
+    @ObservationIgnored private let getBudgetUseCase: GetBudget = Container.shared.getBudgetUseCase()
+    @ObservationIgnored private let assignMoneyUseCase: AssignMoney = Container.shared.assignMoneyUseCase()
     
     var state: BudgetState
-    var destination: Destination?
     
-    @CasePathable
-    enum Destination: String {
-        case monthPicker
-        case assignMoney
-        case editCategories
-        case coverOverspending
-        case coverCategoryOverspending
-        case newFilter
-        case manageFilters
-        case categoryDetail
-        case autoAssign
-        case moveMoney
-        
-        var id: String { rawValue }
-    }
-    
-    init(
-        state: BudgetState = .loading,
-        stateMapper: BudgetStateMapper,
-        getBudgetUseCase: GetBudget,
-        assignMoneyUseCase: AssignMoney,
-        destination: Destination? = nil
-    ) {
+    init(state: BudgetState = .loading) {
         self.state = state
-        self.stateMapper = stateMapper
-        self.getBudgetUseCase = getBudgetUseCase
-        self.assignMoneyUseCase = assignMoneyUseCase
-        self.destination = destination
     }
 
     @MainActor
@@ -66,33 +40,6 @@ public final class BudgetViewModel {
             case let .updateAssignedAmount(categoryId: categoryId, monthYear: monthYear, amount: amount):
                 await assignMoneyUseCase.update(assignedValue: amount, to: categoryId, for: monthYear)
             }
-        }
-    }
-
-    func handle(destination: Destination?) {
-        switch destination {
-        case .monthPicker:
-            self.destination = .monthPicker
-        case .editCategories:
-            self.destination = .editCategories
-        case .assignMoney:
-            self.destination = .assignMoney
-        case .coverOverspending:
-            self.destination = .coverOverspending
-        case .coverCategoryOverspending:
-            self.destination = .coverCategoryOverspending
-        case .newFilter:
-            self.destination = .newFilter
-        case .manageFilters:
-            self.destination = .manageFilters
-        case .categoryDetail:
-            self.destination = .categoryDetail
-        case .autoAssign:
-            self.destination = .autoAssign
-        case .moveMoney:
-            self.destination = .moveMoney
-        case .none:
-            self.destination = nil
         }
     }
     

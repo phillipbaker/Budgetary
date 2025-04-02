@@ -5,7 +5,7 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
-final class CategoryGroupsMapperPlain: Sendable {
+final class CategoryGroupsMapperPlain {
     func mapDbToPlain(categoryGroupsDb: [CategoryGroupDb]) -> [CategoryGroupPlain] {
         return categoryGroupsDb.map { categoryGroupDb in
             mapDbToPlain(categoryGroupDb: categoryGroupDb)

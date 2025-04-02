@@ -11,7 +11,7 @@ import SwiftUI
 //Double(proposedReassignemnt)
 //proposedReassignment: NSDecimalNumber(decimal: category.proposedReassignment).doubleValue
 
-public class BudgetPresentationMapper {
+public final class BudgetPresentationMapper {
     func map(budget: Budget) -> BudgetPresentation {
         return BudgetPresentation(
             id: budget.id,
@@ -104,8 +104,8 @@ public class BudgetPresentationMapper {
                 darkModeForegroundColor: mapDarkModeForegroundColor(for: readyToAssign.readyToAssignThisMonth),
                 lightModeBackgroundColor: mapLightModeBackgroundColor(for: readyToAssign.readyToAssignThisMonth),
                 darkModeBackgroundColor: mapDarkModeBackgroundColor(for: readyToAssign.readyToAssignThisMonth),
-                message: mapReadyToAssignMessage(for: readyToAssign.readyToAssignThisMonth),
-                destination: readyToAssign.readyToAssignThisMonth >= 0.00 ? .assignMoney : .coverOverspending
+                message: mapReadyToAssignMessage(for: readyToAssign.readyToAssignThisMonth)
+//                destination: readyToAssign.readyToAssignThisMonth >= 0.00 ? .assignMoney : .coverOverspending
             )
         }
     }

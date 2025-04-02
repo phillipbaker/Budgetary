@@ -10,7 +10,7 @@ import SwiftUI
 struct ReadyToAssignView: View {
     @Environment(\.colorScheme) var colorScheme
     let readyToAssign: ReadyToAssignPresentation
-    var buttonAction: () -> Void
+    let buttonAction: () -> Void
     
     var body: some View {
         Button(action: buttonAction) {

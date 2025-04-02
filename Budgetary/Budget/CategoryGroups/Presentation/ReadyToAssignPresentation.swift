@@ -20,5 +20,5 @@ public struct ReadyToAssignPresentation: Equatable, Sendable {
     let lightModeBackgroundColor: Color
     let darkModeBackgroundColor: Color
     let message: String
-    let destination: BudgetViewModel.Destination
+//    let destination: BudgetViewModel.Destination
 }

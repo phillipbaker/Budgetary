@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+@Observable
+class MonthPickerModel {
+    
+}
+
 struct MonthPickerView: View {
     @State var year: Int
     let monthYear: MonthYear

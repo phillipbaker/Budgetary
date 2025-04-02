@@ -5,17 +5,13 @@
 //  Created by Phillip Baker on 14/02/2025.
 //
 
+import Factory
 import Foundation
 
-public class AssignMoney {
-    var source: AssignValueSource
-    var mapper: BudgetMapper
-    
-    public init(source: AssignValueSource, mapper: BudgetMapper) {
-        self.source = source
-        self.mapper = mapper
-    }
-    
+public final class AssignMoney {
+    let source: AssignMoneySource = Container.shared.assignMoneySource()
+    let mapper: BudgetMapper = Container.shared.budgetMapper()
+
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency

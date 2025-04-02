@@ -5,6 +5,7 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
+import Factory
 import Foundation
 import SwiftData
 
@@ -15,13 +16,12 @@ enum PayeeDbUpdate {
 
 class PayeeDao {
     private var container: ModelContainer
-    let mapper: PayeesMapperPlain
+    let mapper: PayeesMapperPlain = Container.shared.payeesMapperPlain()
     
     private let (stream, continuation) = AsyncStream.makeStream(of: [PayeePlain].self)
     
-    init(container: ModelContainer, mapper: PayeesMapperPlain) {
+    init(container: ModelContainer) {
         self.container = container
-        self.mapper = mapper
         startStreaming()
     }
     

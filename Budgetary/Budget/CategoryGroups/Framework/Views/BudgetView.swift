@@ -6,43 +6,38 @@
 //
 
 import SwiftUI
+import SwiftUINavigation
 
 struct BudgetView: View {
+    @Bindable var coordinator: BudgetCoordinator
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSize
     
     let budget: BudgetPresentation
     let intent: (BudgetIntent) -> Void
-    var destination: (BudgetViewModel.Destination?) -> Void
     
     @State private var assignedValues: [String: AssignedValue] = [:]
-    
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         List {
             Section {
                 // TODO: Fix need for this ?? default value
-                ReadyToAssignView(readyToAssign: budget.readyToAssign[budget.monthYear] ?? ReadyToAssignPresentation(
-                    readyToAssignFromLastMonth: "",
-                    cashOverspendingFromLastMonth: "",
-                    inflowThisMonth: "",
-                    assignedThisMonth: "",
-                    assignedInFuture: "",
-                    readyToAssignThisMonth: "",
-                    lightModeForegroundColor: .red,
-                    darkModeForegroundColor: .red,
-                    lightModeBackgroundColor: .red,
-                    darkModeBackgroundColor: .red,
-                    message: "",
-                    destination: .assignMoney
-                ),
-                                  buttonAction: {
-                    destination(
-                        budget
-                            .readyToAssign[budget.monthYear]?.destination
-                    )
-                }
+                ReadyToAssignView(
+                    readyToAssign: budget.readyToAssign[budget.monthYear] ?? ReadyToAssignPresentation(
+                        readyToAssignFromLastMonth: "",
+                        cashOverspendingFromLastMonth: "",
+                        inflowThisMonth: "",
+                        assignedThisMonth: "",
+                        assignedInFuture: "",
+                        readyToAssignThisMonth: "",
+                        lightModeForegroundColor: .red,
+                        darkModeForegroundColor: .red,
+                        lightModeBackgroundColor: .red,
+                        darkModeBackgroundColor: .red,
+                        message: ""
+                    ),
+                    buttonAction: {}
                 )
             }
             .padding(.horizontal)
@@ -53,8 +48,7 @@ struct BudgetView: View {
             Section {
                 FilterCategoriesView(
                     filter: budget.filter,
-                    filterIntent: { id in intent(.filterButtonTapped(monthYear: budget.monthYear, filterId: id)) },
-                    destination: { dest in destination(dest) }
+                    filterIntent: { id in intent(.filterButtonTapped(monthYear: budget.monthYear, filterId: id)) }
                 )
             }
             .listRowSeparator(.hidden)
@@ -113,24 +107,54 @@ struct BudgetView: View {
                     }
                 }
         )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                BudgetMenu()
+            }
+            
+            ToolbarItem(placement: .navigation) {
+                HStack {
+                    Button {
+                        coordinator.monthPickerButtonTapped()
+                    } label: {
+                        MonthPickerButtonLabel(month: budget.monthYear.monthAbbreviated + " " + budget.monthYear.year.description)
+                            .popover(isPresented: Binding($coordinator.destination.monthPicker), attachmentAnchor: .point(.bottom)) {
+                                MonthPickerView(
+                                    year: budget.monthYear.year,
+                                    monthYear: budget.monthYear,
+                                    months: budget.months,
+                                    filter: budget.filter,
+                                    intent: intent
+                                )
+                            }
+                    }
+                    
+                    if budget.monthYear != .currentMonthYear {
+                        TodayButton(intent: intent, filter: budget.filter)
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: Binding($coordinator.destination.editCategories)) {
+            EditCategoriesRootView()
+        }
     }
     
     private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<AssignedValue> {
         let key = "\(monthYear.description)-\(category.id.description)"
         
         return Binding(
-            get: { assignedValues[key, default:
-                    AssignedValue(
-                        primary: category.assigned[monthYear]?.assignedThisMonth ?? "",
-                        secondary: Decimal(0).formatted(.currency(code: "GBP")),
-                        operation: "",
-                        lastCommitted: Decimal(0).formatted(.currency(code: "GBP"))
-                    )]},
+            get: { assignedValues[key, default: AssignedValue(
+                primary: category.assigned[monthYear]?.assignedThisMonth ?? "",
+                secondary: Decimal(0).formatted(.currency(code: "GBP")),
+                operation: "",
+                lastCommitted: Decimal(0).formatted(.currency(code: "GBP"))
+            )]},
             set: { assignedValues[key] = $0 }
         )
     }
 }
 
 #Preview {
-    BudgetView(budget: .mock, intent: { _ in }, destination: { _ in })
+    BudgetView(coordinator: BudgetCoordinator(), budget: .mock, intent: { _ in })
 }

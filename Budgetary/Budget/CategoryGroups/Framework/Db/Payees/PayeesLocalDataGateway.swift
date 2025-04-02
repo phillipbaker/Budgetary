@@ -5,15 +5,15 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
+import Factory
+
 actor PayeesLocalDataGateway: PayeesDataSourceLocal {
-    var dao: PayeeDao
-    var mapper: PayeesMapperPlain
+    let dao: PayeeDao = Container.shared.payeeDao()
+    let mapper: PayeesMapperPlain = Container.shared.payeesMapperPlain()
     
     private let (stream, continuation) = AsyncStream.makeStream(of: [PayeePlain].self, bufferingPolicy: .bufferingNewest(1))
     
-    init(dao: PayeeDao, mapper: PayeesMapperPlain) {
-        self.dao = dao
-        self.mapper = mapper
+    init() {
         Task { await startStreaming() }
     }
     

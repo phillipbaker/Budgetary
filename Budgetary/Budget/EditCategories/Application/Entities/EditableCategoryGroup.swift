@@ -1,0 +1,16 @@
+//
+//  EditableCategoryGroup.swift
+//  Budgetary
+//
+//  Created by Phillip Baker on 31/03/2025.
+//
+
+struct EditableCategoryGroup: Equatable, Sendable {
+    let id: String
+    let name: String
+    let categories: [EditableCategory]
+    
+    func renameGroup(to newName: String) -> EditableCategoryGroup {
+        return EditableCategoryGroup(id: self.id, name: newName, categories: self.categories)
+    }
+}

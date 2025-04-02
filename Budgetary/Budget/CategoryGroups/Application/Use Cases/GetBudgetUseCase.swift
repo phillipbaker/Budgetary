@@ -5,16 +5,16 @@
 //  Created by Phillip Baker on 04/11/2024.
 //
 
-final public class GetBudget: Sendable {
-    let source: GetBudgetSource
-    let mapper: BudgetMapper
-    
+import Factory
+
+public final class GetBudget: Sendable {
+    let source: GetBudgetSource = Container.shared.getBudgetSource()
+    let mapper: BudgetMapper = Container.shared.budgetMapper()
+
     private let dataStore = BudgetDataStore()
     private let (combinedDataStream, continuation) = AsyncStream.makeStream(of: CombinedBudgetData.self)
 
-    public init(source: GetBudgetSource, mapper: BudgetMapper) {
-        self.source = source
-        self.mapper = mapper
+    public init() {
         Task { await startStreaming() }
     }
     

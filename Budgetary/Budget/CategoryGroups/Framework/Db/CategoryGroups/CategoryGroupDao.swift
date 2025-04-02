@@ -5,19 +5,23 @@
 //  Created by Phillip Baker on 05/11/2024.
 //
 
+import Factory
 import Foundation
 import SwiftData
 
 class CategoryGroupDao {
     private let container: ModelContainer
-    let mapper: CategoryGroupsMapperPlain
+    let mapper: CategoryGroupsMapperPlain = Container.shared.categoryGroupsMapperPlain()
     
     private let (stream, continuation) = AsyncStream.makeStream(of: [CategoryGroupPlain].self)
     
-    init(container: ModelContainer, mapper: CategoryGroupsMapperPlain) {
+    init(container: ModelContainer) {
         self.container = container
-        self.mapper = mapper
         startStreaming()
+    }
+    
+    func allCategoryGroups() -> [CategoryGroupDb] {
+        return mock
     }
     
     func startStreaming() {

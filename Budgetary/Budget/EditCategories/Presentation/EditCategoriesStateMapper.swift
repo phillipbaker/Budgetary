@@ -5,18 +5,16 @@
 //  Created by Phillip Baker on 02/11/2024.
 //
 
-public class EditCategoriesStateMapper {
-    var mapper: BudgetPresentationMapper
+import Factory
 
-    init(mapper: BudgetPresentationMapper) {
-        self.mapper = mapper
-    }
+public final class EditCategoriesStateMapper {
+    let mapper: EditCategoriesPresentationMapper = Container.shared.editCategoriesPresentationMapper()
     
-    func map(categoryGroups: [CategoryGroup]) -> EditCategoriesState {
-        if categoryGroups.isEmpty {
+    func map(editableCagtegoryGroups: [EditableCategoryGroup]) -> EditCategoriesState {
+        if editableCagtegoryGroups.isEmpty {
             return EditCategoriesState.empty
         } else {
-            return EditCategoriesState.success(mapper.map(categoryGroups: categoryGroups))
+            return EditCategoriesState.success(mapper.map(editableCategoryGroups: editableCagtegoryGroups))
         }
     }
 }

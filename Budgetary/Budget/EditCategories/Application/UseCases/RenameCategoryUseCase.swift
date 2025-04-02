@@ -5,17 +5,27 @@
 //  Created by Phillip Baker on 31/10/2024.
 //
 
-public class RenameCategoryUseCase {
-    var source: RenameCategorySource
-    var mapper: BudgetMapper
+import Factory
+
+public final class RenameCategoryUseCase {
+    let source: RenameCategorySource = Container.shared.renameCategorySource()
+    let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-    public init(source: RenameCategorySource, mapper: BudgetMapper) {
-        self.source = source
-        self.mapper = mapper
-    }
-    
-    func rename(_ category: CategoryPresentation, to name: String) {
-        let category = source.findCategory(by: category.id)
-        source.rename(category, to: name)
+    func renameCategory(withId id: String, to newName: String) async {
+        print("rename category called in use case")
+        guard let categoryPlain = await source.findCategory(by: id) else {
+            print("no plain category found in use case")
+            return
+        }
+
+        let renamedCategory = CategoryPlain(
+            id: categoryPlain.id,
+            name: newName,
+            notes: categoryPlain.notes,
+            isHidden: categoryPlain.isHidden,
+            assigned: categoryPlain.assigned
+        )
+        print("renamed category in use case: ", renamedCategory.name)
+        await source.update(category: renamedCategory)
     }
 }

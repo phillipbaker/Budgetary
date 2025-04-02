@@ -5,12 +5,10 @@
 //  Created by Phillip Baker on 02/11/2024.
 //
 
-public class BudgetStateMapper {
-    var mapper: BudgetPresentationMapper
-    
-    public init(mapper: BudgetPresentationMapper) {
-        self.mapper = mapper
-    }
+import Factory
+
+public final class BudgetStateMapper {
+    let mapper: BudgetPresentationMapper = Container.shared.budgetPresentationMapper()
     
     func map(budget: Budget) -> BudgetState {
         return .success(mapper.map(budget: budget))

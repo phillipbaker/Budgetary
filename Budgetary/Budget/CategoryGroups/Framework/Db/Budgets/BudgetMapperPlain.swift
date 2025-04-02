@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BudgetMapperPlain {
+final class BudgetMapperPlain {
     func mapDbToPlain(budgetDb: BudgetDb) -> BudgetPlain {
         return BudgetPlain(
             id: budgetDb.id,

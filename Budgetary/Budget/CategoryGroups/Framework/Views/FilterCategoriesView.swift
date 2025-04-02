@@ -13,7 +13,7 @@ struct FilterCategoriesView: View {
     
     let filter: CategoryFilterPresentation
     let filterIntent: (_ id: String) -> Void
-    let destination: (BudgetViewModel.Destination) -> Void
+//    let destination: (BudgetViewModel.Destination) -> Void
     
     var body: some View {
         ScrollViewReader { value in
@@ -36,13 +36,13 @@ struct FilterCategoriesView: View {
                     
                     Menu {
                         Button {
-                            destination(.manageFilters)
+//                            destination(.manageFilters)
                         } label: {
                             Label("Manage Filters", systemImage: "pencil")
                         }
                         
                         Button {
-                            destination(.newFilter)
+//                            destination(.newFilter)
                         } label: {
                             Label("New Filter", systemImage: "plus.circle")
                         }
