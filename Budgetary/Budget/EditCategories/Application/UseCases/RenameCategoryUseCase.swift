@@ -7,17 +7,21 @@
 
 import Factory
 
-public final class RenameCategoryUseCase {
+final class RenameCategoryUseCase {
     let source: RenameCategorySource = Container.shared.renameCategorySource()
     let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-    func renameCategory(withId id: String, to newName: String) async {
-        print("rename category called in use case")
-        guard let categoryPlain = await source.findCategory(by: id) else {
-            print("no plain category found in use case")
+    func rename(categoryWithId id: String, to newName: String) async {
+        guard let categoryGroupPlain = await source.findCategoryGroup(containing: id) else {
+            print("no category group containing category found")
             return
         }
-
+        
+        guard let categoryPlain = categoryGroupPlain.categories.first(where: { $0.id == id }) else {
+            print("no category in returned group with id")
+            return
+        }
+        
         let renamedCategory = CategoryPlain(
             id: categoryPlain.id,
             name: newName,
@@ -25,7 +29,16 @@ public final class RenameCategoryUseCase {
             isHidden: categoryPlain.isHidden,
             assigned: categoryPlain.assigned
         )
-        print("renamed category in use case: ", renamedCategory.name)
-        await source.update(category: renamedCategory)
+        
+        let updatedGroup = CategoryGroupPlain(
+            id: categoryGroupPlain.id,
+            name: categoryGroupPlain.name,
+            isHidden: categoryGroupPlain.isHidden,
+            categories: categoryGroupPlain.categories.map {
+                $0.id == renamedCategory.id ? renamedCategory : $0
+            }
+        )
+        
+        await source.update(categoryGroup: updatedGroup)
     }
 }

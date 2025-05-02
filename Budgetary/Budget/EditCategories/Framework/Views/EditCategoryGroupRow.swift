@@ -8,51 +8,41 @@
 import SwiftUI
 
 struct EditCategoryGroupRow: View {
-    // TODO: Just id here instead of whole group?
-    let group: EditableCategoryGroupPresentation
+    let id: String
     let intent: (EditCategoriesIntent) -> Void
-    @State var editedName: String
-//    @FocusState var focusedField: EditCategoriesViewModel.FocusedField?
+    
+    @Binding var editedName: String
+    @State private var displayAlert: Bool = false
+    
+    enum FocusedField: Hashable {
+        case listRow(id: String)
+    }
     
     var body: some View {
-        HStack {
-            TextField("Group Name", text: $editedName)
-//                .focused($focusedField, equals: .listRow(group.id))
-//                .onChange(of: focusedField) { oldValue, _ in
-//                    if oldValue == .listRow(group.id) {
-//                        if editedName.isEmpty && group.categories.isEmpty {
-//                            withAnimation {
-////                                intent(.removeGroup(id: group.id))
-//                            }
-//                        }
-//                    }
-//                }
-                .onSubmit {
-//                    intent(.renameGroup(group, editedName))
+        TextField("Group Name", text: $editedName)
+            .onSubmit {
+                guard !editedName.isEmpty else {
+                    displayAlert = true
+                    return
                 }
-                .font(.body)
-                .fontWeight(.semibold)
-            
-            Button {
-//                withAnimation { intent(.addGroup) }
-            } label: {
-                Image(systemName: "plus.circle")
-                    .tint(.secondary)
+                intent(.renameGroup(id: id, newName: editedName))
             }
-            .buttonStyle(.borderless)
-            
-            Image(systemName: "line.3.horizontal")
-                .foregroundStyle(.secondary)
-                .imageScale(.large)
-        }
-        .padding(.bottom, 8)
+            .alert(Text("Category Group name cannot be empty"), isPresented: $displayAlert) {
+                Button("OK") {
+                    displayAlert = false
+                }
+            }
+            .font(.body)
+            .fontWeight(.semibold)
+            .textCase(.none)
+            .padding(.bottom, 8)
     }
 }
 
 #Preview {
     EditCategoryGroupRow(
-        group: .obligations,
-        intent: { _ in }, 
-        editedName: "Obligations"
+        id: UUID().uuidString,
+        intent: { _ in },
+        editedName: .constant("Obligations")
     )
 }

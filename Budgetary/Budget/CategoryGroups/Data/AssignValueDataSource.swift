@@ -9,13 +9,13 @@ import Factory
 import Foundation
 
 public final class AssignMoneyDataSource: AssignMoneySource {
-    let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
+    let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
-    public func findCategory(by id: String) async -> CategoryPlain? {
-        await categoryGroupsDataSourceLocal.findCategory(by: id)
+    public func findCategoryGroup(containing categoryId: String) async -> CategoryGroupPlain? {
+        await categoryGroupsDataSourceLocal.findCategoryGroup(containing: categoryId)
     }
     
-    public func update(category: CategoryPlain) async {
-        await categoryGroupsDataSourceLocal.update(category: category)
+    public func update(categoryGroup: CategoryGroupPlain) async {
+        await categoryGroupsDataSourceLocal.update(categoryGroup: categoryGroup)
     }
 }

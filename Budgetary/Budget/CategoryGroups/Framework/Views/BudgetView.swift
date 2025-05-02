@@ -5,21 +5,23 @@
 //  Created by Phillip Baker on 07/08/2024.
 //
 
+import Factory
 import SwiftUI
 import SwiftUINavigation
 
 struct BudgetView: View {
-    @Bindable var coordinator: BudgetCoordinator
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSize
+    @Environment(BudgetCoordinator.self) var coordinator
     
     let budget: BudgetPresentation
     let intent: (BudgetIntent) -> Void
-    
+
     @State private var assignedValues: [String: AssignedValue] = [:]
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
+        @Bindable var coordinator = coordinator
         List {
             Section {
                 // TODO: Fix need for this ?? default value
@@ -156,5 +158,5 @@ struct BudgetView: View {
 }
 
 #Preview {
-    BudgetView(coordinator: BudgetCoordinator(), budget: .mock, intent: { _ in })
+    BudgetView(budget: .mock, intent: { _ in })
 }

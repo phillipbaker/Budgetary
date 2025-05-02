@@ -5,18 +5,19 @@
 //  Created by Phillip Baker on 31/10/2024.
 //
 
-public class RemoveGroupUseCase {
-    var source: RemoveGroupSource
-    var mapper: BudgetMapper
-    
-    public init(source: RemoveGroupSource, mapper: BudgetMapper) {
-        self.source = source
-        self.mapper = mapper
-    }
-    
-    // Just get ID and pass that through to delete?
-    func removeGroup(id: String) {
-        let group = source.findCategoryGroup(by: id)
-        source.remove(group)
+import Factory
+
+final class RemoveGroupUseCase {
+    var source: RemoveGroupSource = Container.shared.removeGroupSource()
+    var mapper: BudgetMapper = Container.shared.budgetMapper()
+
+    func removeGroup(id: String) async {
+        guard let group = await source.findCategoryGroup(by: id) else {
+            //throw error
+            print("no group found")
+            return
+        }
+
+        await source.remove(categoryGroup: group)
     }
 }

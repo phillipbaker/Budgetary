@@ -12,11 +12,21 @@ import SwiftUI
 final class BudgetCoordinator {
     var destination: Destination? = nil
     
+    let id = UUID()
+    
     @CasePathable
     enum Destination {
         case editCategories
         case monthPicker
+        case newGroup
+        case newCategory
     }
+    
+    func dismiss() {
+        destination = nil
+    }
+    
+    // Budget Home
     
     func editCateogoriesButtonTapped() {
         guard destination != .editCategories else { return }
@@ -28,7 +38,17 @@ final class BudgetCoordinator {
         destination = .monthPicker
     }
     
+    // Edit Categories
+    
     func doneEditingCategoriesButtonTapped() {
         destination = nil
+    }
+    
+    func newGroupButtonTapped() {
+        destination = .newGroup
+    }
+    
+    func newCategoryButtonTapped() {
+        destination = .newCategory
     }
 }

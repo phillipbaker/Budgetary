@@ -10,32 +10,37 @@ import SwiftUI
 struct EditCategoryRow: View {
     let id: String
     let intent: (EditCategoriesIntent) -> Void
+    
     @Binding var editedName: String
-//    @FocusState var focusedField: EditCategoriesViewModel.FocusedField?
+    @FocusState var focus: FocusedField?
+    @State private var displayAlert: Bool = false
+    
+    enum FocusedField: Hashable {
+        case listRow(id: String)
+    }
     
     var body: some View {
-        HStack {
-            TextField("Category Name", text: $editedName)
-//                .focused($focusedField, equals: .listRow(id))
-                .textFieldStyle(.roundedBorder)
-                .transition(.scale)
-                .onSubmit {
-                    print("onSubmit called")
-                    intent(.renameCategory(id: id, newName: editedName))
-                }
-            
-            Image(systemName: "line.3.horizontal")
-                .foregroundStyle(.tertiary)
-                .imageScale(.large)
-        }
-        .listRowSeparator(.hidden)
-//        .listRowBackground(
-//            focusedField == .listRow(id)
-//            ? Color(.blue.opacity(0.2))
-//                .clipShape(RoundedRectangle(cornerRadius: 8))
-//            : Color.clear
-//                .clipShape(RoundedRectangle(cornerRadius: 8))
-//        )
+        Text(editedName)
+//        TextField("Category Name", text: $editedName)
+//            .focused($focus, equals: .listRow(id: id))
+//            .listRowBackground(
+//                focus == .listRow(id: id)
+//                ? Color(.blue.opacity(0.08))
+//                : nil
+//            )
+//            .onSubmit {
+//                guard !editedName.isEmpty else {
+//                    focus = .listRow(id: id)
+//                    displayAlert = true
+//                    return
+//                }
+//                intent(.renameCategory(id: id, newName: editedName))
+//            }
+//            .alert(Text("Category name cannot be empty"), isPresented: $displayAlert) {
+//                Button("OK") {
+//                    displayAlert = false
+//                }
+//            }
     }
 }
 

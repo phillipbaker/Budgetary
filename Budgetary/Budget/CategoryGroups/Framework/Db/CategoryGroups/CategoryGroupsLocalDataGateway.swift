@@ -8,27 +8,24 @@
 import Factory
 
 actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
+    typealias CategoryGroupBroadcaster = StreamBroadcaster<[CategoryGroupPlain]>
+    
     let dao: CategoryGroupDao = Container.shared.categoryGroupDao()
     let mapper: CategoryGroupsMapperPlain = Container.shared.categoryGroupsMapperPlain()
     
-    private let (stream, continuation) = AsyncStream.makeStream(of: [CategoryGroupPlain].self, bufferingPolicy: .bufferingNewest(1))
+    private let _broadcaster = StreamBroadcaster<[CategoryGroupPlain]>(id: "CategoryGroupsLocalDataGateway")
     
+    nonisolated var broadcaster: CategoryGroupBroadcaster {
+        return _broadcaster
+    }
+
     init() {
         Task { await startStreaming() }
     }
     
-    func categoryGroupsStream() -> AsyncStream<[CategoryGroupPlain]> {
-        return stream
-    }
-    
     private func startStreaming() async {
         for await categoryGroupsPlain in dao.streamCategoryGroups() {
-            continuation.yield(categoryGroupsPlain)
-        }
-        
-        continuation.onTermination = { @Sendable reason in
-            // Handle any necessary cleanup
-            print("categories gateway stream terminated with reason: ", reason)
+            await _broadcaster.send(categoryGroupsPlain)
         }
     }
     
@@ -37,29 +34,26 @@ actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
         return mapper.mapDbToPlain(categoryGroupsDb: categoryGroupsDb)
     }
     
-    func findCategoryGroup(by id: String) -> CategoryGroupPlain {
-        let categoryGroupDb = dao.findCategoryGroup(by: id)
+    func findCategoryGroup(by id: String) -> CategoryGroupPlain? {
+        guard let categoryGroupDb = dao.findCategoryGroup(by: id) else { return nil }
         return mapper.mapDbToPlain(categoryGroupDb: categoryGroupDb)
     }
     
-    func findCategory(by id: String) -> CategoryPlain {
-        let category = dao.findCategory(by: id)
-        return mapper.mapDbToPlain(categoryDb: category)
+    func findCategoryGroup(containing categoryId: String) async -> CategoryGroupPlain? {
+        guard let categoryGroupDb = dao.findCategoryGroup(containing: categoryId) else { return nil }
+        return mapper.mapDbToPlain(categoryGroupDb: categoryGroupDb)
     }
     
-    func update(category: CategoryPlain) {
-        print("update category called in gateway")
-        print("name in gateway:", category.name)
-        let categoryDb = mapper.mapPlainToDb(categoryPlain: category)
-        dao.update(category: categoryDb)
-    }
-    
-    func create(categoryGroup: CategoryGroupPlain) {
+    func addNew(categoryGroup: CategoryGroupPlain) async {
         dao.create(categoryGroup: mapper.mapPlainToDb(categoryGroupPlain: categoryGroup))
     }
-    
+
     func update(categoryGroup: CategoryGroupPlain) {
         dao.update(categoryGroup: mapper.mapPlainToDb(categoryGroupPlain: categoryGroup))
+    }
+    
+    func update(categoryGroups: [CategoryGroupPlain]) async {
+        dao.update(categoryGroups: mapper.mapPlainToDb(categoryGroupsPlain: categoryGroups))
     }
     
     func delete(categoryGroup: CategoryGroupPlain) {

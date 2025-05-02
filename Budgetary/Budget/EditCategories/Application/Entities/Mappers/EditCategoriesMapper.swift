@@ -5,7 +5,7 @@
 //  Created by Phillip Baker on 01/04/2025.
 //
 
-public final class EditCategoriesMapper {
+public final class EditCategoriesMapper: Sendable {
     func map(categoryGroupsPlain: [CategoryGroupPlain]) -> [EditableCategoryGroup] {
         return categoryGroupsPlain.map { categoryGroupPlain in
             map(categoryGroupPlain: categoryGroupPlain)

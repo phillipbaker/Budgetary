@@ -5,7 +5,7 @@
 //  Created by Phillip Baker on 31/03/2025.
 //
 
-struct EditableCategoryGroup: Equatable, Sendable {
+public struct EditableCategoryGroup: Equatable, Sendable {
     let id: String
     let name: String
     let categories: [EditableCategory]

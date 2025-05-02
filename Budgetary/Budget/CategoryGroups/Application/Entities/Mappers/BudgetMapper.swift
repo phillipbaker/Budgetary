@@ -7,7 +7,7 @@
 
 import Foundation
 
-final public class BudgetMapper: Sendable {
+public final class BudgetMapper: Sendable {
     // MARK: - Combined Budget Data to Budget
     
     func mapBudget(
@@ -479,5 +479,38 @@ final public class BudgetMapper: Sendable {
             .compactMap { $0.key }.sorted(by: <) // [MonthYear] ordered chronologically
             .last ?? .currentMonthYear // MonthYear?
         return max(latestAssignedMonthYear.advanced(by: 1), .currentMonthYear.advanced(by: 1))
+    }
+    
+    // MARK: - Category to CategoryPlain
+    
+    func map(categoryGroup: CategoryGroup) -> CategoryGroupPlain {
+        return CategoryGroupPlain(
+            id: categoryGroup.id,
+            name: categoryGroup.name,
+            isHidden: categoryGroup.isHidden,
+            categories: []
+        )
+    }
+    
+    func map(categories: [Category]) -> [CategoryPlain] {
+        categories.map { category in
+            map(category: category)
+        }
+    }
+    
+    func map(category: Category) -> CategoryPlain {
+        return CategoryPlain(
+            id: category.id,
+            name: category.name,
+            notes: category.notes,
+            isHidden: category.isHidden,
+            assigned: map(assigned: category.assigned)
+        )
+    }
+    
+    func map(assigned: [MonthYear: Assigned]) -> [MonthYear: Decimal] {
+        assigned.mapValues {
+            return $0.assignedThisMonth
+        }
     }
 }

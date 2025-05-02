@@ -42,8 +42,8 @@ extension Container {
             .singleton
     }
     
-    var combinedBudgetDataMapper: Factory<CombinedBudgetDataMapper> {
-        self { CombinedBudgetDataMapper() }
+    var budgetDataMapper: Factory<BudgetDataMapper> {
+        self { BudgetDataMapper() }
             .singleton
     }
     
@@ -53,7 +53,7 @@ extension Container {
     }
     
     var getBudgetSource: Factory<GetBudgetSource> {
-        self { GetBudgetSourceCombined() }
+        self { GetBudgetDataSource() }
             .singleton
     }
     
@@ -94,6 +94,26 @@ extension Container {
             .singleton
     }
     
+    var newGroupUseCase: Factory<NewGroupUseCase> {
+        self { NewGroupUseCase()}
+            .singleton
+    }
+    
+    var newGroupSource: Factory<NewGroupSource> {
+        self { NewGroupDataSource() }
+            .singleton
+    }
+    
+    var newCategoryUseCase: Factory<NewCategoryUseCase> {
+        self { NewCategoryUseCase() }
+            .singleton
+    }
+    
+    public var newCategorySource: Factory<NewCategorySource> {
+        self { NewCategoryDataSource() }
+            .singleton
+    }
+    
     var renameCategoryUseCase: Factory<RenameCategoryUseCase> {
         self { RenameCategoryUseCase() }
             .singleton
@@ -101,6 +121,71 @@ extension Container {
     
     var renameCategorySource: Factory<RenameCategorySource> {
         self { RenameCategoryDataSource() }
+            .singleton
+    }
+    
+    var renameGroupUseCase: Factory<RenameGroupUseCase> {
+        self { RenameGroupUseCase() }
+            .singleton
+    }
+    
+    var renameGroupSource: Factory<RenameGroupSource> {
+        self { RenameGroupDataSource() }
+            .singleton
+    }
+    
+    var removeCategoryUseCase: Factory<RemoveCategoryUseCase> {
+        self { RemoveCategoryUseCase() }
+            .singleton
+    }
+    
+    var removeCategorySource: Factory<RemoveCategorySource> {
+        self { RemoveCategoryDataSource() }
+            .singleton
+    }
+    
+    var removeGroupUseCase: Factory<RemoveGroupUseCase> {
+        self { RemoveGroupUseCase() }
+            .singleton
+    }
+    
+    var removeGroupSource: Factory<RemoveGroupSource> {
+        self { RemoveGroupDataSource() }
+            .singleton
+    }
+    
+    var hideCategoryUseCase: Factory<HideCategoryUseCase> {
+        self { HideCategoryUseCase() }
+            .singleton
+    }
+    
+    var hideCategorySource: Factory<HideCategorySource> {
+        self { HideCategoryDataSource() }
+            .singleton
+    }
+    
+    var hideCategoryGroupSource: Factory<HideCategoryGroupSource> {
+        self { HideCategoryGroupDataSource() }
+            .singleton
+    }
+    
+    var moveCategoryGroupUseCase: Factory<MoveCategoryGroupUseCase> {
+        self { MoveCategoryGroupUseCase() }
+            .singleton
+    }
+    
+    var moveCategoryGroupSource: Factory<MoveCategoryGroupSource> {
+        self { MoveCategoryGroupDataSource() }
+            .singleton
+    }
+    
+    var moveCategoryUseCase: Factory<MoveCategoryUseCase> {
+        self { MoveCategoryUseCase() }
+            .singleton
+    }
+    
+    var moveCategorySource: Factory<MoveCategorySource> {
+        self { MoveCategoryDataSource() }
             .singleton
     }
     
@@ -121,7 +206,7 @@ extension Container {
             .singleton
     }
     
-    var categoryGroupsDataSourceLocal: Factory<CategoryGroupsDataSourceLocal> {
+    var categoryGroupsDataSourceLocal: Factory<any CategoryGroupsDataSourceLocal> {
         self { CategoryGroupsLocalDataGateway() }
             .singleton
     }
@@ -155,6 +240,25 @@ extension Container {
     
     var budgetAccountDao: Factory<BudgetAccountDao> {
         self { BudgetAccountDao(container: try! ModelContainer()) }
+            .singleton
+    }
+    
+    // MARK: Stream Broadcaster
+    
+    var streamBroadcaster: Factory<StreamBroadcaster<Sendable>> {
+        self { StreamBroadcaster(id: "Test") }
+            .singleton
+    }
+    
+    // MARK: View Models
+    
+    var budgetViewModel: Factory<BudgetViewModel> {
+        self { BudgetViewModel() }
+            .singleton
+    }
+    
+    var editCategoriesViewModel: Factory<EditCategoriesViewModel> {
+        self { EditCategoriesViewModel() }
             .singleton
     }
 }

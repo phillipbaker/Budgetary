@@ -6,16 +6,6 @@
 //
 
 public protocol RemoveGroupSource {
-    func findCategoryGroup(by id: String) -> CategoryGroup
-    func remove(_ group: CategoryGroup)
+    func findCategoryGroup(by id: String) async -> CategoryGroupPlain?
+    func remove(categoryGroup: CategoryGroupPlain) async
 }
-
-
-class RemoveGroupSourceImpl: RemoveGroupSource {
-    func findCategoryGroup(by id: String) -> CategoryGroup {
-        .fun
-    }
-    
-    func remove(_ group: CategoryGroup) {}
-}
-

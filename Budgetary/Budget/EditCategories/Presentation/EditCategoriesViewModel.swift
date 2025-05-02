@@ -10,31 +10,23 @@ import SwiftUI
 
 @Observable
 public final class EditCategoriesViewModel: Identifiable {
-    @ObservationIgnored let stateMapper: EditCategoriesStateMapper = Container.shared.editCategoriesStateMapper()
     @ObservationIgnored let loadCategoryGroupsUseCase: LoadCategoryGroupsUseCase = Container.shared.loadCategoryGroupsUseCase()
-    
-//    @ObservationIgnored let addCategoryUseCase: AddCategoryUseCase
-//    @ObservationIgnored let addGroupUseCase: AddGroupUseCase
-//    @ObservationIgnored let moveCategoriesUseCase: MoveCategoriesUseCase
-//    @ObservationIgnored let removeCategoryUseCase: RemoveCategoryUseCase
-//    @ObservationIgnored let removeGroupUseCase: RemoveGroupUseCase
-    @ObservationIgnored let renameCategoryUseCase = Container.shared.renameCategoryUseCase()
-//    @ObservationIgnored let renameGroupUseCase: RenameGroupUseCase
-//    @ObservationIgnored let reorderCategoriesUseCase: ReorderCategoriesUseCase
-//    @ObservationIgnored let reorderGroupsUseCase: ReorderGroupsUseCase
-    
-    public enum FocusedField: Hashable {
-        case listRow(String)
-    }
-//    
-    var focusedField: FocusedField?
+    @ObservationIgnored let newGroupUseCase: NewGroupUseCase = Container.shared.newGroupUseCase()
+    @ObservationIgnored let newCategoryUseCase: NewCategoryUseCase = Container.shared.newCategoryUseCase()
+    @ObservationIgnored let renameGroupUseCase: RenameGroupUseCase = Container.shared.renameGroupUseCase()
+    @ObservationIgnored let renameCategoryUseCase: RenameCategoryUseCase = Container.shared.renameCategoryUseCase()
+    @ObservationIgnored let removeGroupUseCase: RemoveGroupUseCase = Container.shared.removeGroupUseCase()
+    @ObservationIgnored let removeCategoryUseCase: RemoveCategoryUseCase = Container.shared.removeCategoryUseCase()
+    @ObservationIgnored let moveCategoryGroupUseCase: MoveCategoryGroupUseCase = Container.shared.moveCategoryGroupUseCase()
+    @ObservationIgnored let moveCategoryUseCase: MoveCategoryUseCase = Container.shared.moveCategoryUseCase()
+
+    @ObservationIgnored let stateMapper: EditCategoriesStateMapper = Container.shared.editCategoriesStateMapper()
+
     var state: EditCategoriesState
     
     init(
-//        focusedField: FocusedField? = nil,
         state: EditCategoriesState = .loading
     ) {
-//        self.focusedField = focusedField
         self.state = state
     }
     
@@ -43,54 +35,39 @@ public final class EditCategoriesViewModel: Identifiable {
         Task {
             switch intent {
             case .loadCategoryGroups:
-                self.state = self.stateMapper.map(editableCagtegoryGroups: await loadCategoryGroupsUseCase.load())
-                //        case let .addCategory(id):
-                //            addCategory(toGroupWithId: id)
-                //        case .addGroup:
-                //            addGroup()
-                //        case .moveCategories(_, _):
-                //            // TODO: Should this be combined with ReorderCategories (and just called Move?)? No, fill out
-                //            break
-                //        case let .removeCategory(categoryId, groupId):
-                //            removeCategoryUseCase.removeCategory(id: categoryId, from: groupId)
-                //        case let .removeGroup(id):
-                //            removeGroupUseCase.removeGroup(id: id)
+                await loadCategoryGroups()
+            case let .newGroup(name):
+                await newGroupUseCase.addNew(group: name)
+            case let .newCategory(name: name, groupId: id):
+                await newCategoryUseCase.addCategory(with: name, toGroupWithId: id)
+            case let .renameGroup(id, newName):
+                await renameGroupUseCase.rename(categoryGroupWithId: id, to: newName)
             case let .renameCategory(id, newName):
-                print("rename category called in view model")
-                await renameCategoryUseCase.renameCategory(withId: id, to: newName)
-                //        case let .renameGroup(group, name):
-                //            renameGroupUseCase.rename(group, to: name)
-                //        case let .reorderCategories(group, offsets, destination):
-                //            reorderCategoriesUseCase.moveCategories(in: group, from: offsets, to: destination)
-                //        case let .reorderGroups(offsets, destination):
-                //            reorderGroupsUseCase.moveGroups(from: offsets, to: destination)
+                await renameCategoryUseCase.rename(categoryWithId: id, to: newName)
+            case let .removeGroup(id):
+                await removeGroupUseCase.removeGroup(id: id)
+            case let .removeCategory(id, categoryGroup):
+                await removeCategoryUseCase.removeCategory(categoryId: id, from: categoryGroup)
+            case let .moveCategoryGroup(offsets, newOffset):
+                await moveCategoryGroupUseCase.moveCategoryGroup(from: offsets, to: newOffset)
+            case let .moveCategory(id, destinationGroupId, index):
+                await moveCategoryUseCase.move(categoryId: id, to: destinationGroupId, at: index)
             }
         }
     }
     
-//    private func addCategory(toGroupWithId id: String) {
-//        let newCategory = addCategoryUseCase.addCategory(toGroupWithId: id)
-//        focusedField = .listRow(newCategory.id)
-//    }
-    
-    private func addGroup() {
-//        let newGroup = addGroupUseCase.addGroup()
-//        focusedField = .listRow(newGroup.id)
-        //        if let emptyRow = groups.first(where: { $0.name.isEmpty }) {
-        //            focusedField = .listRow(emptyRow.id)
-        //        } else {
-        //            let newGroup = CategoryGroupPresentation()
-        //            groups.insert(newGroup, at: 0)
-        //            focusedField = .listRow(newGroup.id)
-        //        }
-        //    }
-    }
-    
-    private func update(_ category: CategoryPresentation) {
-        // apply edits to name, hide/unhide, notes all at once? How will that work?
-    }
-    
-    func resignFocus() {
-//        focusedField = nil
+    private var isSubscribed = false // would probably prefer to do this with Task solution but caused concurrency error
+
+    private func loadCategoryGroups() async {
+        self.state = self.stateMapper.map(editableCagtegoryGroups: await loadCategoryGroupsUseCase.load())
+        
+        // Only subscribe if we haven't already started a subscription
+        if !isSubscribed {
+            isSubscribed = true
+            for await categoryGroups in await loadCategoryGroupsUseCase.subscribe() {
+                // see budget view model, not handling errors and more here yet...
+                self.state = self.stateMapper.map(editableCagtegoryGroups: categoryGroups)
+            }
+        }
     }
 }

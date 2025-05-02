@@ -9,13 +9,12 @@ import Foundation
 
 public enum EditCategoriesIntent {
     case loadCategoryGroups
-//    case addCategory(id: String)
-//    case addGroup
-//    case moveCategories([CategoryPresentation], CategoryGroupPresentation)
-//    case removeCategory(id: String, groupId: String)
-//    case removeGroup(id: String)
+    case newGroup(name: String)
+    case newCategory(name: String, groupId: String)
+    case renameGroup(id: String, newName: String)
     case renameCategory(id: String, newName: String)
-//    case renameGroup(CategoryGroupPresentation, String)
-//    case reorderCategories(CategoryGroupPresentation, IndexSet, Int)
-//    case reorderGroups(IndexSet, Int)
+    case removeGroup(id: String)
+    case removeCategory(id: String, groupId: String)
+    case moveCategoryGroup(from: IndexSet, to: Int)
+    case moveCategory(id: String, toDestinationGroupId: String, atIndex: Int)
 }

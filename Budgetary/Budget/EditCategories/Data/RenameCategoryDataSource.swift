@@ -8,14 +8,13 @@
 import Factory
 
 final class RenameCategoryDataSource: RenameCategorySource {
-    let categoryGroupsDataSourceLocal: CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
-    
-    func findCategory(by id: String) async -> CategoryPlain? {
-        await categoryGroupsDataSourceLocal.findCategory(by: id)
+    let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
+
+    func findCategoryGroup(containing categoryId: String) async -> CategoryGroupPlain? {
+        await categoryGroupsDataSourceLocal.findCategoryGroup(containing: categoryId)
     }
     
-    func update(category: CategoryPlain) async {
-        print("update categbory called in data source")
-        await categoryGroupsDataSourceLocal.update(category: category)
+    func update(categoryGroup: CategoryGroupPlain) async {
+        await categoryGroupsDataSourceLocal.update(categoryGroup: categoryGroup)
     }
 }

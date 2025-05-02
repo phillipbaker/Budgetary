@@ -27,90 +27,93 @@ class CategoryGroupDao {
     func startStreaming() {
         continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
     }
-
+    
     func streamCategoryGroups() -> AsyncStream<[CategoryGroupPlain]> {
         return stream
     }
     
-    func findCategoryGroup(by id: String) -> CategoryGroupDb {
-        return mock.first(where: { $0.id == id }) ?? .obligations
+    func findCategoryGroup(by id: String) -> CategoryGroupDb? {
+        return mock.first(where: { $0.id == id })
     }
     
-    func findCategory(by id: String) -> CategoryDb {
-        return mock
-            .first(where: { $0.categories.contains(where: { $0.id == id }) })?
-            .categories.first(where: { $0.id == id })
-        ?? .amazonPrime
+    func findCategoryGroup(containing categoryId: String) -> CategoryGroupDb? {
+        return mock.first(where: { $0.categories.contains(where: { $0.id == categoryId })})
     }
     
-    func update(category: CategoryDb) {
-        guard let group = mock.first(where: { $0.categories.contains(where: { $0.id == category.id }) }) else { return }
-        let updatedCategories = group.categories.map { $0.id == category.id ? category : $0 }
-        let updatedGroup = CategoryGroupDb(id: group.id, name: group.name, categories: updatedCategories)
-        let newMock = mock.map { $0.id == group.id ? updatedGroup : $0 }
+    func create(categoryGroup: CategoryGroupDb) {
+        mock.insert(categoryGroup, at: 0)
+        continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
+    }
+    
+    func update(categoryGroup: CategoryGroupDb) {
+        let newMock = mock.map { $0.id == categoryGroup.id ? categoryGroup : $0 }
         mock = newMock
         continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
     }
     
-    func create(categoryGroup: CategoryGroupDb) {
-        
-    }
-    
-    func update(categoryGroup: CategoryGroupDb) {
-        
+    func update(categoryGroups: [CategoryGroupDb]) {
+        mock = categoryGroups
+        continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
     }
     
     func delete(categoryGroup: CategoryGroupDb) {
-        
+        // Is this necessary or does removeAll simply skip/fail silently if no groups match?
+        guard mock.contains(where: { $0.id == categoryGroup.id }) else {
+            // throw error?
+            print("could not locate category group to delete")
+            return
+        }
+        mock.removeAll(where: { $0.id == categoryGroup.id })
+        continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
     }
     
     private var mock: [CategoryGroupDb] = [
         CategoryGroupDb(
-        id: "1",
-        name: "Immediate Obligations",
-        categories: [
-            CategoryDb(
-                id: "1",
-                name: "Rent",
-                notes: "",
-                isHidden: false,
-                assigned: [
-                    .aug2024: 0.00,
-                    .sep2024: 0.00,
-                    .oct2024: 0.00,
-                    .apr2025: 100.00
-                ]
-            ),
-            CategoryDb(
-                id: "2",
-                name: "Council Tax",
-                notes: "",
-                isHidden: false,
-                assigned: [
-                    .aug2024: 311.00,
-                    .sep2024: 312.00,
-                    .oct2024: 313.00,
-                ]
-            ),
-            CategoryDb(
-                id: "3",
-                name: "Utilities",
-                notes: "",
-                isHidden: false,
-                assigned: [
-                    .aug2024: 0.00,
-                    .sep2024: 0.00,
-                    .oct2024: 50.00,
-                ]
-            )
-        ]
-    ),
+            id: "1",
+            name: "Immediate Obligations",
+            categories: [
+                CategoryDb(
+                    id: "2",
+                    name: "Rent",
+                    notes: "",
+                    isHidden: false,
+                    assigned: [
+                        .aug2024: 0.00,
+                        .sep2024: 0.00,
+                        .oct2024: 0.00,
+                        .apr2025: 100.00
+                    ]
+                ),
+                CategoryDb(
+                    id: "3",
+                    name: "Council Tax",
+                    notes: "",
+                    isHidden: false,
+                    assigned: [
+                        .aug2024: 311.00,
+                        .sep2024: 312.00,
+                        .oct2024: 313.00,
+                    ]
+                ),
+                CategoryDb(
+                    id: "4",
+                    name: "Utilities",
+                    notes: "",
+                    isHidden: false,
+                    assigned: [
+                        .aug2024: 0.00,
+                        .sep2024: 0.00,
+                        .oct2024: 50.00,
+                    ]
+                )
+            ]
+        ),
         CategoryGroupDb(
-            id: "2",
+            id: "5",
             name: "True Expenses",
             categories: [
                 CategoryDb(
-                    id: "8",
+                    id: "6",
                     name: "YNAB",
                     notes: "",
                     isHidden: false,
@@ -122,13 +125,13 @@ class CategoryGroupDao {
                     ]
                 )
             ]
-            ),
+        ),
         CategoryGroupDb(
-            id: "3",
+            id: "7",
             name: "Monthly Expenses",
             categories: [
                 CategoryDb(
-                    id: "16",
+                    id: "8",
                     name: "Groceries",
                     notes: "",
                     isHidden: false,
@@ -141,11 +144,11 @@ class CategoryGroupDao {
             ]
         ),
         CategoryGroupDb(
-            id: "4",
+            id: "9",
             name: "Fun",
             categories: [
                 CategoryDb(
-                    id: "29",
+                    id: "10",
                     name: "Phil",
                     notes: "",
                     isHidden: false,

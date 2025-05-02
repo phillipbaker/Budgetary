@@ -20,17 +20,20 @@ public final class AssignMoney {
     }()
     
     func update(assignedValue: String, to categoryId: String, for monthYear: MonthYear) async {
+        print("updateAssignedValue Use Case")
         guard let decimalValue = Self.formatter.number(from: assignedValue)?.decimalValue else {
             // throw error user can see here....
             print("→ Application: Error - AssignMoneyUseCase failed to make decimal")
             return
         }
         
-        guard let categoryPlain = await source.findCategory(by: categoryId) else {
+        guard let categoryGroupPlain = await source.findCategoryGroup(containing: categoryId) else {
             // throw error user can see here...
             print("→ Application: Error - AssignMoneyUseCase failed to find category")
             return
         }
+        
+        guard let categoryPlain = categoryGroupPlain.categories.first(where: { $0.id == categoryId }) else { return }
 
         let updatedCategory = CategoryPlain(
             id: categoryPlain.id,
@@ -40,6 +43,17 @@ public final class AssignMoney {
             assigned: categoryPlain.assigned.merging([monthYear: decimalValue]) { _, new in new }
         )
         
-        await source.update(category: updatedCategory)
+        let updatedCategories = categoryGroupPlain.categories.map { category in
+            category.id == updatedCategory.id ? updatedCategory : category
+        }
+
+        let updatedGroup = CategoryGroupPlain(
+            id: categoryGroupPlain.id,
+            name: categoryGroupPlain.name,
+            isHidden: categoryGroupPlain.isHidden,
+            categories: updatedCategories
+        )
+        
+        await source.update(categoryGroup: updatedGroup)
     }
 }

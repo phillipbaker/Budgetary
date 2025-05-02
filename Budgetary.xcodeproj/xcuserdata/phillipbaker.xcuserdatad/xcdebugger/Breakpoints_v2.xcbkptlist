@@ -3,22 +3,4 @@
    uuid = "74D3CD92-DEF6-40D2-9C5C-881BCBF66AA5"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7A54D363-9C8F-4E7B-9B53-08955BE0B866"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budgetary/Budget/EditCategories/Presentation/EditCategoriesViewModel.swift"
-            startingColumnNumber = "17"
-            endingColumnNumber = "17"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "handle(intent:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

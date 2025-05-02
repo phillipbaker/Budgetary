@@ -5,68 +5,115 @@
 //  Created by Phillip Baker on 10/09/2024.
 //
 
+import Factory
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct EditCategoriesListView: View {
-    @Environment(BudgetCoordinator.self) var coordinator
-//    @Bindable var viewModel: EditCategoriesViewModel
-    
-    let groups: [EditableCategoryGroupPresentation]
+    var categoryGroups: [EditableCategoryGroupPresentation]
     let intent: (EditCategoriesIntent) -> Void
     
+    @State private var showNewCategorySheet = false
+    @State private var showNewGroupSheet = false
     @State private var localValues: [String: String] = [:]
     
-//    @FocusState var focusedField: EditCategoriesViewModel.FocusedField?
-    let resignFocus: () -> Void
-
+    @Environment(BudgetCoordinator.self) var coordinator
+    @State private var editMode: EditMode = .inactive
+    
+    @State private var draggedCategoryId: String?
+    
     var body: some View {
+        @Bindable var coordinator = coordinator
+        
         List {
-            Button("Add Group") {
-//                withAnimation { intent(.addGroup) }
+            HStack(spacing: 16) {
+                Button {
+                    showNewGroupSheet = true
+                } label: {
+                    Label("New Group", systemImage: "folder.fill.badge.plus")
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                }
+                
+                Button {
+                    withAnimation {
+                        editMode = .active
+                    }
+                } label: {
+                    Label("Reorder", systemImage: "arrow.up.arrow.down")
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                }
             }
-            ForEach(groups) { group in
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .buttonStyle(.bordered)
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowBackground(Color.clear)
+            
+            ForEach(categoryGroups) { group in
                 Section {
                     ForEach(group.categories) { category in
                         EditCategoryRow(
                             id: category.id,
                             intent: intent,
                             editedName: bindingFor(category: category)
-                            //                            focusedField: _focusedField
                         )
+                        .draggable(category)
                     }
-                    .onMove { _, _ in
-                        //                        intent(.reorderCategories(group, source, destination))
+                    .onMove { _, _ in }
+                    .dropDestination(for: EditableCategoryPresentation.self) { droppedCategories, index in
+                        move(droppedCategories: droppedCategories, to: group.id, at: index)
+                    }
+                    
+                    if editMode == .inactive {
+                        Button {
+                            showNewCategorySheet = true
+                        } label: {
+                            HStack(spacing: 5) {
+                                Image(systemName: "plus.circle")
+                                Text("New Category")
+                            }
+                            .font(.subheadline)
+                            .tint(.primary)
+                            .foregroundStyle(.secondary)
+                        }
                     }
                 } header: {
                     EditCategoryGroupRow(
-                        group: group,
-                        intent: { _ in /*rowIntent in intent(rowIntent)*/ },
-                        editedName: group.name
-//                        focusedField: _focusedField
+                        id: group.id,
+                        intent: intent,
+                        editedName: bindingFor(categoryGroup: group)
                     )
-//                    .background(
-//                        focusedField == .listRow(group.id)
-//                        ? Color(.systemFill)
-//                        : Color.clear
-//                    )
+                }
+                .sheet(isPresented: $showNewGroupSheet, onDismiss: { showNewGroupSheet = false} ) {
+                    NewGroupView(intent: intent)
+                }
+                .sheet(isPresented: $showNewCategorySheet, onDismiss: { showNewCategorySheet = false }) {
+                    NewCategoryView(groupId: group.id, intent: intent)
                 }
             }
-//            .onMove { source, destination in
-////                intent(.reorderGroups(source, destination))
+//            .onMove { offsets, newOffset in
+//                intent(.moveCategoryGroup(from: offsets, to: newOffset))
 //            }
         }
-        .padding(.horizontal, 8)
-        .listStyle(.plain)
-        
-        .onTapGesture {
-//            resignFocus()
-        }
-        
+        .listStyle(.insetGrouped)
+        .environment(\.editMode, $editMode)
+        .navigationTitle("Edit Categories")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                DoneButton(onSubmit: coordinator.doneEditingCategoriesButtonTapped)
+                Button("Done") {
+                    coordinator.doneEditingCategoriesButtonTapped()
+                }
+                .fontWeight(.semibold)
             }
         }
+    }
+    
+    private func move(droppedCategories: [EditableCategoryPresentation], to destinationGroupId: String, at index: Int) {
+        guard let dropped = droppedCategories.first else { return }
+        intent(.moveCategory(id: dropped.id, toDestinationGroupId: destinationGroupId, atIndex: index))
     }
     
     private func bindingFor(category: EditableCategoryPresentation) -> Binding<String> {
@@ -75,12 +122,18 @@ struct EditCategoriesListView: View {
             set: { localValues[category.id] = $0 }
         )
     }
+    
+    private func bindingFor(categoryGroup: EditableCategoryGroupPresentation) -> Binding<String> {
+        return Binding(
+            get: { localValues[categoryGroup.id, default: categoryGroup.name] },
+            set: { localValues[categoryGroup.id] = $0 }
+        )
+    }
 }
 
 #Preview {
     EditCategoriesListView(
-        groups: [EditableCategoryGroupPresentation.obligations, .trueExpenses, .monthlyExpenses, .fun],
-        intent: { _ in },
-        resignFocus: {}
+        categoryGroups: [EditableCategoryGroupPresentation.obligations, .trueExpenses, .monthlyExpenses, .fun],
+        intent: { _ in }
     )
 }

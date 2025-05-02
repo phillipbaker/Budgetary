@@ -10,8 +10,8 @@ import SwiftUI
 import SwiftUINavigation
 
 struct BudgetRootView: View {
-    @State var viewModel = BudgetViewModel()
-    let coordinator: BudgetCoordinator = Container.shared.budgetCoordinator() // @State or just a let? Both seem to work
+    let viewModel: BudgetViewModel = Container.shared.budgetViewModel()
+    let coordinator: BudgetCoordinator = Container.shared.budgetCoordinator()
     
     // TODO: Figure out how to move this somehwere better
     init() {
@@ -27,7 +27,6 @@ struct BudgetRootView: View {
         case .success(let budget):
             NavigationStack {
                 BudgetView(
-                    coordinator: coordinator,
                     budget: budget,
                     intent: { intent in viewModel.handle(intent: intent) }
                 )

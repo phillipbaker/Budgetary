@@ -7,12 +7,30 @@
 
 import Factory
 
-public final class LoadCategoryGroupsUseCase {
+final class LoadCategoryGroupsUseCase: Sendable {
     let source: LoadCategoryGroupsSource = Container.shared.loadCategoryGroupsSource()
     let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
+    private let (categoryGroupsStream, continuation) = AsyncStream.makeStream(of: [EditableCategoryGroup].self, bufferingPolicy: .bufferingNewest(1))
+    
+    init() {
+        Task {
+            for await categoryGroups in await source.categoryGroupsStream() {
+                continuation.yield(mapper.map(categoryGroupsPlain: categoryGroups))
+            }
+            
+            continuation.onTermination = { reason in
+                // Cleanup if necessary
+                print("use case stream terminated for reason: ", reason)
+            }
+        }
+    }
+    
     func load() async -> [EditableCategoryGroup] {
-        let categoryGroupsPlain = await source.allCategoryGroups()
-        return mapper.map(categoryGroupsPlain: categoryGroupsPlain)
+        return mapper.map(categoryGroupsPlain: await source.loadCategoryGroups())
+    }
+    
+    func subscribe() async -> AsyncStream<[EditableCategoryGroup]> {
+        return categoryGroupsStream
     }
 }
