@@ -90,6 +90,18 @@ public struct BudgetAccount: Equatable, Sendable {
             // create/append a new cleared transaction for the difference between current working balance and new total
         }
     }
+    
+    func adding(transaction: TransactionEntity) -> BudgetAccount {
+        return BudgetAccount(
+            id: self.id,
+            nickname: self.nickname,
+            accountType: self.accountType,
+            startingBalance: self.startingBalance,
+            notes: self.notes,
+            isClosed: self.isClosed,
+            transactions: self.transactions + [transaction]
+        )
+    }
 }
 
 struct LoanMortgageAccount {}

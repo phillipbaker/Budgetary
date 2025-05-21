@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUINavigation
 
 struct FilterCategoriesView: View {
     @Environment(\.colorScheme) var colorScheme

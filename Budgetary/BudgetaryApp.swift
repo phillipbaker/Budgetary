@@ -10,9 +10,11 @@ import SwiftUI
 
 @main
 struct BudgetaryApp: App {
+    let viewModel = HomeViewModel(selectedTab: .budget, isPresentingTransactionSheet: true)
+    
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(viewModel: viewModel)
         }
     }
 }

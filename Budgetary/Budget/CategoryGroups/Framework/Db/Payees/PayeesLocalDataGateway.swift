@@ -35,7 +35,11 @@ actor PayeesLocalDataGateway: PayeesDataSourceLocal {
         return stream
     }
     
-    func findPayee(by id: String) -> PayeePlain {
+    func allPayees() async -> [PayeePlain] {
+        return mapper.map(payeesDb: dao.allPayees())
+    }
+    
+    func findPayee(by id: String) -> PayeePlain? {
         let payeeDb = dao.findPayee(by: id)
         return mapper.map(payeeDb: payeeDb)
     }

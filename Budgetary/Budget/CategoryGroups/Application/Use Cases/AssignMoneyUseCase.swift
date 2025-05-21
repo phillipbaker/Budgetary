@@ -20,7 +20,6 @@ public final class AssignMoney {
     }()
     
     func update(assignedValue: String, to categoryId: String, for monthYear: MonthYear) async {
-        print("updateAssignedValue Use Case")
         guard let decimalValue = Self.formatter.number(from: assignedValue)?.decimalValue else {
             // throw error user can see here....
             print("→ Application: Error - AssignMoneyUseCase failed to make decimal")

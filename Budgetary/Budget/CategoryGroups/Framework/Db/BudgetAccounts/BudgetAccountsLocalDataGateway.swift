@@ -34,8 +34,13 @@ actor BudgetAccountsLocalDataGateway: BudgetAccountsDataSourceLocal {
         return stream
     }
     
-    func findBudgetAccount(by id: String) -> BudgetAccountPlain {
-        let budgetAccountDb = dao.findBudgetAccount(by: id)
+    func allBudgetAccounts() async -> [BudgetAccountPlain] {
+        let budgetAccountsDb = dao.allBudgetAccounts()
+        return mapper.mapDbToPlain(budgetAccountsDb: budgetAccountsDb)
+    }
+    
+    func findBudgetAccount(by id: String) -> BudgetAccountPlain? {
+        guard let budgetAccountDb = dao.findBudgetAccount(by: id) else { return nil }
         return mapper.mapDbToPlain(budgetAccountDb: budgetAccountDb)
     }
     

@@ -10,26 +10,28 @@ import SwiftUI
 
 struct EditCategoriesRootView: View {
     let viewModel: EditCategoriesViewModel = Container.shared.editCategoriesViewModel()
-    
-    init() {
-        viewModel.handle(intent: .loadCategoryGroups)
-    }
+    let coordinator: EditCategoriesCoordinator = Container.shared.editCategoriesCoordinator()
     
     var body: some View {
-        switch viewModel.state {
-        case .empty:
-            EditCategoriesEmptyView()
-        case .error:
-            EditCategoriesErrorView()
-        case .loading:
-            ProgressView()
-        case .success(let categoryGroups):
-            NavigationStack {
+        Group {
+            switch viewModel.state {
+            case .empty:
+                EditCategoriesEmptyView()
+            case .error:
+                EditCategoriesErrorView()
+            case .loading:
+                ProgressView()
+            case .success(let categoryGroups):
                 EditCategoriesListView(
-                    categoryGroups: categoryGroups,
-                    intent: { intent in viewModel.handle(intent: intent) }
+                    intent: { intent in viewModel.handle(intent: intent) },
+                    coordinator: coordinator,
+                    categoryGroups: categoryGroups
                 )
+                .environment(coordinator)
             }
+        }
+        .task {
+            viewModel.handle(intent: .loadCategoryGroups)
         }
     }
 }

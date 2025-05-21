@@ -13,13 +13,11 @@ final class NewGroupUseCase {
     let mapper: BudgetMapper = Container.shared.budgetMapper()
     
     func addNew(group name: String) async {
-        let newGroup = CategoryGroup(
+        let newGroup = CategoryGroupEntity(
             id: UUID().uuidString,
             name: name,
             isHidden: false,
             assignedTotal: [:],
-            activityTotal: [:],
-            availableTotal: [:],
             categories: []
         )
         await source.addNew(categoryGroup: mapper.map(categoryGroup: newGroup))

@@ -23,6 +23,7 @@ extension CategoryPresentation: @unchecked Sendable {
             averageSpent: ""
         )],
         activity: [.sep2024: ActivityPresentation(
+            id: "23",
             total: "",
             transactions: [TransactionPresentation(
                 id: "",

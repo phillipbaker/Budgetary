@@ -1,73 +1,29 @@
 //
-//  Extension+Container.swift
+//  Container+EditCategories.swift
 //  Budgetary
 //
-//  Created by Phillip Baker on 31/03/2025.
+//  Created by Phillip Baker on 04/05/2025.
 //
 
 import Factory
-import SwiftData
 
 extension Container {
     
-    // MARK: Budget
+    // MARK: Coordinator
     
-    var budgetCoordinator: Factory<BudgetCoordinator> {
-        self { BudgetCoordinator() }
+    var editCategoriesCoordinator: Factory<EditCategoriesCoordinator> {
+        self { EditCategoriesCoordinator() }
             .singleton
     }
     
-    var budgetMapper: Factory<BudgetMapper> {
-        self { BudgetMapper() }
+    // MARK: View Model
+
+    var editCategoriesViewModel: Factory<EditCategoriesViewModel> {
+        self { EditCategoriesViewModel() }
             .singleton
     }
     
-    var budgetStateMapper: Factory<BudgetStateMapper> {
-        self { BudgetStateMapper() }
-            .singleton
-    }
-    
-    var budgetPresentationMapper: Factory<BudgetPresentationMapper> {
-        self { BudgetPresentationMapper() }
-            .singleton
-    }
-    
-    var budgetMapperPlain: Factory<BudgetMapperPlain> {
-        self { BudgetMapperPlain() }
-            .singleton
-    }
-    
-    var categoryGroupsMapperPlain: Factory<CategoryGroupsMapperPlain> {
-        self { CategoryGroupsMapperPlain() }
-            .singleton
-    }
-    
-    var budgetDataMapper: Factory<BudgetDataMapper> {
-        self { BudgetDataMapper() }
-            .singleton
-    }
-    
-    var getBudgetUseCase: Factory<GetBudget> {
-        self { GetBudget() }
-            .singleton
-    }
-    
-    var getBudgetSource: Factory<GetBudgetSource> {
-        self { GetBudgetDataSource() }
-            .singleton
-    }
-    
-    var assignMoneyUseCase: Factory<AssignMoney> {
-        self { AssignMoney() }
-            .singleton
-    }
-    
-    var assignMoneySource: Factory<AssignMoneySource> {
-        self { AssignMoneyDataSource() }
-            .singleton
-    }
-    
-    // MARK: Edit Categories
+    // MARK: Mappers
     
     var editCategoriesMapper: Factory<EditCategoriesMapper> {
         self { EditCategoriesMapper() }
@@ -83,6 +39,8 @@ extension Container {
         self { EditCategoriesPresentationMapper() }
             .singleton
     }
+    
+    // MARK: Use Cases & Date Sources
     
     var loadCategoryGroupsUseCase: Factory<LoadCategoryGroupsUseCase> {
         self { LoadCategoryGroupsUseCase() }
@@ -186,79 +144,6 @@ extension Container {
     
     var moveCategorySource: Factory<MoveCategorySource> {
         self { MoveCategoryDataSource() }
-            .singleton
-    }
-    
-    // MARK: Data Gateways
-    
-    var budgetDataSourceLocal: Factory<BudgetDataSourceLocal> {
-        self { BudgetLocalDatagateway() }
-            .singleton
-    }
-    
-    var payeesDataSourceLocal: Factory<PayeesDataSourceLocal> {
-        self { PayeesLocalDataGateway() }
-            .singleton
-    }
-    
-    var budgetAccountsDataSourceLocal: Factory<BudgetAccountsDataSourceLocal> {
-        self { BudgetAccountsLocalDataGateway() }
-            .singleton
-    }
-    
-    var categoryGroupsDataSourceLocal: Factory<any CategoryGroupsDataSourceLocal> {
-        self { CategoryGroupsLocalDataGateway() }
-            .singleton
-    }
-    
-    var budgetAccountsMapperPlain: Factory<BudgetAccountsMapperPlain> {
-        self { BudgetAccountsMapperPlain() }
-            .singleton
-    }
-    
-    var payeesMapperPlain: Factory<PayeesMapperPlain> {
-        self { PayeesMapperPlain() }
-            .singleton
-    }
-    
-    // MARK: DAOs
-    
-    var budgetDao: Factory<BudgetDao> {
-        self { BudgetDao(container: try! ModelContainer()) }
-            .singleton
-    }
-    
-    var categoryGroupDao: Factory<CategoryGroupDao> {
-        self { CategoryGroupDao(container: try! ModelContainer()) }
-            .singleton
-    }
-    
-    var payeeDao: Factory<PayeeDao> {
-        self { PayeeDao(container: try! ModelContainer()) }
-            .singleton
-    }
-    
-    var budgetAccountDao: Factory<BudgetAccountDao> {
-        self { BudgetAccountDao(container: try! ModelContainer()) }
-            .singleton
-    }
-    
-    // MARK: Stream Broadcaster
-    
-    var streamBroadcaster: Factory<StreamBroadcaster<Sendable>> {
-        self { StreamBroadcaster(id: "Test") }
-            .singleton
-    }
-    
-    // MARK: View Models
-    
-    var budgetViewModel: Factory<BudgetViewModel> {
-        self { BudgetViewModel() }
-            .singleton
-    }
-    
-    var editCategoriesViewModel: Factory<EditCategoriesViewModel> {
-        self { EditCategoriesViewModel() }
             .singleton
     }
 }

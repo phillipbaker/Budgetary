@@ -9,7 +9,7 @@ import Foundation
 
 extension BudgetDb: @unchecked Sendable {
     static let mock = BudgetDb(
-        id: "UUID().uuidString",
+        id: UUID().uuidString,
         settings: BudgetSettingsDb(
             name: "UK Budget",
             curreny: "GBR",

@@ -57,7 +57,7 @@ extension TransactionEntity {
         date: .augEigth2024,
         payee: .anthonyMartin,
         category: .rent,
-        amount: .outflow(-100),
+        amount: .outflow(100),
         isCleared: true
     )
     

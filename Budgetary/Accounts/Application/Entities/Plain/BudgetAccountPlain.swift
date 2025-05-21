@@ -12,7 +12,7 @@ public struct BudgetAccountPlain: Equatable, Sendable {
     let nickname: String
     let accountType: AccountType
     let startingBalance: Decimal
-    let notes: String
+    let notes: String?
     let isClosed: Bool
     let transactions: [TransactionPlain]
 }

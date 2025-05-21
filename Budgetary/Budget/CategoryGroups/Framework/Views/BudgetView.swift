@@ -10,18 +10,17 @@ import SwiftUI
 import SwiftUINavigation
 
 struct BudgetView: View {
-    @Environment(\.dynamicTypeSize) var dynamicTypeSize
-    @Environment(\.horizontalSizeClass) var horizontalSize
-    @Environment(BudgetCoordinator.self) var coordinator
-    
     let budget: BudgetPresentation
     let intent: (BudgetIntent) -> Void
-
+    @Bindable var coordinator: BudgetCoordinator
+    
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.horizontalSizeClass) var horizontalSize
+    
     @State private var assignedValues: [String: AssignedValue] = [:]
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
-        @Bindable var coordinator = coordinator
         List {
             Section {
                 // TODO: Fix need for this ?? default value
@@ -120,13 +119,16 @@ struct BudgetView: View {
                         coordinator.monthPickerButtonTapped()
                     } label: {
                         MonthPickerButtonLabel(month: budget.monthYear.monthAbbreviated + " " + budget.monthYear.year.description)
-                            .popover(isPresented: Binding($coordinator.destination.monthPicker), attachmentAnchor: .point(.bottom)) {
+                            .popover(
+                                isPresented: $coordinator.destination.monthPicker,
+                                attachmentAnchor: .point(.bottom)
+                            ) {
                                 MonthPickerView(
-                                    year: budget.monthYear.year,
                                     monthYear: budget.monthYear,
                                     months: budget.months,
                                     filter: budget.filter,
-                                    intent: intent
+                                    intent: intent,
+                                    year: budget.monthYear.year
                                 )
                             }
                     }
@@ -137,20 +139,24 @@ struct BudgetView: View {
                 }
             }
         }
-        .sheet(isPresented: Binding($coordinator.destination.editCategories)) {
-            EditCategoriesRootView()
+        .sheet(isPresented: $coordinator.destination.editCategories) {
+            NavigationStack {
+                EditCategoriesRootView()
+            }
         }
     }
     
     private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<AssignedValue> {
         let key = "\(monthYear.description)-\(category.id.description)"
         
+        // Secondary and last committed used to be set to Decimal(0).formatted(.currency(code: "GBP"))
+        // Now have logic inside CurrencyTextField that sets empty strings to "£0.00"
         return Binding(
             get: { assignedValues[key, default: AssignedValue(
                 primary: category.assigned[monthYear]?.assignedThisMonth ?? "",
-                secondary: Decimal(0).formatted(.currency(code: "GBP")),
+                secondary: "",
                 operation: "",
-                lastCommitted: Decimal(0).formatted(.currency(code: "GBP"))
+                lastCommitted: ""
             )]},
             set: { assignedValues[key] = $0 }
         )
@@ -158,5 +164,5 @@ struct BudgetView: View {
 }
 
 #Preview {
-    BudgetView(budget: .mock, intent: { _ in })
+    BudgetView(budget: .mock, intent: { _ in }, coordinator: .init())
 }

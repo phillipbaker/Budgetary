@@ -7,19 +7,15 @@
 
 import SwiftUI
 
-@Observable
-class MonthPickerModel {
-    
-}
-
 struct MonthPickerView: View {
-    @State var year: Int
     let monthYear: MonthYear
     let months: [MonthPresentation]
     let filter: CategoryFilterPresentation
     let intent: (BudgetIntent) -> Void
     
+    @State var year: Int
     @State private var sheetHeight: CGFloat = 0
+    @Environment(BudgetCoordinator.self) var coordinator
     
     let columns = [
         GridItem(.flexible(minimum: 100, maximum: .infinity), alignment: .leading),
@@ -58,6 +54,7 @@ struct MonthPickerView: View {
                     if month.monthYear.year == year {
                         Button {
                             intent(.monthPickerMonthSelected(monthYear: month.monthYear, filterId: filter.id))
+                            coordinator.dismiss()
                         } label: {
                             Text(month.monthYear.monthAbbreviated)
                                 .fontWeight(month.monthYear == monthYear ? .semibold : .regular)
@@ -117,11 +114,11 @@ struct MonthPickerView: View {
         Color.gray
             .ignoresSafeArea()
         MonthPickerView(
-            year: monthYear.year,
             monthYear: monthYear,
             months: [],
             filter: .allCategories,
-            intent: { _ in }
+            intent: { _ in },
+            year: monthYear.year
         )
     }
 }

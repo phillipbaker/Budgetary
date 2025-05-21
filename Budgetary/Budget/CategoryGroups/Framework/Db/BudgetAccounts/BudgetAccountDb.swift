@@ -16,7 +16,7 @@ final class BudgetAccountDb: Equatable {
     var nickname: String
     var accountType: AccountType
     var startingBalance: Decimal
-    var notes: String
+    var notes: String?
     var isClosed: Bool
     @Relationship(deleteRule: .cascade) var transactions: [TransactionDb]
     
@@ -25,7 +25,7 @@ final class BudgetAccountDb: Equatable {
         nickname: String,
         accountType: AccountType,
         startingBalance: Decimal,
-        notes: String,
+        notes: String?,
         isClosed: Bool,
         transactions: [TransactionDb]
     ) {

@@ -21,7 +21,7 @@ struct CategoryRowView: View {
     
     @State private var rowID: UUID = UUID()
     
-    @FocusState var focus: FocusedField?
+    @FocusState var focusedField: FocusedField?
     @Binding var assignedLocalValue: AssignedValue
     
     let intent: (BudgetIntent) -> Void
@@ -36,7 +36,7 @@ struct CategoryRowView: View {
         : AnyLayout(HStackLayout(spacing: 4))
         
         Button {
-            focus = .primary(id: rowID)
+            focusedField = .primary(id: rowID)
         } label: {
             rowLayout {
                 Text(category.name)
@@ -64,7 +64,7 @@ struct CategoryRowView: View {
                             currencyCode: "GBP",
                             intent: intent,
                             localValue: $assignedLocalValue,
-                            focus: _focus
+                            focusedField: _focusedField
                         )
                     }
                     

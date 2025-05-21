@@ -28,7 +28,11 @@ class BudgetAccountDao {
         return stream
     }
     
-    func findBudgetAccount(by id: String) -> BudgetAccountDb {
+    func allBudgetAccounts() -> [BudgetAccountDb] {
+        return mock
+    }
+    
+    func findBudgetAccount(by id: String) -> BudgetAccountDb? {
 //        if let budgetAccount = try container.mainContext.fetch(
 //            FetchDescriptor<BudgetAccountDb>(predicate: #Predicate { $0.id == id })
 //        ).first {
@@ -43,7 +47,9 @@ class BudgetAccountDao {
     }
     
     func update(budgetAccount: BudgetAccountDb) {
-        
+        let newMock = mock.map { $0.id == budgetAccount.id ? budgetAccount : $0 }
+        mock = newMock
+        continuation.yield(mapper.mapDbToPlain(budgetAccountsDb: mock))
     }
     
     func delete(budgetAccount: BudgetAccountDb) {

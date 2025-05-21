@@ -13,33 +13,16 @@ public struct TransactionEntity: Equatable, Hashable, Sendable {
 //    let account: BudgetAccount
     
     let id: String = UUID().uuidString
-    /// The date of the transaction.
-    /// Does this need to stay a Date and be converted to a day in code to account for global/timezone differences?
-    /// I think yes, a speciicc moment in time might be different day for different people...
     let date: Date
-
-    /// The entity the transaction pays. Nil represents the user has not entered a Payee.
-    // Default to empty string, remove optional? Does this have memory problems?
-    let payee: Payee?
-    
-    /// The user-defined Category for a transaction. Nil equates to “Uncategorised”.
-    let category: TransactionCategory
-    
-    /// A note field assocated with the transaction. Defaults to an empty String to avoid an Optional
+    let payee: Payee? // // Default to empty string, remove optional? Does this have memory problems?
+    let category: TransactionCategory?
     let memo: String = ""
-    
-    /// Value of inflow OR outflow for the transaction. Associated value of`Decimal`
     let amount: Amount
-    
-    /// Whether or not the transaction is cleared.
     let isCleared: Bool
-    
-    /// Not included in initial model
     // Flag
     // Repeating transactions
 }
 
-/// TransactionEntity value. Can be a credit OR debit with assocated value of the amount
 public enum Amount: Codable, Equatable, Hashable, Sendable {
     case inflow(Decimal)
     case outflow(Decimal)

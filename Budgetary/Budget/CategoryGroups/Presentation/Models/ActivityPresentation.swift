@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct ActivityPresentation: Equatable {
+public struct ActivityPresentation: Equatable, Identifiable {
+    public let id: String
     let total: String
     let transactions: [TransactionPresentation]
 }

@@ -7,7 +7,6 @@
 
 import Factory
 import SwiftUI
-import SwiftUINavigation
 
 @Observable
 public final class BudgetViewModel {

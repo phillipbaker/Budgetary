@@ -10,25 +10,18 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct EditCategoriesListView: View {
-    var categoryGroups: [EditableCategoryGroupPresentation]
     let intent: (EditCategoriesIntent) -> Void
-    
-    @State private var showNewCategorySheet = false
-    @State private var showNewGroupSheet = false
+    @Bindable var coordinator: EditCategoriesCoordinator
+    let categoryGroups: [EditableCategoryGroupPresentation]
+
     @State private var localValues: [String: String] = [:]
-    
-    @Environment(BudgetCoordinator.self) var coordinator
     @State private var editMode: EditMode = .inactive
     
-    @State private var draggedCategoryId: String?
-    
     var body: some View {
-        @Bindable var coordinator = coordinator
-        
         List {
             HStack(spacing: 16) {
                 Button {
-                    showNewGroupSheet = true
+                    coordinator.newGroupButtonTapped()
                 } label: {
                     Label("New Group", systemImage: "folder.fill.badge.plus")
                         .frame(maxWidth: .infinity)
@@ -62,13 +55,10 @@ struct EditCategoriesListView: View {
                         .draggable(category)
                     }
                     .onMove { _, _ in }
-                    .dropDestination(for: EditableCategoryPresentation.self) { droppedCategories, index in
-                        move(droppedCategories: droppedCategories, to: group.id, at: index)
-                    }
                     
                     if editMode == .inactive {
                         Button {
-                            showNewCategorySheet = true
+                            coordinator.newCategoryButtonTapped(for: group.id)
                         } label: {
                             HStack(spacing: 5) {
                                 Image(systemName: "plus.circle")
@@ -86,16 +76,7 @@ struct EditCategoriesListView: View {
                         editedName: bindingFor(categoryGroup: group)
                     )
                 }
-                .sheet(isPresented: $showNewGroupSheet, onDismiss: { showNewGroupSheet = false} ) {
-                    NewGroupView(intent: intent)
-                }
-                .sheet(isPresented: $showNewCategorySheet, onDismiss: { showNewCategorySheet = false }) {
-                    NewCategoryView(groupId: group.id, intent: intent)
-                }
             }
-//            .onMove { offsets, newOffset in
-//                intent(.moveCategoryGroup(from: offsets, to: newOffset))
-//            }
         }
         .listStyle(.insetGrouped)
         .environment(\.editMode, $editMode)
@@ -104,16 +85,19 @@ struct EditCategoriesListView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
-                    coordinator.doneEditingCategoriesButtonTapped()
+                    coordinator.dismiss()
                 }
                 .fontWeight(.semibold)
             }
         }
-    }
-    
-    private func move(droppedCategories: [EditableCategoryPresentation], to destinationGroupId: String, at index: Int) {
-        guard let dropped = droppedCategories.first else { return }
-        intent(.moveCategory(id: dropped.id, toDestinationGroupId: destinationGroupId, atIndex: index))
+        .sheet(item: $coordinator.destination) { destination in
+            switch destination {
+            case .newGroup:
+                NewGroupView(intent: intent)
+            case .newCategory(let groupId):
+                NewCategoryView(groupId: groupId, intent: intent)
+            }
+        }
     }
     
     private func bindingFor(category: EditableCategoryPresentation) -> Binding<String> {
@@ -133,7 +117,8 @@ struct EditCategoriesListView: View {
 
 #Preview {
     EditCategoriesListView(
-        categoryGroups: [EditableCategoryGroupPresentation.obligations, .trueExpenses, .monthlyExpenses, .fun],
-        intent: { _ in }
+        intent: { _ in },
+        coordinator: .init(),
+        categoryGroups: [EditableCategoryGroupPresentation.obligations, .trueExpenses, .monthlyExpenses, .fun]
     )
 }

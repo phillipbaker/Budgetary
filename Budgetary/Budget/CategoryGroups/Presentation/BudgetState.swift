@@ -6,7 +6,7 @@
 //
 
 public enum BudgetState {
-    case loading
     case error
+    case loading
     case success(BudgetPresentation)
 }

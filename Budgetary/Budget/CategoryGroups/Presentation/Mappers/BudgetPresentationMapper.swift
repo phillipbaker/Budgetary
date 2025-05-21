@@ -161,6 +161,7 @@ public final class BudgetPresentationMapper {
     func mapActivity(for category: Category) -> [MonthYear: ActivityPresentation] {
         return category.activity.mapValues { activity in
             ActivityPresentation(
+                id: UUID().uuidString,
                 total: activity.total.formatted(.currency(code: "GBP")),
                 transactions: map(transactions: activity.transactions)
             )
@@ -190,7 +191,8 @@ public final class BudgetPresentationMapper {
         return PayeePresentation(id: payee.id, name: payee.name)
     }
     
-    func map(transactionCategory: TransactionCategory) -> TransactionCategoryPresentation {
+    func map(transactionCategory: TransactionCategory?) -> TransactionCategoryPresentation? {
+        guard let transactionCategory else { return nil }
         return TransactionCategoryPresentation(id: transactionCategory.id, name: transactionCategory.name)
     }
     

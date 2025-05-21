@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUINavigation
 
 //@Observable
 //final class CoverOverspendingModel: Identifiable {

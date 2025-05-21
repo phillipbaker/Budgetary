@@ -23,11 +23,20 @@ public final class EditCategoriesViewModel: Identifiable {
     @ObservationIgnored let stateMapper: EditCategoriesStateMapper = Container.shared.editCategoriesStateMapper()
 
     var state: EditCategoriesState
+//    var destination: Destination?
+    
+//    @CasePathable
+//    enum Destination {
+//        case newGroup
+//        case newCategory
+//    }
     
     init(
         state: EditCategoriesState = .loading
+//        destination: Destination? = nil
     ) {
         self.state = state
+//        self.destination = destination
     }
     
     @MainActor
@@ -70,4 +79,16 @@ public final class EditCategoriesViewModel: Identifiable {
             }
         }
     }
+//    
+//    func newGroupButtonTapped() {
+//        self.destination = .newGroup
+//    }
+//    
+//    func newCategoryButtonTapped() {
+//        self.destination = .newCategory
+//    }
+//    
+//    func dismiss() {
+//        self.destination = nil
+//    }
 }

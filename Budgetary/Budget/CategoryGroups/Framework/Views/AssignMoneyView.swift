@@ -15,21 +15,36 @@ struct AssignMoneyView: View {
     let intent: (BudgetIntent) -> Void
     
     @Binding var localValue: AssignedValue
-    @FocusState var focus: CategoryRowView.FocusedField?
+    @FocusState var focusedField: CategoryRowView.FocusedField?
+    
+    @State var destination: Destination?
+    
+    enum Destination: String, Identifiable {
+        case moveMoney
+        case detail
+        
+        var id: String { rawValue }
+    }
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
             CurrencyTextField(
                 text: $localValue.primary,
                 currencyCode: currencyCode,
-                focus: _focus,
                 onEquals: {},
                 onSubmit: { onSubmit() },
                 onCancel: { onCancel() },
                 onOperation: { operation in handle(operation: operation) },
-                onTextChanged: { newValue in updateAssignedAmountLocal(primary: newValue) }
+                onTextChanged: { newValue in updateAssignedAmountLocal(primary: newValue) },
+                textColor: UIColor(Color.primary),
+                textStyle: .subheadline,
+                fontWeight: .semibold,
+                textAlignment: .right,
+                isShowingCancel: true,
+                isShowingNavigationRow: true,
+                destination: { destination in self.destination = destination }
             )
-            .focused($focus, equals: .primary(id: rowID))
+            .focused($focusedField, equals: .primary(id: rowID))
             
             if !localValue.operation.isEmpty {
                 HStack(spacing: 2) {
@@ -37,35 +52,57 @@ struct AssignMoneyView: View {
                     CurrencyTextField(
                         text: $localValue.secondary,
                         currencyCode: currencyCode,
-                        focus: _focus,
                         onEquals: { onEquals() },
                         onSubmit: { onSubmit() },
                         onCancel: { onCancel() },
                         onOperation: { operation in handle(operation: operation) },
-                        onTextChanged: { newValue in updateAssignedAmountLocal(secondary: newValue) }
+                        onTextChanged: { newValue in updateAssignedAmountLocal(secondary: newValue) },
+                        textColor: UIColor(Color.primary),
+                        textStyle: .subheadline,
+                        fontWeight: .semibold,
+                        textAlignment: .right,
+                        isShowingCancel: true,
+                        isShowingNavigationRow: true,
+                        destination: { destination in self.destination = destination }
                     )
-                    .focused($focus, equals: .secondary(id: rowID))
+                    .focused($focusedField, equals: .secondary(id: rowID))
                 }
             }
         }
         .offset(x: -4)
-        .onChange(of: focus) { oldValue, newValue in
+        .onChange(of: focusedField) { oldValue, newValue in
             guard oldValue == .primary(id: rowID) || oldValue == .secondary(id: rowID) else { return }
             // If focus changes to a new row, apply in progress opperation if there is one, commit the new value
             if newValue != .primary(id: rowID) && newValue != .secondary(id: rowID) {
                 onSubmit()
             }
         }
+        .sheet(item: $destination) { destination in
+            switch destination {
+            case .moveMoney:
+                MoveMoneyView()
+            case .detail:
+                CategoryDetailView()
+            }
+        }
     }
     
     private func updateAssignedAmountLocal(primary: String? = nil, secondary: String? = nil, operation: String? = nil) {
-        localValue.primary = primary ?? localValue.primary
-        localValue.secondary = secondary ?? localValue.secondary
-        localValue.operation = operation ?? localValue.operation
+        if let primary, primary != localValue.primary {
+            self.localValue.primary = primary
+        }
+        
+        if let secondary, secondary != localValue.secondary {
+            self.localValue.secondary = secondary
+        }
+        
+        if let operation, operation != localValue.operation {
+            self.localValue.operation = operation
+        }
     }
     
     private func onEquals() {
-        focus = .primary(id: rowID)
+        focusedField = .primary(id: rowID)
         
         DispatchQueue.main.async {
             applyOperation()
@@ -73,7 +110,7 @@ struct AssignMoneyView: View {
     }
     
     private func onSubmit() {
-        focus = nil
+        focusedField = nil
         // If there are primary and secondary values, apply operation (this should fire on secondary text field only)
         if !localValue.operation.isEmpty {
             applyOperation()
@@ -83,7 +120,7 @@ struct AssignMoneyView: View {
     }
     
     private func onCancel() {
-        focus = nil
+        focusedField = nil
         let lastCommittedDecimal = localValue.lastCommitted.decimalValue
         localValue.primary = lastCommittedDecimal.formatted(.currency(code: currencyCode))
         if localValue.operation != "" { localValue.operation = "" }
@@ -91,7 +128,7 @@ struct AssignMoneyView: View {
     }
     
     private func handle(operation: String) {
-        if focus != .secondary(id: rowID) { focus = .secondary(id: rowID) }
+        if focusedField != .secondary(id: rowID) { focusedField = .secondary(id: rowID) }
         if !localValue.operation.isEmpty { applyOperation() } // If an operation in progress, commit the operation
         localValue.operation = operation // Set the operation for the next entry
     }
