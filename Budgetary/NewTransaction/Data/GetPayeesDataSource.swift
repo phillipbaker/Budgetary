@@ -8,7 +8,7 @@
 import Factory
 
 final class GetPayeesDataSource: GetPayeesSource {
-    let payeesDataSourceLocal: PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
+    let payeesDataSourceLocal: any PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
     func getPayeeData() async -> CombinedPayeeData {

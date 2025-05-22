@@ -10,14 +10,14 @@ import Factory
 actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
     typealias CategoryGroupBroadcaster = StreamBroadcaster<[CategoryGroupPlain]>
     
-    let dao: CategoryGroupDao = Container.shared.categoryGroupDao()
-    let mapper: CategoryGroupsMapperPlain = Container.shared.categoryGroupsMapperPlain()
-    
     private let _broadcaster = StreamBroadcaster<[CategoryGroupPlain]>(id: "CategoryGroupsLocalDataGateway")
     
     nonisolated var broadcaster: CategoryGroupBroadcaster {
         return _broadcaster
     }
+    
+    let dao: CategoryGroupDao = Container.shared.categoryGroupDao()
+    let mapper: CategoryGroupsMapperPlain = Container.shared.categoryGroupsMapperPlain()
 
     init() {
         Task { await startStreaming() }

@@ -35,13 +35,13 @@ extension Container {
 
     // MARK: Use Cases & Data Sources
     
-    var getAccountsUseCase: Factory<GetAccountsUseCase> {
-        self { GetAccountsUseCase() }
+    var getAccountsStreamUseCase: Factory<GetAccountsStreamUseCase> {
+        self { GetAccountsStreamUseCase() }
             .singleton
     }
     
-    var getAccountsSource: Factory<GetAccountsSource> {
-        self { GetAccountsDataSource() }
+    var getAccountsStreamSource: Factory<GetAccountsStreamSource> {
+        self { GetAccountsStreamDataSource() }
             .singleton
     }
 }

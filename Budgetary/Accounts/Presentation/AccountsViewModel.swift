@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 final class AccountsViewModel {
     @ObservationIgnored private let stateMapper: AccountsStateMapper = Container.shared.accountsStateMapper()
-    @ObservationIgnored private let getAccountsUseCase: GetAccountsUseCase = Container.shared.getAccountsUseCase()
+    @ObservationIgnored private let getAccountsStreamUseCase: GetAccountsStreamUseCase = Container.shared.getAccountsStreamUseCase()
     
     var state: AccountsState
     
@@ -31,6 +31,8 @@ final class AccountsViewModel {
     
     // need some task mangement here? Don’t want to add a new listener every time this is called...
     private func getAccounts() async {
-        self.state = stateMapper.map(accounts: [BudgetAccount.hsbcChecking])
+        for await accounts in await getAccountsStreamUseCase.accounts() {
+            self.state = stateMapper.map(accounts: accounts)
+        }
     }
 }

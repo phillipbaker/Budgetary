@@ -17,7 +17,7 @@ struct BudgetView: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSize
     
-    @State private var assignedValues: [String: AssignedValue] = [:]
+    @State private var assignedValues: [String: AssignedValues] = [:]
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
@@ -66,7 +66,7 @@ struct BudgetView: View {
                                 CategoryRowView(
                                     monthYear: budget.monthYear,
                                     category: category,
-                                    assignedLocalValue: bindingFor(monthYear: budget.monthYear, category: category),
+                                    localValues: bindingFor(monthYear: budget.monthYear, category: category),
                                     intent: intent
                                 )
                             }
@@ -146,13 +146,13 @@ struct BudgetView: View {
         }
     }
     
-    private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<AssignedValue> {
+    private func bindingFor(monthYear: MonthYear, category: CategoryPresentation) -> Binding<AssignedValues> {
         let key = "\(monthYear.description)-\(category.id.description)"
         
         // Secondary and last committed used to be set to Decimal(0).formatted(.currency(code: "GBP"))
         // Now have logic inside CurrencyTextField that sets empty strings to "£0.00"
         return Binding(
-            get: { assignedValues[key, default: AssignedValue(
+            get: { assignedValues[key, default: AssignedValues(
                 primary: category.assigned[monthYear]?.assignedThisMonth ?? "",
                 secondary: "",
                 operation: "",

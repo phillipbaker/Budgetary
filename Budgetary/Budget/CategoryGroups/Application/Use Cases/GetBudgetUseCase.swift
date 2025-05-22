@@ -1,5 +1,5 @@
 //
-//  GetBudget.swift
+//  GetBudgetUseCase.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 04/11/2024.
@@ -7,7 +7,7 @@
 
 import Factory
 
-public final class GetBudget: Sendable {
+public final class GetBudgetUseCase: Sendable {
     let source: GetBudgetSource = Container.shared.getBudgetSource()
     let mapper: BudgetMapper = Container.shared.budgetMapper()
 

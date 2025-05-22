@@ -18,7 +18,7 @@ struct AccountsRootView: View {
                 Text("Accounts Error")
             case .loading:
                 ProgressView()
-            case .success (let accounts):
+            case .success(let accounts):
                 NavigationStack {
                     AccountsListView(accounts: accounts)
                 }

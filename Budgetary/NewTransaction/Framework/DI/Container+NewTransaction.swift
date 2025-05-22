@@ -88,4 +88,14 @@ extension Container {
         self { GetCategoryGroupsDataSource() }
             .singleton
     }
+    
+    var getAccountsUseCase: Factory<GetAccountsUseCase> {
+        self { GetAccountsUseCase() }
+            .singleton
+    }
+    
+    var getAccountsSource: Factory<GetAccountsSource> {
+        self { GetAccountsDataSource() }
+            .singleton
+    }
 }

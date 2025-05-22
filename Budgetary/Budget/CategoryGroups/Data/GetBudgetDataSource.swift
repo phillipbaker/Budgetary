@@ -10,8 +10,8 @@ import Factory
 
 public final class GetBudgetDataSource: GetBudgetSource {
     let budgetDataSourceLocal: BudgetDataSourceLocal = Container.shared.budgetDataSourceLocal()
-    let payeesDataSourceLocal: PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
-    let budgetAccountsDataSourceLocal: BudgetAccountsDataSourceLocal = Container.shared.budgetAccountsDataSourceLocal()
+    let payeesDataSourceLocal: any PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
+    let budgetAccountsDataSourceLocal: any BudgetAccountsDataSourceLocal = Container.shared.budgetAccountsDataSourceLocal()
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     let mapper: BudgetDataMapper = Container.shared.budgetDataMapper()
 
@@ -23,22 +23,24 @@ public final class GetBudgetDataSource: GetBudgetSource {
     
     func startStreaming() async {
         let budgetStream = await budgetDataSourceLocal.budgetStream()
-        let payeesStream = await payeesDataSourceLocal.payeesStream()
-        let budgetAccountsStream = await budgetAccountsDataSourceLocal.budgetAccountsStream()
+        let payeesStream = await payeesDataSourceLocal.broadcaster.subscribe()
+        let budgetAccountsStream = await budgetAccountsDataSourceLocal.broadcaster.subscribe()
         let categoryGroupsStream = await categoryGroupsDataSourceLocal.broadcaster.subscribe()
         
         for await ((budgetPlain, payeesPlain, categoryGroupsPlain), budgetAccountsPlain) in combineLatest(combineLatest(budgetStream, payeesStream, categoryGroupsStream), budgetAccountsStream) {
-            continuation.yield(mapper.map(
-                budgetPlain: budgetPlain,
-                payeesPlain: payeesPlain,
-                budgetAccountsPlain: budgetAccountsPlain,
-                categoryGroupsPlain: categoryGroupsPlain
-            ))
+            continuation.yield(
+                mapper.map(
+                    budgetPlain: budgetPlain,
+                    payeesPlain: payeesPlain,
+                    budgetAccountsPlain: budgetAccountsPlain,
+                    categoryGroupsPlain: categoryGroupsPlain
+                )
+            )
         }
         
         continuation.onTermination = { @Sendable reason in
             // Handle any necessary cleanup
-            print("combinedStream terminated with reason: ", reason)
+            print("combinedBudgetDataStream terminated with reason: ", reason)
         }
     }
     

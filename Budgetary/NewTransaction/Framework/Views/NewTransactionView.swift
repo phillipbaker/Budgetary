@@ -18,12 +18,7 @@ struct NewTransactionView: View {
     @Environment(\.dismiss) var dismiss
     let viewModel: NewTransactionViewModel = Container.shared.newTransactionViewModel()
 
-    @FocusState private var focusedField: FocusedField?
-    
-    enum FocusedField {
-        case primaryOperand
-        case secondaryOperand
-    }
+    @FocusState var focusedField: NewTransactionViewModel.FocusedField?
     
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -45,10 +40,15 @@ struct NewTransactionView: View {
                 
                 Section {
                     NewTransactionAmountView(
-                        amount: $viewModel.amount,
+                        localValues: $viewModel.localValues,
+                        currencyCode: viewModel.currencyCode,
                         transactionType: $viewModel.transactionType,
                         focusedField: _focusedField,
-                        localValues: $viewModel.localValues
+                        onEquals: { viewModel.onEquals() },
+                        onSubmit: { viewModel.onSubmit() },
+                        onOperation: { operation in viewModel.handle(operation: operation) },
+                        onPrimaryOperandTextChanged: { newValue in viewModel.onTextChanged(primaryOperand: newValue) },
+                        onSecondaryOperandTextChanged: { newValue in viewModel.onTextChanged(secondaryOperand: newValue) }
                     )
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
@@ -178,7 +178,14 @@ struct NewTransactionView: View {
                 
                 Section {
                     Button {
-                        viewModel.handle(intent: .addTransaction)
+                        withAnimation {
+                            focusedField = nil
+                            // If there are primary and secondary values, apply operation
+                            if !viewModel.localValues.operation.isEmpty {
+                                viewModel.applyOperation()
+                            }
+                            viewModel.handle(intent: .addTransaction)
+                        }
                         dismiss() // This should happen in my managed navigation state
                     } label: {
                         Text("Save")
@@ -194,14 +201,20 @@ struct NewTransactionView: View {
             }
             .listStyle(.insetGrouped)
             .contentMargins(.top, 12)
+            .onChange(of: viewModel.focusedField) {
+                focusedField = viewModel.focusedField
+            }
+            .onChange(of: focusedField) {
+                viewModel.focusedField = focusedField
+            }
             .onChange(of: viewModel.date) {
                 withAnimation {
                     viewModel.showingDatePicker = false
                 }
             }
-            .onChange(of: viewModel.showingDatePicker) { _, newValue in
+            .onChange(of: viewModel.showingDatePicker) {
                 withAnimation {
-                    if newValue == true {
+                    if viewModel.showingDatePicker == true {
                         proxy.scrollTo("saveButton", anchor: .bottom)
                         //                    } else {
                         //                        proxy.scrollTo("dateRow", anchor: .top)

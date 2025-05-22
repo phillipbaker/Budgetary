@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 public final class BudgetViewModel {
     @ObservationIgnored private let stateMapper: BudgetStateMapper = Container.shared.budgetStateMapper()
-    @ObservationIgnored private let getBudgetUseCase: GetBudget = Container.shared.getBudgetUseCase()
+    @ObservationIgnored private let getBudgetUseCase: GetBudgetUseCase = Container.shared.getBudgetUseCase()
     @ObservationIgnored private let assignMoneyUseCase: AssignMoney = Container.shared.assignMoneyUseCase()
     
     var state: BudgetState

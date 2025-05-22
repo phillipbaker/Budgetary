@@ -8,31 +8,25 @@
 import Factory
 
 actor PayeesLocalDataGateway: PayeesDataSourceLocal {
+    typealias PayeesBroadcaster = StreamBroadcaster<[PayeePlain]>
+
+    nonisolated var broadcaster: PayeesBroadcaster {
+        return _broadcaster
+    }
+    
+    private let _broadcaster = StreamBroadcaster<[PayeePlain]>(id: "PayeesLocalDataGateway")
+
     let dao: PayeeDao = Container.shared.payeeDao()
     let mapper: PayeesMapperPlain = Container.shared.payeesMapperPlain()
-    
-    private let (stream, continuation) = AsyncStream.makeStream(of: [PayeePlain].self, bufferingPolicy: .bufferingNewest(1))
-    
+
     init() {
         Task { await startStreaming() }
     }
     
     func startStreaming() async {
         for await payeesPlain in dao.streamPayees() {
-            //            let payeesPlain = payeesDb.map { payeeDb in
-            //                self.mapper.map(payeeDb: payeeDb)
-            //            }
-            continuation.yield(payeesPlain)
+            await _broadcaster.send(payeesPlain)
         }
-        
-        continuation.onTermination = { @Sendable reason in
-            // Handle any necessary cleanup
-            print("payees gateway stream terminated with reason: ", reason)
-        }
-    }
-    
-    func payeesStream() async -> AsyncStream<[PayeePlain]> {
-        return stream
     }
     
     func allPayees() async -> [PayeePlain] {

@@ -33,7 +33,8 @@ final class AddTransactionUseCase {
         var amount: Amount {
             switch request.transactionType {
             case .outflow:
-                return .outflow(request.amount.decimalValue)
+                // strip the leading "-" sign from string to save .outflow(Decimal)
+                return .outflow(abs(request.amount.decimalValue))
             case .inflow:
                 return .inflow(request.amount.decimalValue)
             }
@@ -47,7 +48,7 @@ final class AddTransactionUseCase {
             isCleared: request.isCleared
         )
         
-        let updatedAccount = account.adding(transaction: transaction)
+        let updatedAccount = account.adding(transaction: transaction) 
         await source.update(account: mapper.map(account: updatedAccount))
     }
 }

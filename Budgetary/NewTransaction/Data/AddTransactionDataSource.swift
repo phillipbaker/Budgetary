@@ -8,8 +8,8 @@
 import Factory
 
 final class AddTransactionDataSource: AddTransactionSource {
-    let budgetAccountsDataSourceLocal: BudgetAccountsDataSourceLocal = Container.shared.budgetAccountsDataSourceLocal()
-    let payeesDataSourceLocal: PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
+    let budgetAccountsDataSourceLocal: any BudgetAccountsDataSourceLocal = Container.shared.budgetAccountsDataSourceLocal()
+    let payeesDataSourceLocal: any PayeesDataSourceLocal = Container.shared.payeesDataSourceLocal()
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
 
     func getPayees() async -> [PayeePlain] {

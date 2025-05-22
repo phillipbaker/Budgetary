@@ -8,30 +8,25 @@
 import Factory
 
 actor BudgetAccountsLocalDataGateway: BudgetAccountsDataSourceLocal {
+    typealias BudgetAccountsBroadcaster = StreamBroadcaster<[BudgetAccountPlain]>
+
+    nonisolated var broadcaster: BudgetAccountsBroadcaster {
+        return _broadcaster
+    }
+    
+    private let _broadcaster = StreamBroadcaster<[BudgetAccountPlain]>(id: "BudgetAccountsLocalDataGateway")
+
     let dao: BudgetAccountDao = Container.shared.budgetAccountDao()
     let mapper: BudgetAccountsMapperPlain = Container.shared.budgetAccountsMapperPlain()
-    
-    private let (stream, continuation) = AsyncStream.makeStream(of: [BudgetAccountPlain].self, bufferingPolicy: .bufferingNewest(1))
 
     init() {
         Task { await startStreaming() }
     }
     
-    func startStreaming() async {
+    private func startStreaming() async {
         for await budgetAccountsPlain in dao.streamBudgetAccounts() {
-            //            let budgetAccountsPlain = budgetAccountDb.map { budgetAccountDb in
-            //                mapper.mapDbToPlain(budgetAccountDb: budgetAccountDb)
-            continuation.yield(budgetAccountsPlain)
+            await _broadcaster.send(budgetAccountsPlain)
         }
-        
-        continuation.onTermination = { @Sendable reason in
-            // Handle any necessary cleanup
-            print("budgetAccountsPlain gateway stream terminated with reason: ", reason)
-        }
-    }
-
-    func budgetAccountsStream() async -> AsyncStream<[BudgetAccountPlain]> {
-        return stream
     }
     
     func allBudgetAccounts() async -> [BudgetAccountPlain] {

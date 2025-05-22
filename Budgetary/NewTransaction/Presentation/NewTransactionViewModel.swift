@@ -18,7 +18,7 @@ final class NewTransactionViewModel {
     let addTransactionUseCase: AddTransactionUseCase = Container.shared.addTransactionUseCase()
 
     var date: Date
-    var amount: String
+    var currencyCode: String
     var payee: PayeePresentation?
     var category: TransactionCategoryPresentation?
     var isCleared: Bool
@@ -26,12 +26,16 @@ final class NewTransactionViewModel {
     var account: BudgetAccountPresentation?
     
     var destination: Destination?
+    var focusedField: FocusedField?
     var localValues: Operands
     var pickerIsDisabled: Bool
     var showingDatePicker: Bool
     var isFirstLaunch: Bool
 
-    enum FocusedField { case primaryOperand, secondaryOperand }
+    enum FocusedField {
+        case primaryOperand
+        case secondaryOperand
+    }
 
     enum Destination: String, Identifiable {
         case payee, category, account
@@ -40,7 +44,7 @@ final class NewTransactionViewModel {
     
     init(
         date: Date = .now.startOfDay(),
-        amount: String = Decimal(0).formatted(.currency(code: "GBP")),
+        currencyCode: String = "GBP",
         payee: PayeePresentation? = nil,
         category: TransactionCategoryPresentation? = nil,
         isCleared: Bool = false,
@@ -53,7 +57,7 @@ final class NewTransactionViewModel {
         isFirstLaunch: Bool = true
     ) {
         self.date = date
-        self.amount = amount
+        self.currencyCode = currencyCode
         self.payee = payee
         self.category = category
         self.isCleared = isCleared
@@ -79,7 +83,7 @@ final class NewTransactionViewModel {
     private func addTransaction() async {
         let request = AddTransactionRequestModel(
             date: self.date,
-            amount: self.amount,
+            amount: self.localValues.primary,
             payeeId: self.payee?.id,
             categoryId: self.category?.id,
             isCleared: self.isCleared,
@@ -111,5 +115,55 @@ final class NewTransactionViewModel {
     
     func categoryPickerButtonTapped() {
         self.destination = .category
+    }
+
+    @MainActor
+    func onEquals() {
+        focusedField = .primaryOperand
+        
+        DispatchQueue.main.async {
+            self.applyOperation()
+        }
+    }
+    
+    func onSubmit() {
+        focusedField = nil
+        // If there are primary and secondary values, apply operation
+        if !self.localValues.operation.isEmpty {
+            applyOperation()
+        }
+    }
+    
+    func handle(operation: String) {
+        if focusedField != .secondaryOperand { focusedField = .secondaryOperand }
+        if !self.localValues.operation.isEmpty { applyOperation() } // If an operation in progress, commit the operation
+        self.localValues.operation = operation // Set the operation for the next entry
+    }
+    
+    func applyOperation() {
+        // Get Decimal values from Strings to perform operation
+        let primary = localValues.primary.decimalValue
+        let secondary = localValues.secondary.decimalValue
+        
+        // Perform operation on Decimal values
+        let newTotal = self.localValues.operation == "+" ? primary + secondary : primary - secondary
+        
+        self.localValues.primary = newTotal.formatted(.currency(code: currencyCode)) // Update to be result of operation
+        self.localValues.secondary = Decimal(0.00).formatted(.currency(code: currencyCode)) // Reset for new input
+        self.localValues.operation = "" // Reset for new input
+    }
+    
+    func onTextChanged(primaryOperand: String? = nil, secondaryOperand: String? = nil, operation: String? = nil) {
+        if let primaryOperand, primaryOperand != self.localValues.primary {
+            self.localValues.primary = primaryOperand
+        }
+        
+        if let secondaryOperand, secondaryOperand != self.localValues.secondary {
+            self.localValues.secondary = secondaryOperand
+        }
+        
+        if let operation, operation != self.localValues.operation {
+            self.localValues.operation = operation
+        }
     }
 }

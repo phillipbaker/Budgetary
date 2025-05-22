@@ -14,7 +14,7 @@ struct AssignMoneyView: View {
     let currencyCode: String
     let intent: (BudgetIntent) -> Void
     
-    @Binding var localValue: AssignedValue
+    @Binding var localValues: AssignedValues
     @FocusState var focusedField: CategoryRowView.FocusedField?
     
     @State var destination: Destination?
@@ -29,7 +29,7 @@ struct AssignMoneyView: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
             CurrencyTextField(
-                text: $localValue.primary,
+                text: $localValues.primary,
                 currencyCode: currencyCode,
                 onEquals: {},
                 onSubmit: { onSubmit() },
@@ -46,11 +46,11 @@ struct AssignMoneyView: View {
             )
             .focused($focusedField, equals: .primary(id: rowID))
             
-            if !localValue.operation.isEmpty {
+            if !localValues.operation.isEmpty {
                 HStack(spacing: 2) {
-                    Text(localValue.operation)
+                    Text(localValues.operation)
                     CurrencyTextField(
-                        text: $localValue.secondary,
+                        text: $localValues.secondary,
                         currencyCode: currencyCode,
                         onEquals: { onEquals() },
                         onSubmit: { onSubmit() },
@@ -88,16 +88,16 @@ struct AssignMoneyView: View {
     }
     
     private func updateAssignedAmountLocal(primary: String? = nil, secondary: String? = nil, operation: String? = nil) {
-        if let primary, primary != localValue.primary {
-            self.localValue.primary = primary
+        if let primary, primary != localValues.primary {
+            self.localValues.primary = primary
         }
         
-        if let secondary, secondary != localValue.secondary {
-            self.localValue.secondary = secondary
+        if let secondary, secondary != localValues.secondary {
+            self.localValues.secondary = secondary
         }
         
-        if let operation, operation != localValue.operation {
-            self.localValue.operation = operation
+        if let operation, operation != localValues.operation {
+            self.localValues.operation = operation
         }
     }
     
@@ -112,43 +112,43 @@ struct AssignMoneyView: View {
     private func onSubmit() {
         focusedField = nil
         // If there are primary and secondary values, apply operation (this should fire on secondary text field only)
-        if !localValue.operation.isEmpty {
+        if !localValues.operation.isEmpty {
             applyOperation()
         }
-        intent(.updateAssignedAmount(categoryId: category.id, monthYear: monthYear, amount: localValue.primary))
-        localValue.lastCommitted = localValue.primary // Update lastComitted to the new primary value
+        intent(.updateAssignedAmount(categoryId: category.id, monthYear: monthYear, amount: localValues.primary))
+        localValues.lastCommitted = localValues.primary // Update lastComitted to the new primary value
     }
     
     private func onCancel() {
         focusedField = nil
-        let lastCommittedDecimal = localValue.lastCommitted.decimalValue
-        localValue.primary = lastCommittedDecimal.formatted(.currency(code: currencyCode))
-        if localValue.operation != "" { localValue.operation = "" }
-        localValue.secondary = Decimal(0.00).formatted(.currency(code: currencyCode))
+        let lastCommittedDecimal = localValues.lastCommitted.decimalValue
+        localValues.primary = lastCommittedDecimal.formatted(.currency(code: currencyCode))
+        if localValues.operation != "" { localValues.operation = "" }
+        localValues.secondary = Decimal(0.00).formatted(.currency(code: currencyCode))
     }
     
     private func handle(operation: String) {
         if focusedField != .secondary(id: rowID) { focusedField = .secondary(id: rowID) }
-        if !localValue.operation.isEmpty { applyOperation() } // If an operation in progress, commit the operation
-        localValue.operation = operation // Set the operation for the next entry
+        if !localValues.operation.isEmpty { applyOperation() } // If an operation in progress, commit the operation
+        localValues.operation = operation // Set the operation for the next entry
     }
     
     private func applyOperation() {
         // Get Decimal values from Strings to perform operation
-        let primary = localValue.primary.decimalValue
-        let secondary = localValue.secondary.decimalValue
+        let primary = localValues.primary.decimalValue
+        let secondary = localValues.secondary.decimalValue
         
         // Perform operation on Decimal values
-        let newTotal = localValue.operation == "+" ? primary + secondary : primary - secondary
+        let newTotal = localValues.operation == "+" ? primary + secondary : primary - secondary
         
-        localValue.primary = newTotal.formatted(.currency(code: currencyCode)) // Update to be result of operation
-        localValue.secondary = Decimal(0.00).formatted(.currency(code: currencyCode)) // Reset for new input
-        localValue.operation = "" // Reset for new input
+        localValues.primary = newTotal.formatted(.currency(code: currencyCode)) // Update to be result of operation
+        localValues.secondary = Decimal(0.00).formatted(.currency(code: currencyCode)) // Reset for new input
+        localValues.operation = "" // Reset for new input
     }
 }
 
 #Preview {
-    @Previewable @State var assignedLocalValue = AssignedValue(
+    @Previewable @State var localValues = AssignedValues(
         primary: "9.99",
         secondary: "0.00",
         operation: "",
@@ -161,6 +161,6 @@ struct AssignMoneyView: View {
         category: .amazonPrime,
         currencyCode: "GBP",
         intent: { _ in },
-        localValue: $assignedLocalValue
+        localValues: $localValues
     )
 }

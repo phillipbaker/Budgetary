@@ -22,12 +22,12 @@ extension Container {
             .singleton
     }
     
-    var payeesDataSourceLocal: Factory<PayeesDataSourceLocal> {
+    var payeesDataSourceLocal: Factory<any PayeesDataSourceLocal> {
         self { PayeesLocalDataGateway() }
             .singleton
     }
     
-    var budgetAccountsDataSourceLocal: Factory<BudgetAccountsDataSourceLocal> {
+    var budgetAccountsDataSourceLocal: Factory<any BudgetAccountsDataSourceLocal> {
         self { BudgetAccountsLocalDataGateway() }
             .singleton
     }

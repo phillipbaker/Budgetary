@@ -30,7 +30,7 @@ final class AccountPickerViewModel {
     }
     
     private func getAccounts() async {
-        let accounts = await getAccountsUseCase.getAccounts()
+        let accounts = await getAccountsUseCase.accounts()
         self.state = stateMapper.map(accounts: accounts)
     }
     

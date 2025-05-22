@@ -22,7 +22,7 @@ struct CategoryRowView: View {
     @State private var rowID: UUID = UUID()
     
     @FocusState var focusedField: FocusedField?
-    @Binding var assignedLocalValue: AssignedValue
+    @Binding var localValues: AssignedValues
     
     let intent: (BudgetIntent) -> Void
     
@@ -63,7 +63,7 @@ struct CategoryRowView: View {
                             category: category,
                             currencyCode: "GBP",
                             intent: intent,
-                            localValue: $assignedLocalValue,
+                            localValues: $localValues,
                             focusedField: _focusedField
                         )
                     }
@@ -114,7 +114,7 @@ struct CategoryRowView: View {
 }
 
 #Preview {
-    @Previewable @State var assignedLocalValue = AssignedValue(
+    @Previewable @State var localValues = AssignedValues(
         primary: "9.99",
         secondary: "0.00",
         operation: "",
@@ -124,7 +124,7 @@ struct CategoryRowView: View {
     CategoryRowView(
         monthYear: .currentMonthYear,
         category: .cellPhones,
-        assignedLocalValue: $assignedLocalValue,
+        localValues: $localValues,
         intent: { _ in }
     )
     .padding()

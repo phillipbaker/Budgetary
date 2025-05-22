@@ -57,8 +57,8 @@ extension Container {
     
     // MARK: Use Cases & Date Sources
     
-    var getBudgetUseCase: Factory<GetBudget> {
-        self { GetBudget() }
+    var getBudgetUseCase: Factory<GetBudgetUseCase> {
+        self { GetBudgetUseCase() }
             .singleton
     }
     

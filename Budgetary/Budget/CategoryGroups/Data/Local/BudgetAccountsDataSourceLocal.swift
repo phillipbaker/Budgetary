@@ -6,7 +6,9 @@
 //
 
 public protocol BudgetAccountsDataSourceLocal: Sendable {
-    func budgetAccountsStream() async -> AsyncStream<[BudgetAccountPlain]>
+    associatedtype BudgetAccountsBroadcaster: StreamBroadcaster<[BudgetAccountPlain]>
+    nonisolated var broadcaster: BudgetAccountsBroadcaster { get }
+
     func allBudgetAccounts() async -> [BudgetAccountPlain]
     func findBudgetAccount(by id: String) async -> BudgetAccountPlain?
     func create(budgetAccount: BudgetAccountPlain) async
