@@ -11,6 +11,13 @@ struct AccountView: View {
     let account: BudgetAccountPresentation
     
     @State private var searchText: String = ""
+    @State private var destination: Destination?
+    
+    enum Destination: String, Identifiable {
+        case transactionDetail
+        
+        var id: String { rawValue }
+    }
     
     var body: some View {
         List {
@@ -69,12 +76,13 @@ struct AccountView: View {
                     transactions: [
                         .init(
                             id: "2",
-                            date: "2/5/2025",
+                            date: .now,
+                            memo: "",
+                            amount: AmountPresentation(transactionType: .outflow, value: "500.00"),
+                            isCleared: true,
                             payee: PayeePresentation(id: "3", name: "Sainsbury’s"),
                             category: TransactionCategoryPresentation(id: "4", name: "Groceries"),
-                            memo: "",
-                            amount: .outflow("500.00"),
-                            isCleared: true
+                            account: TransactionAccountPresentation(id: "1", name: "HSBC - Joint")
                         )
                     ]
                 )

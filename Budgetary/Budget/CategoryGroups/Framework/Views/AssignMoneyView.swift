@@ -40,8 +40,8 @@ struct AssignMoneyView: View {
                 textStyle: .subheadline,
                 fontWeight: .semibold,
                 textAlignment: .right,
-                isShowingCancel: true,
-                isShowingNavigationRow: true,
+                cancelButtonIsPresented: true,
+                navigationRowIsPresented: true,
                 destination: { destination in self.destination = destination }
             )
             .focused($focusedField, equals: .primary(id: rowID))
@@ -61,8 +61,8 @@ struct AssignMoneyView: View {
                         textStyle: .subheadline,
                         fontWeight: .semibold,
                         textAlignment: .right,
-                        isShowingCancel: true,
-                        isShowingNavigationRow: true,
+                        cancelButtonIsPresented: true,
+                        navigationRowIsPresented: true,
                         destination: { destination in self.destination = destination }
                     )
                     .focused($focusedField, equals: .secondary(id: rowID))

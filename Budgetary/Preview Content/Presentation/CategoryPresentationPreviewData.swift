@@ -27,12 +27,13 @@ extension CategoryPresentation: @unchecked Sendable {
             total: "",
             transactions: [TransactionPresentation(
                 id: "",
-                date: "",
+                date: .now,
+                memo: "",
+                amount: AmountPresentation(transactionType: .inflow, value: "120.00"),
+                isCleared: true,
                 payee: PayeePresentation(id: "", name: "Sainsbury’s"),
                 category: TransactionCategoryPresentation(id: "", name: "Groceries"),
-                memo: "",
-                amount: AmountPresentation.inflow("£120.00"),
-                isCleared: true
+                account: TransactionAccountPresentation(id: "2", name: "HSBC - Joint")
             )]
         )],
         available: [.sep2024: AvailablePresentation(

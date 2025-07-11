@@ -11,5 +11,5 @@ public struct PayeePlain: Equatable, Sendable {
     let aliases: [String]
     let includedInPayeeList: Bool
     let automaticallyCategorizeIsOn: Bool
-    let defaultCategoryId: String
+    let defaultCategoryId: String?
 }

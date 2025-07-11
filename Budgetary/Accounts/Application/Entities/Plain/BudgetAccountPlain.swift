@@ -9,7 +9,7 @@ import Foundation
 
 public struct BudgetAccountPlain: Equatable, Sendable {
     let id: String
-    let nickname: String
+    let name: String
     let accountType: AccountType
     let startingBalance: Decimal
     let notes: String?

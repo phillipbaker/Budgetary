@@ -170,38 +170,7 @@ public final class BudgetPresentationMapper {
     
     func map(transactions: [TransactionEntity]) -> [TransactionPresentation] {
         transactions.map { transaction in
-            map(transaction: transaction)
-        }
-    }
-    
-    func map(transaction: TransactionEntity) -> TransactionPresentation {
-        return TransactionPresentation(
-            id: transaction.id,
-            date: transaction.date.formatted(),
-            payee: map(payee: transaction.payee),
-            category: map(transactionCategory: transaction.category),
-            memo: transaction.memo,
-            amount: map(amount: transaction.amount),
-            isCleared: transaction.isCleared
-        )
-    }
-    
-    func map(payee: Payee?) -> PayeePresentation? {
-        guard let payee else { return nil }
-        return PayeePresentation(id: payee.id, name: payee.name)
-    }
-    
-    func map(transactionCategory: TransactionCategory?) -> TransactionCategoryPresentation? {
-        guard let transactionCategory else { return nil }
-        return TransactionCategoryPresentation(id: transactionCategory.id, name: transactionCategory.name)
-    }
-    
-    func map(amount: Amount) -> AmountPresentation {
-        switch amount {
-        case .inflow(let amount):
-            return .inflow(amount.formatted(.currency(code: "GBP")))
-        case .outflow(let amount):
-            return .outflow(amount.formatted(.currency(code: "GBP")))
+            TransactionPresentationMapper.map(transaction: transaction)
         }
     }
     

@@ -7,9 +7,9 @@
 
 import Foundation
 
-public struct BudgetAccount: Equatable, Sendable {
+public struct BudgetAccount: Equatable, Hashable, Sendable {
     let id: String
-    let nickname: String
+    let name: String
     let accountType: AccountType
     
     /// The current balance when adding an account. Non-optional, defaults to zero.
@@ -94,12 +94,36 @@ public struct BudgetAccount: Equatable, Sendable {
     func adding(transaction: TransactionEntity) -> BudgetAccount {
         return BudgetAccount(
             id: self.id,
-            nickname: self.nickname,
+            name: self.name,
             accountType: self.accountType,
             startingBalance: self.startingBalance,
             notes: self.notes,
             isClosed: self.isClosed,
             transactions: self.transactions + [transaction]
+        )
+    }
+    
+    func updating(transaction: TransactionEntity) -> BudgetAccount {
+        return BudgetAccount(
+            id: self.id,
+            name: self.name,
+            accountType: self.accountType,
+            startingBalance: self.startingBalance,
+            notes: self.notes,
+            isClosed: self.isClosed,
+            transactions: self.transactions.map { $0.id == transaction.id ? transaction : $0 }
+        )
+    }
+    
+    func deleting(transaction: TransactionEntity) -> BudgetAccount {
+        return BudgetAccount(
+            id: self.id,
+            name: self.name,
+            accountType: self.accountType,
+            startingBalance: self.startingBalance,
+            notes: self.notes,
+            isClosed: self.isClosed,
+            transactions: self.transactions.filter { $0.id != transaction.id }
         )
     }
 }

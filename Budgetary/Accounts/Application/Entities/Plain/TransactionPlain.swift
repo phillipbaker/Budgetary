@@ -10,9 +10,9 @@ import Foundation
 public struct TransactionPlain: Equatable, Sendable {
     let id: String
     let date: Date
-    let payeeId: String?
-    let categoryId: String?
     let memo: String
     let amount: Amount
     let isCleared: Bool
+    let payeeId: String?
+    let categoryId: String?
 }

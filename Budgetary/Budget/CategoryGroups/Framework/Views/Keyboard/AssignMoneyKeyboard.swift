@@ -19,12 +19,12 @@ struct AssignMoneyKeyboard: View {
 
     let destination: (AssignMoneyView.Destination?) -> Void
     
-    let isShowingCancel: Bool
-    let isShowingNavigationRow: Bool
+    let cancelButtonIsPresented: Bool
+    let navigationRowIsPresented: Bool
 
     var body: some View {
         Grid(verticalSpacing: 24) {
-            if isShowingNavigationRow {
+            if navigationRowIsPresented {
                 GridRow {
                     KeypadNavigationButton(
                         title: "Assign",
@@ -61,7 +61,7 @@ struct AssignMoneyKeyboard: View {
                 OperationButton(title: "-", image: "minus", action: onOperationKeyTapped)
             }
             .frame(maxWidth: .infinity)
-            .padding(.top, isShowingNavigationRow ? 0 : 16)
+            .padding(.top, navigationRowIsPresented ? 0 : 16)
             
             GridRow {
                 NumberButton(number: "4", insert: onNumberKeyTapped)
@@ -80,7 +80,7 @@ struct AssignMoneyKeyboard: View {
             .frame(maxWidth: .infinity)
             
             GridRow {
-                if isShowingCancel {
+                if cancelButtonIsPresented {
                     CancelButton(onCancel: onCancelKeyTapped)
                 } else {
                     Color.clear

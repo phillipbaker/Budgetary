@@ -7,22 +7,12 @@
 
 import Foundation
 
-public enum AmountPresentation: Equatable, Hashable, Sendable {
-    case inflow(String)
-    case outflow(String)
-    
-    var value: String {
-        switch self {
-        case let .inflow(amount):
-            return amount
-        case let .outflow(amount):
-            return "-" + amount
-        }
-    }
+public struct AmountPresentation: Equatable, Hashable, Sendable {
+    let transactionType: TransactionType
+    let value: String
 }
 
-//
-//struct IdentifiedAmount: Identifiable, Hashable {
-//    let id: String = UUID().uuidString
-//    let presentation: AmountPresentation
-//}
+enum TransactionType: String, CaseIterable, Equatable, Hashable, Identifiable, Sendable {
+    case outflow, inflow
+    var id: String { rawValue }
+}

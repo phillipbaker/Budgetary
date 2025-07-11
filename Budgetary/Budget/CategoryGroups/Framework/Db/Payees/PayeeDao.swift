@@ -50,7 +50,8 @@ class PayeeDao {
     }
     
     func create(payee: PayeeDb) {
-
+        // validations not duping etc here?
+        mock.append(payee)
     }
     
     func update(payee: PayeeDb) {

@@ -8,44 +8,44 @@
 public final class BudgetAccountsMapper: Sendable {
     func mapAccounts(from data: CombinedAccountsData) -> [BudgetAccount] {
         data.accounts.map { account in
-            map(account: account, fromPayees: data.payees, andCategoryGroups: data.categoryGroups)
+            TransactionMapper.map(account: account, fromPayees: data.payees, andCategoryGroups: data.categoryGroups)
         }
+    }
+    
+    func map(accounts: [BudgetAccountPlain]) -> [TransactionAccount] {
+        accounts.map { account in
+            map(account: account)
+        }
+    }
+    
+    func map(account: BudgetAccountPlain) -> TransactionAccount {
+        return TransactionAccount(id: account.id, name: account.name)
+    }
+
+    func map(transactionAccountPlain: TransactionAccountPresentation) -> TransactionAccount {
+        return TransactionAccount(id: transactionAccountPlain.id, name: transactionAccountPlain.name)
     }
     
     func map(account: BudgetAccountPlain, fromPayees payees: [PayeePlain], andCategoryGroups categoryGroups: [CategoryGroupPlain]) -> BudgetAccount {
-        return BudgetAccount(
-            id: account.id,
-            nickname: account.nickname,
-            accountType: account.accountType,
-            startingBalance: account.startingBalance,
-            notes: account.notes,
-            isClosed: account.isClosed,
-            transactions: map(transactions: account.transactions, fromPayees: payees, andCategoryGroups: categoryGroups)
-        )
+        TransactionMapper.map(account: account, fromPayees: payees, andCategoryGroups: categoryGroups)
     }
     
-    func map(transactions: [TransactionPlain], fromPayees payees: [PayeePlain], andCategoryGroups categoryGroups: [CategoryGroupPlain]) -> [TransactionEntity] {
-        return transactions.map { transaction in
-            map(transaction: transaction, fromPayees: payees, andCategoryGroups: categoryGroups)
-        }
+    func map(payeePlain: PayeePlain, categoryGroups: [CategoryGroupPlain]) -> Payee {
+        TransactionMapper.map(payeePlain: payeePlain, categoryGroups: categoryGroups)
     }
     
-    func map(transaction: TransactionPlain, fromPayees payees: [PayeePlain], andCategoryGroups categoryGroups: [CategoryGroupPlain]) -> TransactionEntity {
-        return TransactionEntity(
-            date: transaction.date,
-            payee: TransactionMapper.map(payeeId: transaction.payeeId, payeesPlain: payees, categoryGroups: categoryGroups),
-            category: TransactionMapper.mapCategory(categoryId: transaction.categoryId, categoryGroups: categoryGroups),
-            amount: transaction.amount,
-            isCleared: transaction.isCleared
-        )
+    func map(categoryPlain: CategoryPlain) -> TransactionCategory {
+        TransactionMapper.map(categoryPlain: categoryPlain)
     }
     
     // MARK: - Entity to Plain
     
+    // TODO: This seems like an infinite loop
+    
     func map(account: BudgetAccount) -> BudgetAccountPlain {
         return BudgetAccountPlain(
             id: account.id,
-            nickname: account.nickname,
+            name: account.name,
             accountType: account.accountType,
             startingBalance: account.startingBalance,
             notes: account.notes,
@@ -64,11 +64,21 @@ public final class BudgetAccountsMapper: Sendable {
         return TransactionPlain(
             id: transaction.id,
             date: transaction.date,
-            payeeId: transaction.payee?.id,
-            categoryId: transaction.category?.id,
             memo: transaction.memo,
             amount: transaction.amount,
-            isCleared: transaction.isCleared
+            isCleared: transaction.isCleared,
+            payeeId: transaction.payee?.id,
+            categoryId: transaction.category?.id
         )
+    }
+
+    func map(transactionType: TransactionType, and amount: String) -> Amount {
+        switch transactionType {
+        case .outflow:
+            // strip the leading "-" sign from string to save .outflow(Decimal)
+            return .outflow(abs(amount.decimalValue))
+        case .inflow:
+            return .inflow(amount.decimalValue)
+        }
     }
 }

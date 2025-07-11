@@ -5,21 +5,27 @@
 //  Created by Phillip Baker on 07/08/2024.
 //
 
+import Factory
+import Foundation
 import SwiftUI
 import SwiftData
+
+enum HomeIntent {
+    case addTransaction
+}
 
 @Observable
 final class HomeViewModel {
     var selectedTab: AppTab {
         didSet {
             if selectedTab == .newTransaction {
-                self.isPresentingTransactionSheet = true
+                self.newTransactionSheetIsPresented = true
                 self.selectedTab = oldValue
             }
         }
     }
 
-    var isPresentingTransactionSheet: Bool
+    var newTransactionSheetIsPresented: Bool
     
     enum AppTab: Hashable {
         case budget
@@ -35,11 +41,7 @@ final class HomeViewModel {
         isPresentingTransactionSheet: Bool = false
     ) {
         self.selectedTab = selectedTab
-        self.isPresentingTransactionSheet = isPresentingTransactionSheet
-    }
-    
-    func cancelAddingNewTransactionButtonTapped() {
-        self.isPresentingTransactionSheet = false
+        self.newTransactionSheetIsPresented = isPresentingTransactionSheet
     }
 }
 
@@ -90,19 +92,8 @@ struct HomeView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
-        .sheet(isPresented: $viewModel.isPresentingTransactionSheet) {
-            NavigationStack() {
-                NewTransactionView()
-                    .navigationTitle("Add Transaction")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button("Cancel", role: .cancel) {
-                                self.viewModel.cancelAddingNewTransactionButtonTapped()
-                            }
-                        }
-                    }
-            }
+        .sheet(isPresented: $viewModel.newTransactionSheetIsPresented) {
+            TransactionDetailView(viewModel: Container.shared.transactionDetailViewModel((nil, true)))
         }
     }
 }

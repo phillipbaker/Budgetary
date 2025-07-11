@@ -15,7 +15,7 @@ public class BudgetAccountsMapperPlain {
     func mapDbToPlain(budgetAccountDb: BudgetAccountDb) -> BudgetAccountPlain {
         return BudgetAccountPlain(
             id: budgetAccountDb.id,
-            nickname: budgetAccountDb.nickname,
+            name: budgetAccountDb.name,
             accountType: budgetAccountDb.accountType,
             startingBalance: budgetAccountDb.startingBalance,
             notes: budgetAccountDb.notes,
@@ -27,7 +27,7 @@ public class BudgetAccountsMapperPlain {
     func mapPlainToDb(budgetAccountPlain: BudgetAccountPlain) -> BudgetAccountDb {
         return BudgetAccountDb(
             id: budgetAccountPlain.id,
-            nickname: budgetAccountPlain.nickname,
+            name: budgetAccountPlain.name,
             accountType: budgetAccountPlain.accountType,
             startingBalance: budgetAccountPlain.startingBalance,
             notes: budgetAccountPlain.notes,
@@ -46,11 +46,11 @@ public class BudgetAccountsMapperPlain {
         return TransactionPlain(
             id: transactionDb.id,
             date: transactionDb.date,
-            payeeId: transactionDb.payeeId,
-            categoryId: transactionDb.categoryId,
             memo: transactionDb.memo,
             amount: transactionDb.amount,
-            isCleared: transactionDb.isCleared
+            isCleared: transactionDb.isCleared,
+            payeeId: transactionDb.payeeId,
+            categoryId: transactionDb.categoryId
         )
     }
     
@@ -64,11 +64,11 @@ public class BudgetAccountsMapperPlain {
         return TransactionDb(
             id: transactionPlain.id,
             date: transactionPlain.date,
-            payeeId: transactionPlain.payeeId,
-            categoryId: transactionPlain.categoryId,
             memo: transactionPlain.memo,
             amount: transactionPlain.amount,
-            isCleared: transactionPlain.isCleared
+            isCleared: transactionPlain.isCleared,
+            payeeId: transactionPlain.payeeId,
+            categoryId: transactionPlain.categoryId
         )
     }
 }

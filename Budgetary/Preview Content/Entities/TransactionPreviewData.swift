@@ -46,319 +46,437 @@ extension TransactionEntity {
     // August 2024
     
     static let augSalary = TransactionEntity(
+        id: "",
         date: .augEigth2024,
+        memo: "",
+        amount: .inflow(1000),
+        isCleared: true,
         payee: .reorg,
         category: .readyToAssign,
-        amount: .inflow(1000),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augRent = TransactionEntity(
+        id: "",
         date: .augEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .anthonyMartin,
         category: .rent,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
+
     )
     
     static let augCouncilTax = TransactionEntity(
+        id: "",
         date: .augNinth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .bexley,
         category: .councilTax,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augUtilities = TransactionEntity(
+        id: "",
         date: .augNinth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .eonNext,
         category: .utilities,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augWater = TransactionEntity(
+        id: "",
         date: .augTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .thamesWater,
         category: .water,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augInternet = TransactionEntity(
+        id: "",
         date: .augFourteenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .plusnet,
         category: .internet,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augTvLicense = TransactionEntity(
+        id: "",
         date: .augTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .tvLicence,
         category: .tvLicense,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augCellPhones = TransactionEntity(
+        id: "",
         date: .augTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .giffGaff,
         category: .cellPhones,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augGroceries1 = TransactionEntity(
+        id: "",
         date: .augEigth2024,
+        memo: "",
+        amount: .outflow(300),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(300),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augGroceries2 = TransactionEntity(
+        id: "",
         date: .augEigth2024,
+        memo: "",
+        amount: .outflow(200),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(200),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augGroceries3 = TransactionEntity(
+        id: "",
         date: .augTenth2024,
+        memo: "",
+        amount: .outflow(200),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(200),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augGroceries4 = TransactionEntity(
+        id: "",
         date: .augFourteenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let augGroceries5 = TransactionEntity(
+        id: "",
         date: .augEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     // September 2024
     
     static let sepSalary = TransactionEntity(
+        id: "",
         date: .sepEigth2024,
+        memo: "",
+        amount: .inflow(1000),
+        isCleared: true,
         payee: .reorg,
         category: .readyToAssign,
-        amount: .inflow(1000),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepRent = TransactionEntity(
+        id: "",
         date: .sepEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .anthonyMartin,
         category: .rent,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepCouncilTax = TransactionEntity(
+        id: "",
         date: .sepNinth2024,
+        memo: "",
+        amount: .outflow(0),
+        isCleared: true,
         payee: .bexley,
         category: .councilTax,
-        amount: .outflow(0),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepUtilities = TransactionEntity(
+        id: "",
         date: .sepNinth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .eonNext,
         category: .utilities,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepWater = TransactionEntity(
+        id: "",
         date: .sepTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .thamesWater,
         category: .water,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepInternet = TransactionEntity(
+        id: "",
         date: .sepFourteenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .plusnet,
         category: .internet,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepTvLicense = TransactionEntity(
+        id: "",
         date: .sepTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .tvLicence,
         category: .tvLicense,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepCellPhones = TransactionEntity(
+        id: "",
         date: .sepTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .giffGaff,
         category: .cellPhones,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepGroceries1 = TransactionEntity(
+        id: "",
         date: .sepEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepGroceries2 = TransactionEntity(
+        id: "",
         date: .sepEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepGroceries3 = TransactionEntity(
+        id: "",
         date: .sepTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepGroceries4 = TransactionEntity(
+        id: "",
         date: .sepFourteenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let sepGroceries5 = TransactionEntity(
+        id: "",
         date: .sepEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     // October 2024
     
     static let octSalary = TransactionEntity(
+        id: "",
         date: .octEigth2024,
+        memo: "",
+        amount: .inflow(1000),
+        isCleared: true,
         payee: .reorg,
         category: .readyToAssign,
-        amount: .inflow(1000),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octRent = TransactionEntity(
+        id: "",
         date: .octEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .anthonyMartin,
         category: .rent,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octCouncilTax = TransactionEntity(
+        id: "",
         date: .octNinth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .bexley,
         category: .councilTax,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octUtilities = TransactionEntity(
+        id: "",
         date: .octNinth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .eonNext,
         category: .utilities,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octWater = TransactionEntity(
+        id: "",
         date: .octTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .thamesWater,
         category: .water,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octInternet = TransactionEntity(
+        id: "",
         date: .octFourteenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .plusnet,
         category: .internet,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octTvLicense = TransactionEntity(
+        id: "",
         date: .octTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .tvLicence,
         category: .tvLicense,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octCellPhones = TransactionEntity(
+        id: "",
         date: .octTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .giffGaff,
         category: .cellPhones,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octGroceries1 = TransactionEntity(
+        id: "",
         date: .octEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octGroceries2 = TransactionEntity(
+        id: "",
         date: .octEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octGroceries3 = TransactionEntity(
+        id: "",
         date: .octTenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octGroceries4 = TransactionEntity(
+        id: "",
         date: .octFourteenth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
     
     static let octGroceries5 = TransactionEntity(
+        id: "",
         date: .octEigth2024,
+        memo: "",
+        amount: .outflow(100),
+        isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        amount: .outflow(100),
-        isCleared: true
+        account: TransactionAccount(id: "4", name: "HSBC")
     )
 }
 

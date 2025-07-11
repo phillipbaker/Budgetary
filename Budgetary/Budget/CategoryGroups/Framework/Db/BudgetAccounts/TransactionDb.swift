@@ -12,27 +12,27 @@ import SwiftData
 final class TransactionDb: Equatable {
     @Attribute(.unique) var id: String
     var date: Date
-    var payeeId: String?
-    var categoryId: String?
     var memo: String
     var amount: Amount
     var isCleared: Bool
-    
+    var payeeId: String?
+    var categoryId: String?
+
     init(
         id: String,
         date: Date,
-        payeeId: String?,
-        categoryId: String?,
         memo: String,
         amount: Amount,
-        isCleared: Bool
+        isCleared: Bool,
+        payeeId: String?,
+        categoryId: String?
     ) {
         self.id = id
         self.date = date
-        self.payeeId = payeeId
-        self.categoryId = categoryId
         self.memo = memo
         self.amount = amount
         self.isCleared = isCleared
+        self.categoryId = categoryId
+        self.payeeId = payeeId
     }
 }

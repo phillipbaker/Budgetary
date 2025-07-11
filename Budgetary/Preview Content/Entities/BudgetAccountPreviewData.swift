@@ -10,7 +10,7 @@ import Foundation
 extension BudgetAccount {
     static let hsbcChecking = BudgetAccount(
         id: UUID().uuidString,
-        nickname: "HSBC Checking",
+        name: "HSBC Checking",
         accountType: .budget,
         startingBalance: 0.0,
         notes: nil,

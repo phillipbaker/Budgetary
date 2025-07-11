@@ -19,8 +19,8 @@ struct CurrencyTextField: UIViewRepresentable {
     let textStyle: UIFont.TextStyle
     let fontWeight: UIFont.Weight
     let textAlignment: NSTextAlignment
-    let isShowingCancel: Bool
-    let isShowingNavigationRow: Bool
+    let cancelButtonIsPresented: Bool
+    let navigationRowIsPresented: Bool
     let destination: (AssignMoneyView.Destination?) -> Void
 
     func makeUIView(context: Context) -> UITextField {
@@ -35,7 +35,7 @@ struct CurrencyTextField: UIViewRepresentable {
         textField.font = dynamicFont
         textField.textAlignment = textAlignment
         
-        let keyboard = UIHostingController(
+        let keyboardVC = UIHostingController(
             rootView: AssignMoneyKeyboard(
                 onSubmitKeyTapped: context.coordinator.submitKeyTapped,
                 onCancelKeyTapped: onCancel,
@@ -44,12 +44,16 @@ struct CurrencyTextField: UIViewRepresentable {
                 onNumberKeyTapped: { number in context.coordinator.insert(number) },
                 onOperationKeyTapped: onOperation,
                 destination: destination,
-                isShowingCancel: isShowingCancel,
-                isShowingNavigationRow: isShowingNavigationRow
+                cancelButtonIsPresented: cancelButtonIsPresented,
+                navigationRowIsPresented: navigationRowIsPresented
             )
-        ).view
-        textField.inputView = keyboard
-        textField.inputView?.translatesAutoresizingMaskIntoConstraints = false
+        )
+        
+        keyboardVC.view.translatesAutoresizingMaskIntoConstraints = false
+        keyboardVC.view.backgroundColor = .clear
+        
+        context.coordinator.hostingController = keyboardVC
+        textField.inputView = keyboardVC.view
 
         return textField
     }
@@ -87,6 +91,8 @@ struct CurrencyTextField: UIViewRepresentable {
         let onSubmit: () -> Void
         let onTextChanged: ((String) -> Void)?
 
+        weak var hostingController: UIHostingController<AssignMoneyKeyboard>?
+
         weak var textField: UITextField?
 
         init(
@@ -117,6 +123,7 @@ struct CurrencyTextField: UIViewRepresentable {
             } else {
                 // Handle empty input or edge case
                 // e.g., trigger some fallback behavior
+                
             }
         }
         

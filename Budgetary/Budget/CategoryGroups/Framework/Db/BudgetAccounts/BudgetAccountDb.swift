@@ -10,10 +10,10 @@ import SwiftData
 
 @Model
 final class BudgetAccountDb: Equatable {
-    #Unique<BudgetAccountDb>([\.id, \.nickname])
+    #Unique<BudgetAccountDb>([\.id, \.name])
     
     var id: String
-    var nickname: String
+    var name: String
     var accountType: AccountType
     var startingBalance: Decimal
     var notes: String?
@@ -22,7 +22,7 @@ final class BudgetAccountDb: Equatable {
     
     init(
         id: String,
-        nickname: String,
+        name: String,
         accountType: AccountType,
         startingBalance: Decimal,
         notes: String?,
@@ -30,7 +30,7 @@ final class BudgetAccountDb: Equatable {
         transactions: [TransactionDb]
     ) {
         self.id = id
-        self.nickname = nickname
+        self.name = name
         self.accountType = accountType
         self.startingBalance = startingBalance
         self.notes = notes

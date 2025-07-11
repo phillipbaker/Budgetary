@@ -14,7 +14,7 @@ extension Array where Element == BudgetAccountDb {
 extension BudgetAccountDb: @unchecked Sendable {
     static let hsbcChecking = BudgetAccountDb(
         id: "1",
-        nickname: "HSBC Checking",
+        name: "HSBC Checking",
         accountType: .budget,
         startingBalance: 0.0,
         notes: "Notes go here...",
@@ -23,56 +23,56 @@ extension BudgetAccountDb: @unchecked Sendable {
             TransactionDb(
                 id: "97",
                 date: .sepEigth2024,
-                payeeId: "4",
-                categoryId: "99",
-                memo: "Memo goes here...",
+                memo: "",
                 amount: .inflow(100),
-                isCleared: true
+                isCleared: true,
+                payeeId: "4",
+                categoryId: "16"
             ),
             TransactionDb(
                 id: "98",
                 date: .octEigth2024,
-                payeeId: "4",
-                categoryId: "99",
-                memo: "Memo goes here...",
+                memo: "",
                 amount: .inflow(100),
-                isCleared: true
+                isCleared: true,
+                payeeId: "4",
+                categoryId: "17"
             ),
             TransactionDb(
                 id: "99",
                 date: .novEigth2024,
-                payeeId: "4",
-                categoryId: "99",
-                memo: "Memo goes here...",
+                memo: "",
                 amount: .inflow(1000),
-                isCleared: true
+                isCleared: true,
+                payeeId: "4",
+                categoryId: "23"
             ),
             TransactionDb(
                 id: "100",
                 date: .decEigth2024,
-                payeeId: "4",
-                categoryId: "99",
-                memo: "Memo goes here...",
+                memo: "",
                 amount: .inflow(100),
-                isCleared: true
+                isCleared: true,
+                payeeId: "4",
+                categoryId: "24"
             ),
             TransactionDb(
                 id: "1",
                 date: .octEigth2024,
-                payeeId: "1",
-                categoryId: "1",
-                memo: "Memo goes here...",
+                memo: "",
                 amount: .outflow(40),
-                isCleared: true
+                isCleared: true,
+                payeeId: "1",
+                categoryId: "28"
             ),
             TransactionDb(
-                id: "2",
+                id: "1",
                 date: .novEigth2024,
-                payeeId: "1",
-                categoryId: "1",
                 memo: "Memo goes here...",
                 amount: .outflow(500),
-                isCleared: true
+                isCleared: true,
+                payeeId: "29",
+                categoryId: "1"
             )
 //            TransactionDb(
 //                id: "3",
@@ -115,7 +115,7 @@ extension BudgetAccountDb: @unchecked Sendable {
     
     static let account2 = BudgetAccountDb(
         id: "2",
-        nickname: "Account 2",
+        name: "Account 2",
         accountType: .budget,
         startingBalance: 0.00,
         notes: "Notes",
@@ -125,7 +125,7 @@ extension BudgetAccountDb: @unchecked Sendable {
     
     static let account3 = BudgetAccountDb(
         id: "3",
-        nickname: "Account 3",
+        name: "Account 3",
         accountType: .budget,
         startingBalance: 0.00,
         notes: "Notes",
@@ -135,7 +135,7 @@ extension BudgetAccountDb: @unchecked Sendable {
     
     static let account4 = BudgetAccountDb(
         id: "4",
-        nickname: "Account 4",
+        name: "Account 4",
         accountType: .budget,
         startingBalance: 0.00,
         notes: "Notes",

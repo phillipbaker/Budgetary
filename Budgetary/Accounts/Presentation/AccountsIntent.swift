@@ -8,3 +8,7 @@
 public enum AccountsIntent: Sendable {
     case getAccounts
 }
+
+public enum TransactionAccountsIntent: Sendable {
+    case getTransactionAccounts
+}

@@ -14,7 +14,7 @@ final class PayeeDb: Equatable {
     var aliases: [String]
     var includedInPayeeList: Bool
     var automaticallyCategorizeIsOn: Bool
-    var defaultCategoryId: String
+    var defaultCategoryId: String?
     
     init(
         id: String,
@@ -22,7 +22,7 @@ final class PayeeDb: Equatable {
         aliases: [String],
         includedInPayeeList: Bool,
         automaticallyCategorizeIsOn: Bool,
-        defaultCategoryId: String
+        defaultCategoryId: String?
     ) {
         self.id = id
         self.name = name
