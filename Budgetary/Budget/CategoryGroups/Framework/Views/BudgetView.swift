@@ -66,6 +66,7 @@ struct BudgetView: View {
                                 localValues: bindingFor(monthYear: budget.monthYear, category: category),
                                 intent: intent
                             )
+                            .id("\(budget.monthYear.description)-\(category.id)")
                             .contextMenu {
                                 Button {
                                     
