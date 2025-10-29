@@ -12,14 +12,21 @@ struct DoneButton: View {
     @State private var isTapped: Bool = false
     
     var body: some View {
-        Button("done") {
+        Button(role: .confirm) {
             onSubmit()
             isTapped.toggle()
+        } label: {
+            Image(systemName: "checkmark")
+                .imageScale(.small)
         }
-        .font(.body)
-        .fontWeight(.semibold)
-        .buttonStyle(.borderedProminent)
+        .frame(maxWidth: .infinity, minHeight: 48, maxHeight: .infinity)
+        .font(.title)
+        .background(.tint)
+//        .fontWeight(.semibold)
+//        .buttonStyle(.borderedProminent)
         .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+        .foregroundStyle(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 }
 

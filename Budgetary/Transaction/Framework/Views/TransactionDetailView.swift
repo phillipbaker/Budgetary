@@ -41,10 +41,7 @@ struct TransactionDetailView: View {
                             focusedField: _focusedField,
                             onAppear: { viewModel.onAppear() },
                             onEquals: { viewModel.onEquals() },
-                            onSubmit: {
-                                focusedField = nil
-                                viewModel.onSubmit()
-                            },
+                            onSubmit: { viewModel.onSubmit() },
                             onOperation: { operation in viewModel.handle(operation: operation) },
                             onPrimaryOperandTextChanged: { newValue in viewModel.onTextChanged(primaryOperand: newValue) },
                             onSecondaryOperandTextChanged: { newValue in viewModel.onTextChanged(secondaryOperand: newValue) }
@@ -211,13 +208,17 @@ struct TransactionDetailView: View {
                 .listStyle(.insetGrouped)
                 .contentMargins(.top, 12)
                 .onChange(of: viewModel.focusedField) {
-                    focusedField = viewModel.focusedField
+                    if focusedField != viewModel.focusedField {
+                        focusedField = viewModel.focusedField
+                    }
                 }
                 .onChange(of: focusedField) {
-                    viewModel.focusedField = focusedField
+                    if viewModel.focusedField != focusedField {
+                        viewModel.focusedField = focusedField
+                    }
                 }
                 .onChange(of: viewModel.isCleared) {
-                    focusedField = nil
+                    if focusedField != nil { focusedField = nil }
                 }
                 .onChange(of: viewModel.date) {
                     viewModel.onChangeOfDate()
@@ -231,7 +232,7 @@ struct TransactionDetailView: View {
                 .onChange(of: viewModel.transactionType) {
                     viewModel.onChangeOfTransactionType()
                 }
-                .onChange(of: viewModel.destination) { oldValue, _ in
+                .onChange(of: viewModel.destination) { oldValue, newValue in
                     viewModel.onChangeOfDestination(from: oldValue)
                 }
                 .navigationDestination(item: $viewModel.destination) { destination in

@@ -10,6 +10,8 @@ import SwiftUI
 struct AccountsListView: View {
     let accounts: [BudgetAccountPresentation]
     
+    
+    
     var body: some View {
         List {
             Section {
@@ -42,5 +44,15 @@ struct AccountsListView: View {
         .navigationDestination(for: BudgetAccountPresentation.self) { account in
             AccountView(account: account)
         }
+//        .tabViewBottomAccessory(content: {
+//            Button {
+//                viewModel.selectedTab = HomeViewModel.AppTab.newTransaction
+//            } label: {
+//                HStack {
+//                    Image(systemName: "plus")
+//                    Text("Transaction")
+//                }
+//            }
+//        })
     }
 }

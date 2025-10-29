@@ -44,7 +44,6 @@ struct CategoryRowView: View {
                         maxWidth: .infinity,
                         alignment: isXL ? .trailing : .leading
                     )
-                    .padding(.vertical, 2)
                     .font(.subheadline)
                     .lineLimit(isXL ? nil : 1)
                     .multilineTextAlignment(isXL ? .trailing : .leading)
@@ -75,6 +74,7 @@ struct CategoryRowView: View {
                                     .font(.caption)
                             }
                             NumberView(number: category.activity[monthYear]?.total ?? "0.00")
+                                .fontWeight(.medium)
                         }
                     }
                     

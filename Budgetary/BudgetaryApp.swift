@@ -10,7 +10,7 @@ import SwiftUI
 
 @main
 struct BudgetaryApp: App {
-    let viewModel = HomeViewModel(selectedTab: .budget, isPresentingTransactionSheet: true)
+    let viewModel = HomeViewModel(selectedTab: .budget, isPresentingTransactionSheet: false)
     
     var body: some Scene {
         WindowGroup {

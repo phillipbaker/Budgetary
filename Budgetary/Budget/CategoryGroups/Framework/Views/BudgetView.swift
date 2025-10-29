@@ -14,6 +14,7 @@ struct BudgetView: View {
     let intent: (BudgetIntent) -> Void
     @Bindable var coordinator: BudgetCoordinator
     
+    //    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSize
     
@@ -41,60 +42,79 @@ struct BudgetView: View {
                     buttonAction: {}
                 )
             }
-            .padding(.horizontal)
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             
-            Section {
-                FilterCategoriesView(
-                    filter: budget.filter,
-                    filterIntent: { id in intent(.filterButtonTapped(monthYear: budget.monthYear, filterId: id)) }
-                )
-            }
-            .listRowSeparator(.hidden)
-            .scrollIndicators(.hidden)
-            .listRowBackground(Color(.systemGroupedBackground))
+            //            Section {
+            //                FilterCategoriesView(
+            //                    filter: budget.filter,
+            //                    filterIntent: { id in intent(.filterButtonTapped(monthYear: budget.monthYear, filterId: id)) }
+            //                )
+            //            }
+            //            .listRowSeparator(.hidden)
+            //            .scrollIndicators(.hidden)
+            //            .listRowBackground(Color(.systemGroupedBackground))
             
-            Section {
-                if budget.categoryGroups.isEmpty {
-                    CategoryListEmptyView(filter: budget.filter, monthYear: budget.monthYear, intent: intent)
-                } else {
-                    ForEach(budget.categoryGroups) { group in
-                        Section {
-                            ForEach(group.categories) { category in
-                                CategoryRowView(
-                                    monthYear: budget.monthYear,
-                                    category: category,
-                                    localValues: bindingFor(monthYear: budget.monthYear, category: category),
-                                    intent: intent
-                                )
+            if budget.categoryGroups.isEmpty {
+                CategoryListEmptyView(filter: budget.filter, monthYear: budget.monthYear, intent: intent)
+            } else {
+                ForEach(budget.categoryGroups) { group in
+                    Section {
+                        ForEach(group.categories) { category in
+                            CategoryRowView(
+                                monthYear: budget.monthYear,
+                                category: category,
+                                localValues: bindingFor(monthYear: budget.monthYear, category: category),
+                                intent: intent
+                            )
+                            .contextMenu {
+                                Button {
+                                    
+                                } label: {
+                                    Label("Add Transaction", systemImage: "plus")
+                                }
+                                Button {
+                                    
+                                } label: {
+                                    Label("View Activity", systemImage: "chart.line.uptrend.xyaxis")
+                                }
+                                Button {
+                                    
+                                } label: {
+                                    Label("Move Money", systemImage: "arrow.left.arrow.right")
+                                }
+                                Button {
+                                    
+                                } label: {
+                                    Label("Edit Target", systemImage: "target") // Add target if none?
+                                }
+                                Button {
+                                    
+                                } label: {
+                                    Label("View Details", systemImage: "ellipsis")
+                                }
                             }
-                            .transition(.move(edge: .top))
-                        } header: {
-                            CategoryGroupRowView(group: group, monthYear: budget.monthYear)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    alignment: dynamicTypeSize >= .xLarge && horizontalSize == .compact ? .trailing : .leading
-                                )
-                                .listRowBackground(Color(.systemGroupedBackground))
-                                .listSectionSeparator(.hidden)
                         }
+                        .transition(.move(edge: .top))
+                    } header: {
+                        CategoryGroupRowView(group: group, monthYear: budget.monthYear)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: dynamicTypeSize >= .xLarge && horizontalSize == .compact ? .trailing : .leading
+                            )
                     }
                 }
             }
             
-            Section {
-                if budget.filter != .allCategories && !budget.categoryGroups.isEmpty {
-                    Button("Clear Filter") {
-                        intent(.clearFilterButtonTapped(monthYear: budget.monthYear))
-                    }
-                }
-            }
+            //            Section {
+            //                if budget.filter != .allCategories && !budget.categoryGroups.isEmpty {
+            //                    Button("Clear Filter") {
+            //                        intent(.clearFilterButtonTapped(monthYear: budget.monthYear))
+            //                    }
+            //                }
+            //            }
         }
-        .listStyle(.grouped)
-        .listSectionSpacing(16)
         .contentMargins(.top, 12)
+        .listSectionSpacing(8)
         .safeAreaPadding(.bottom, 24) // causing a jolt on keyboard dismiss
         .gesture(
             DragGesture()
@@ -114,27 +134,35 @@ struct BudgetView: View {
             }
             
             ToolbarItem(placement: .navigation) {
-                HStack {
-                    Button {
-                        coordinator.monthPickerButtonTapped()
-                    } label: {
-                        MonthPickerButtonLabel(month: budget.monthYear.monthAbbreviated + " " + budget.monthYear.year.description)
-                            .popover(
-                                isPresented: $coordinator.destination.monthPicker,
-                                attachmentAnchor: .point(.bottom)
-                            ) {
-                                MonthPickerView(
-                                    monthYear: budget.monthYear,
-                                    months: budget.months,
-                                    filter: budget.filter,
-                                    intent: intent,
-                                    year: budget.monthYear.year
-                                )
-                            }
-                    }
-                    
-                    if budget.monthYear != .currentMonthYear {
-                        TodayButton(intent: intent, filter: budget.filter)
+                GlassEffectContainer {
+                    HStack(spacing: 0) {
+                        Button {
+                            coordinator.monthPickerButtonTapped()
+                        } label: {
+                            Text(budget.monthYear.monthWide + " " + budget.monthYear.year.description)
+                                .fontWeight(.semibold)
+                            //                            .padding(.top, 4)
+                                                        .padding(.horizontal, 8)
+                                .popover(
+                                    isPresented: $coordinator.destination.monthPicker,
+                                    attachmentAnchor: .point(.bottom)
+                                ) {
+                                    MonthPickerView(
+                                        monthYear: budget.monthYear,
+                                        months: budget.months,
+                                        filter: budget.filter,
+                                        intent: intent,
+                                        year: budget.monthYear.year
+                                    )
+                                    .presentationCompactAdaptation(.popover)
+                                }
+                        }
+                        //                        .buttonStyle(.glass)
+                        
+                        if budget.monthYear != .currentMonthYear {
+                            TodayButton(intent: intent, filter: budget.filter)
+                            //                                .buttonStyle(.glass)
+                        }
                     }
                 }
             }

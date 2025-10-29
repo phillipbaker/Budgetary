@@ -34,7 +34,7 @@ actor PayeesLocalDataGateway: PayeesDataSourceLocal {
     }
     
     func findPayee(by id: String) -> PayeePlain? {
-        let payeeDb = dao.findPayee(by: id)
+        guard let payeeDb = dao.findPayee(by: id) else { return nil }
         return mapper.map(payeeDb: payeeDb)
     }
     

@@ -19,14 +19,17 @@ struct CategoryRowDetailView: View {
                 HStack {
                     Text("Assigned")
                     NumberView(number: category.assigned[monthYear]?.assignedThisMonth ?? "0.00")
+                        .fontWeight(.medium)
                 }
                 HStack {
                     Text("Activity")
                     NumberView(number: category.activity[monthYear]?.total ?? "0.00")
+                        .fontWeight(.medium)
                 }
                 HStack {
                     Text("Available")
                     NumberView(number: category.available[monthYear]?.total ?? "0.00")
+                        .fontWeight(.medium)
                 }
             }
             .toolbar {

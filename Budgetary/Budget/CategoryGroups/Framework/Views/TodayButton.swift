@@ -20,20 +20,19 @@ struct TodayButton: View {
             ))
         } label: {
             Text("Today")
-                .tint(.primary)
+                .tint(.secondary)
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .padding(.vertical, 6)
-                .padding(.horizontal, 12)
-                .foregroundStyle(.secondary)
+                .padding(.vertical, 4)
+                .padding(.horizontal, 8)
                 .background(
                     Color(
                         colorScheme == .dark
-                        ? .secondarySystemBackground
-                        : .systemBackground
+                        ? .systemGroupedBackground
+                        : .systemGroupedBackground
                     )
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(Capsule())
         }
     }
 }

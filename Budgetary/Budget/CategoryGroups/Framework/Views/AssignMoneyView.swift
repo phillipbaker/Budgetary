@@ -69,7 +69,6 @@ struct AssignMoneyView: View {
                 }
             }
         }
-        .offset(x: -4)
         .onChange(of: focusedField) { oldValue, newValue in
             guard oldValue == .primary(id: rowID) || oldValue == .secondary(id: rowID) else { return }
             // If focus changes to a new row, apply in progress opperation if there is one, commit the new value

@@ -51,7 +51,6 @@ struct CurrencyTextField: UIViewRepresentable {
         
         keyboardVC.view.translatesAutoresizingMaskIntoConstraints = false
         keyboardVC.view.backgroundColor = .clear
-        
         context.coordinator.hostingController = keyboardVC
         textField.inputView = keyboardVC.view
 
@@ -106,7 +105,7 @@ struct CurrencyTextField: UIViewRepresentable {
             self.onSubmit = onSubmit
             self.onTextChanged = onTextChanged
         }
-        
+
         func insert(_ newText: String) {
             guard let textField, let selectedRange = textField.selectedTextRange else { return }
             textInput(textField, replaceTextAt: selectedRange, with: newText)

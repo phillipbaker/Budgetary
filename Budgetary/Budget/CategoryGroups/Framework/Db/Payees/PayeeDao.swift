@@ -38,15 +38,16 @@ class PayeeDao {
     }
     
     // Remove try? error do/try/catch
-    func findPayee(by id: String) -> PayeeDb {
-        return PayeeDb(
-            id: UUID().uuidString,
-            name: "Sainsbury’s",
-            aliases: [],
-            includedInPayeeList: true,
-            automaticallyCategorizeIsOn: true,
-            defaultCategoryId: "Groceries"
-        )
+    func findPayee(by id: String) -> PayeeDb? {
+        mock.first(where: { $0.id == id })
+//        return PayeeDb(
+//            id: UUID().uuidString,
+//            name: "Sainsbury’s",
+//            aliases: [],
+//            includedInPayeeList: true,
+//            automaticallyCategorizeIsOn: true,
+//            defaultCategoryId: "Groceries"
+//        )
     }
     
     func create(payee: PayeeDb) {

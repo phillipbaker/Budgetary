@@ -12,15 +12,15 @@ struct CancelButton: View {
     @State private var isTapped: Bool = false
     
     var body: some View {
-        Button {
+        Button("Cancel", role: .cancel) {
             onCancel()
             isTapped.toggle()
-        } label: {
-            Image(systemName: "x.circle.fill")
-                .tint(.secondary.opacity(0.6))
         }
-        .font(.title)
+        .frame(maxWidth: .infinity, minHeight: 48, maxHeight: .infinity)
+        .tint(.primary)
         .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+        .background(.thinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 }
 

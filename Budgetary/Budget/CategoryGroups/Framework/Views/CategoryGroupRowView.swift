@@ -17,11 +17,11 @@ struct CategoryGroupRowView: View {
     var body: some View {
         let rowLayout = isXL
         ? AnyLayout(VStackLayout(alignment: .trailing))
-        : AnyLayout(HStackLayout())
+        : AnyLayout(HStackLayout(alignment: .lastTextBaseline))
         
         let amountsLayout = isAX3
         ? AnyLayout(VStackLayout(alignment: .trailing))
-        : AnyLayout(HStackLayout(spacing: 4))
+        : AnyLayout(HStackLayout(alignment: .lastTextBaseline, spacing: 4))
         
         rowLayout {
             Text(group.name)
@@ -33,26 +33,27 @@ struct CategoryGroupRowView: View {
             amountsLayout {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("Assigned")
-                        .offset(x: -4)
                         .font(.caption)
                     NumberView(number: group.assignedTotal[monthYear] ?? "Error")
+                        .fontWeight(.semibold)
                 }
-                
+
                 if horizontalSizeClass == .regular {
                     VStack(alignment: .trailing, spacing: 2) {
                         Text("Activity")
-                            .offset(x: -4)
                             .font(.caption)
                         NumberView(number: group.activityTotal[monthYear] ?? "Error")
+                            .fontWeight(.semibold)
                     }
                 }
                 
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("Available")
-                        .offset(x: -4)
                         .font(.caption)
                     NumberView(number: group.availableTotal[monthYear] ?? "")
+                        .fontWeight(.semibold)
                 }
+                .offset(x: -8)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
         }

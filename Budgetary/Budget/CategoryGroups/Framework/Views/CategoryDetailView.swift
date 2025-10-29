@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@Observable
+//@Observable
 final class CategoryDetailModel: Identifiable {
     var category: Category
     

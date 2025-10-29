@@ -19,6 +19,7 @@ final class AddTransactionUseCase {
         guard let payeePresentation = transaction.payee else { return }
         guard let payeePlain = await source.findPayee(by: payeePresentation.id) else { return }
         let payee = mapper.map(payeePlain: payeePlain, categoryGroups: categoryGroups)
+        print("payee:", payee.name)
         
         guard let transactionCategory = transaction.category else { return }
         guard let categoryGroupPlain = await source.findCategoryGroup(containing: transactionCategory.id) else { return }

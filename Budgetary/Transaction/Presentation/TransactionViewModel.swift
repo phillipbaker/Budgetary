@@ -10,9 +10,9 @@ import SwiftUI
 
 @Observable
 final class TransactionDetailViewModel {
-    let addTransactionUseCase: AddTransactionUseCase = Container.shared.addTransactionUseCase()
-    let updateTransactionUseCase: UpdateTransactionUseCase = Container.shared.updateTransactionUseCase()
-    let deleteTransactionUseCase: DeleteTransactionUseCase = Container.shared.deleteTransactionUseCase()
+    @ObservationIgnored let addTransactionUseCase: AddTransactionUseCase = Container.shared.addTransactionUseCase()
+    @ObservationIgnored let updateTransactionUseCase: UpdateTransactionUseCase = Container.shared.updateTransactionUseCase()
+    @ObservationIgnored let deleteTransactionUseCase: DeleteTransactionUseCase = Container.shared.deleteTransactionUseCase()
     
     let id: String?
     var date: Date
@@ -20,6 +20,7 @@ final class TransactionDetailViewModel {
     var isCleared: Bool
     var transactionType: TransactionType
     var payee: PayeePresentation?
+
     var category: TransactionCategoryPresentation?
     var account: TransactionAccountPresentation?
     
@@ -136,7 +137,7 @@ final class TransactionDetailViewModel {
     @MainActor
     func confirmAddTransactionButtonTapped() {
         withAnimation {
-            focusedField = nil
+            if focusedField != nil { focusedField = nil }
             // If there are primary and secondary values, apply operation
             if !self.localValues.operation.isEmpty {
                 self.applyOperation()
@@ -149,7 +150,7 @@ final class TransactionDetailViewModel {
     @MainActor
     func confirmDeleteTransactionButtonTapped(id: String?) {
         guard let id = self.id else { return }
-        focusedField = nil
+        if focusedField != nil { focusedField = nil }
         handle(intent: .deleteTransaction(id: id))
     }
     
@@ -171,7 +172,7 @@ final class TransactionDetailViewModel {
 
     @MainActor
     func onEquals() {
-        focusedField = .primaryOperand
+        if focusedField != .primaryOperand { focusedField = .primaryOperand }
         
         DispatchQueue.main.async {
             self.applyOperation()
@@ -179,8 +180,8 @@ final class TransactionDetailViewModel {
     }
     
     func onSubmit() {
-//        print("onSubmit called")
-//        focusedField = nil
+        print("onSubmit called")
+        if focusedField != nil { focusedField = nil }
         print("focusedField: ", focusedField.debugDescription)
         // If there are primary and secondary values, apply operation
         if !self.localValues.operation.isEmpty {
@@ -236,7 +237,7 @@ final class TransactionDetailViewModel {
     // MARK: - View State
     
     func datePickerButtonTapped() {
-        focusedField = nil
+        if focusedField != nil { focusedField = nil }
         datePickerIsPresented.toggle()
     }
     
@@ -291,17 +292,17 @@ final class TransactionDetailViewModel {
     
     func onChangeOfDestination(from oldValue: Destination?) {
         if oldValue == nil {
-            focusedField = nil
+            if focusedField != nil { focusedField = nil }
             if isFirstLaunch == true { isFirstLaunch = false }
         }
     }
     
     func onAppear() {
         if isNewTransaction && isFirstLaunch {
-            focusedField = .primaryOperand
+            if focusedField != .primaryOperand { focusedField = .primaryOperand }
             isFirstLaunch = false
         } else {
-            focusedField = nil
+            if focusedField != nil { focusedField = nil }
         }
     }
 }

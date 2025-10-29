@@ -19,9 +19,14 @@ struct OperationButton: View {
             isTapped.toggle()
         } label: {
             Image(systemName: image)
+                .imageScale(.small)
         }
+        .frame(maxWidth: .infinity, minHeight: 48, maxHeight: .infinity)
         .font(.title)
+        .tint(.primary)
         .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
+        .background(.thinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 }
 

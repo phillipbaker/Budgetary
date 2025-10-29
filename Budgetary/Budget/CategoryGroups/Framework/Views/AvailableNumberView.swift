@@ -17,7 +17,7 @@ struct AvailableView: View {
             .hidden()
             .overlay(alignment: .trailing) {
                 Text(available.total)
-                    .padding(.vertical, 2)
+                    .padding(.vertical, 4)
                     .padding(.horizontal, 8)
                     .background(
                         colorScheme == .light
@@ -31,12 +31,9 @@ struct AvailableView: View {
                     )
                     .clipShape(Capsule())
             }
-            .offset(x: 4)
-            .padding(.vertical, 2)
             .frame(minWidth: 112, alignment: .trailing)
             .font(.subheadline)
             .fontWeight(.semibold)
-
     }
 }
 

@@ -23,6 +23,5 @@ struct ReadyToAssignButtonLabel: View {
         .padding()
         .background(colorScheme == .light ? readyToAssign.lightModeBackgroundColor : readyToAssign.darkModeBackgroundColor)
         .foregroundStyle(colorScheme == .light ? readyToAssign.lightModeForegroundColor : readyToAssign.darkModeForegroundColor)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }

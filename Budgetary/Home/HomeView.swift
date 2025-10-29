@@ -34,6 +34,7 @@ final class HomeViewModel {
         case hsbcJoint
         case discover
         case ny529
+        case search
     }
 
     init(
@@ -84,14 +85,28 @@ struct HomeView: View {
                 }
                 .defaultVisibility(.hidden, for: .tabBar)
             }
+
+//            Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
+//                Color.clear
+//            }
             
-            if horizontalSizeClass == .compact {
-                Tab("Transaction", systemImage: "plus.circle.fill", value: .newTransaction) {
+//            if horizontalSizeClass == .compact {
+                Tab("Add Transaction", systemImage: "plus", value: .newTransaction, role: .search) {
                     Color.clear
                 }
-            }
+//            }
         }
         .tabViewStyle(.sidebarAdaptable)
+//        .tabViewBottomAccessory(content: {
+//            Button {
+//                
+//            } label: {
+//                HStack {
+//                    Image(systemName: "plus")
+//                    Text("Transaction")
+//                }
+//            }
+//        })
         .sheet(isPresented: $viewModel.newTransactionSheetIsPresented) {
             TransactionDetailView(viewModel: Container.shared.transactionDetailViewModel((nil, true)))
         }

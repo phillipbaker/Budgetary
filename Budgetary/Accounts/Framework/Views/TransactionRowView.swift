@@ -35,7 +35,7 @@ struct TransactionRowView: View {
                                 .font(.caption)
                                 .padding(4)
                                 .background(Color.gray.opacity(0.1))
-                                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
                     }
                 }

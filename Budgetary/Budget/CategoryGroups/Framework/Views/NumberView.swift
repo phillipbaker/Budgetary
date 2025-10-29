@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NumberView: View {
-    var number: String
+    let number: String
     
     var body: some View {
         Text("£9,999,999.99")
@@ -16,11 +16,8 @@ struct NumberView: View {
             .hidden()
             .overlay(alignment: .trailing) {
                 Text(number)
-                    .offset(x: -4)
             }
             .frame(minWidth: 112, alignment: .trailing)
             .font(.subheadline)
-            .fontWeight(.semibold)
-            .padding(.vertical, 2)
     }
 }

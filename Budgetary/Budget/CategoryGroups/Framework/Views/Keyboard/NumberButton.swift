@@ -8,17 +8,24 @@
 import SwiftUI
 
 struct NumberButton: View {
+    @Environment(\.colorScheme) var colorScheme
     let number: String
     let insert: ((String) -> Void)
     @State private var isTapped: Bool = false
     
     var body: some View {
-        Button(number) {
+        Button {
             insert(number)
             isTapped.toggle()
+        } label: {
+            Text(number)
+                .frame(maxWidth: .infinity, minHeight: 48, maxHeight: .infinity)
+                .font(.title)
+                .tint(.primary)
+                .background(colorScheme == .light ? .white : .secondary)
+                .clipShape(RoundedRectangle(cornerRadius: 22))
+                .contentShape(Rectangle())
         }
-        .font(.title)
-        .tint(.primary)
         .sensoryFeedback(.impact(weight: .light), trigger: isTapped)
     }
 }

@@ -33,7 +33,7 @@ struct BudgetMenu: View {
                 Label("Settings", systemImage: "gear")
             }
         } label: {
-            Image(systemName: "ellipsis.circle")
+            Image(systemName: "ellipsis")
         }
     }
 }
