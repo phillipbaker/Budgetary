@@ -8,5 +8,5 @@
 import Foundation
 
 extension EditableCategoryPresentation {
-    static let groceries = EditableCategoryPresentation(id: UUID().uuidString, name: "Groceries")
+    static let groceries = EditableCategoryPresentation(id: .init(), name: "Groceries")
 }

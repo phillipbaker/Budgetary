@@ -14,7 +14,7 @@ public final class EditCategoriesMapper: Sendable {
     
     func map(categoryGroupPlain: CategoryGroupPlain) -> EditableCategoryGroup {
         return EditableCategoryGroup(
-            id: categoryGroupPlain.id,
+            id: ID<EditableCategoryGroup>(categoryGroupPlain.id),
             name: categoryGroupPlain.name,
             categories: map(categoriesPlain: categoryGroupPlain.categories)
         )
@@ -27,6 +27,6 @@ public final class EditCategoriesMapper: Sendable {
     }
     
     func map(categoryPlain: CategoryPlain) -> EditableCategory {
-        return EditableCategory(id: categoryPlain.id, name: categoryPlain.name)
+        return EditableCategory(id: ID<EditableCategory>(categoryPlain.id), name: categoryPlain.name)
     }
 }

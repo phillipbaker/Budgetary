@@ -14,13 +14,14 @@ public final class PayeeMapper: Sendable {
     
     func map(payee: PayeePlain, categoryGroups: [CategoryGroupPlain]) -> Payee {
         return Payee(
-            id: payee.id,
+            id: ID<Payee>(payee.id),
             name: payee.name,
+            type: map(payeeTypePlain: payee.type),
             aliases: payee.aliases,
             includedInPayeeList: payee.includedInPayeeList,
             automaticallyCategorizeIsOn: payee.automaticallyCategorizeIsOn,
             defaultCategory: TransactionMapper.mapCategory(
-                categoryId: payee.defaultCategoryId,
+                categoryID: payee.defaultCategoryID,
                 categoryGroups: categoryGroups
             )
         )
@@ -28,12 +29,27 @@ public final class PayeeMapper: Sendable {
     
     func map(payee: Payee) -> PayeePlain {
         return PayeePlain(
-            id: payee.id,
+            id: ID<PayeePlain>(payee.id),
             name: payee.name,
+            type: map(payeeType: payee.type),
             aliases: payee.aliases,
             includedInPayeeList: payee.includedInPayeeList,
             automaticallyCategorizeIsOn: payee.automaticallyCategorizeIsOn,
-            defaultCategoryId: payee.defaultCategory?.id
+            defaultCategoryID: ID<CategoryPlain>(payee.defaultCategory?.id)
         )
+    }
+    
+    func map(payeeTypePlain: PayeeTypePlain) -> PayeeType {
+        switch payeeTypePlain {
+        case .regular: .regular
+        case .transfer(let accountID): .transfer(ID<BudgetAccount>(accountID))
+        }
+    }
+    
+    func map(payeeType: PayeeType) -> PayeeTypePlain {
+        switch payeeType {
+        case .regular: .regular
+        case .transfer(let accountID): .transfer(ID<BudgetAccountPlain>(accountID))
+        }
     }
 }

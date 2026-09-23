@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewGroupView: View {
-    let intent: (EditCategoriesIntent) -> Void
+    let action: (EditCategoriesAction) -> Void
     @Environment(EditCategoriesCoordinator.self) var coordinator
     
     @State private var name: String = ""
@@ -43,12 +43,12 @@ struct NewGroupView: View {
                     .background(.white)
                     .cornerRadius(8)
                     .onSubmit {
-                        intent(.newGroup(name: name))
+                        action(.newGroup(name: name))
                         coordinator.dismiss()
                     }
                 
                 Button {
-                    intent(.newGroup(name: name))
+                    action(.newGroup(name: name))
                     coordinator.dismiss()
                 } label: {
                     Text("Save")

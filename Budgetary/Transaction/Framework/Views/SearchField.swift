@@ -62,7 +62,7 @@ struct SearchField: View {
             
             
             if focused {
-                Button("Cancel") {
+                Button(role: .cancel) {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         searchText = ""
                         focused = false

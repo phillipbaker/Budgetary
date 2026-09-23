@@ -9,22 +9,29 @@ import Foundation
 
 extension BudgetPresentation {
     static let mock = BudgetPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         monthYear: .currentMonthYear,
         months: [.mock],
-        filter: .allCategories,
-        readyToAssign: [.aug2024: .mock],
+        readyToAssign: .mock,
         categoryGroups: [.obligations, .trueExpenses, .monthlyExpenses, .fun],
-        start: .aug2024,
-        end: .oct2024
+        creditCardPaymentGroup: CreditCardPaymentGroupPresentation(
+            id: .init(),
+            name: "Credit Card Payments Mock",
+            isHidden: false,
+            assignedTotal: [:],
+            activityTotal: [:],
+            availableTotal: [:],
+            categories: []
+        )
     )
 }
 
 extension MonthPresentation {
     static let mock = MonthPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         monthYear: .currentMonthYear,
         isDisabled: false,
+        isCurrentMonth: true,
         foregroundColor: .primary,
         backgroundColor: .secondary
     )

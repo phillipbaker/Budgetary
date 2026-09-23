@@ -9,8 +9,9 @@ import Foundation
 
 extension Payee {
     static let anthonyMartin = Payee(
-        id: "1",
+        id: .init(),
         name: "Anthony Martin",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -18,8 +19,9 @@ extension Payee {
     )
     
     static let amazon = Payee(
-        id: "2",
+        id: .init(),
         name: "Amazon",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -27,8 +29,9 @@ extension Payee {
     )
     
     static let sainsburys = Payee(
-        id: "3",
+        id: .init(),
         name: "Sainsbury’s",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -36,8 +39,9 @@ extension Payee {
     )
     
     static let nyt = Payee(
-        id: "4",
+        id: .init(),
         name: "New York Times",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -45,8 +49,9 @@ extension Payee {
     )
     
     static let ikea = Payee(
-        id: "5",
+        id: .init(),
         name: "Ikea",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -54,8 +59,9 @@ extension Payee {
     )
     
     static let bexley = Payee(
-        id: "6",
+        id: .init(),
         name: "London Borough of Bexley",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -63,8 +69,9 @@ extension Payee {
     )
     
     static let eonNext = Payee(
-        id: "7",
+        id: .init(),
         name: "Eon Next",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -72,8 +79,9 @@ extension Payee {
     )
     
     static let thamesWater = Payee(
-        id: "8",
+        id: .init(),
         name: "Thames Water",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -81,8 +89,9 @@ extension Payee {
     )
     
     static let plusnet = Payee(
-        id: "9",
+        id: .init(),
         name: "Plusnet",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -90,8 +99,9 @@ extension Payee {
     )
     
     static let tvLicence = Payee(
-        id: "10",
+        id: .init(),
         name: "TV Licence",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -99,8 +109,9 @@ extension Payee {
     )
     
     static let giffGaff = Payee(
-        id: "11",
+        id: .init(),
         name: "Giff Gaff",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
@@ -108,8 +119,9 @@ extension Payee {
     )
     
     static let reorg = Payee(
-        id: "12",
+        id: .init(),
         name: "Reorg",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,

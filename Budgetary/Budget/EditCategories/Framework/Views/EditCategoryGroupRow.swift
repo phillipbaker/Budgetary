@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct EditCategoryGroupRow: View {
-    let id: String
-    let intent: (EditCategoriesIntent) -> Void
+    let id: ID<CategoryGroupPresentation>
+    let action: (EditCategoriesAction) -> Void
     
     @Binding var editedName: String
     @State private var displayAlert: Bool = false
     
     enum FocusedField: Hashable {
-        case listRow(id: String)
+        case listRow(id: ID<CategoryGroupPresentation>)
     }
     
     var body: some View {
@@ -25,7 +25,7 @@ struct EditCategoryGroupRow: View {
                     displayAlert = true
                     return
                 }
-                intent(.renameGroup(id: id, newName: editedName))
+                action(.renameGroup(id: id, newName: editedName))
             }
             .alert(Text("Category Group name cannot be empty"), isPresented: $displayAlert) {
                 Button("OK") {
@@ -41,8 +41,8 @@ struct EditCategoryGroupRow: View {
 
 #Preview {
     EditCategoryGroupRow(
-        id: UUID().uuidString,
-        intent: { _ in },
+        id: .init(),
+        action: { _ in },
         editedName: .constant("Obligations")
     )
 }

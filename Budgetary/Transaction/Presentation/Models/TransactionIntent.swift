@@ -1,12 +1,30 @@
 //
-//  TransactionIntent.swift
+//  TransactionAction.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 21/05/2025.
 //
 
-public enum TransactionIntent {
-    case addTransaction
-    case updateTransaction(TransactionRequestModel)
-    case deleteTransaction(id: String)
+public enum TransactionAction {
+    case setDraftAmount(AmountDraft)
+    case setDraftTransactionType(TransactionTypePresentation)
+    
+    // Add Transaction
+    case cancelButtonTapped
+    case saveTransactionButtonTapped
+
+    // Delete Transaction
+    case confirmDeleteButtonTapped(ID<TransactionDraft>)
+    
+    // Payee Picker
+    case payeePickerButtonTapped
+    case newPayeeButtonTapped(String)
+    
+    // Category Picker
+    case categoryPickerButtonTapped
+//    case newCategoryButtonTapped
+//    case saveNewCategoryButtonTapped(name: String, group: CategoryGroupNamePresentation)
+    
+    // Account Picker
+    case accountPickerButtonTapped
 }

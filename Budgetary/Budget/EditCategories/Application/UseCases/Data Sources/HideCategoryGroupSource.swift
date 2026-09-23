@@ -6,6 +6,6 @@
 //
 
 public protocol HideCategoryGroupSource {
-    func findCategoryGroup(by id: String) async -> CategoryGroupPlain?
+    func findCategoryGroup(by id: ID<CategoryGroupPlain>) async -> CategoryGroupPlain?
     func update(categoryGroup: CategoryGroupPlain) async
 }

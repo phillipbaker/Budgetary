@@ -8,9 +8,9 @@
 import Foundation
 
 public struct BudgetAccount: Equatable, Hashable, Sendable {
-    let id: String
+    let id: ID<BudgetAccount>
     let name: String
-    let accountType: AccountType
+    let type: BudgetAccountType
     
     /// The current balance when adding an account. Non-optional, defaults to zero.
     let startingBalance: Decimal
@@ -23,7 +23,7 @@ public struct BudgetAccount: Equatable, Hashable, Sendable {
     let isClosed: Bool
     
     /// All transactions that belong to the account. Non-optional, defaults to empty.
-    let transactions: [TransactionEntity]
+    let transactions: [BudgetTransaction]
     
     var transactionTotal: Decimal {
         /// Sum of all inflow and outflow transactions
@@ -41,11 +41,7 @@ public struct BudgetAccount: Equatable, Hashable, Sendable {
     }
     
     var balance: Decimal {
-        var balance = startingBalance
-        for transaction in transactions {
-            balance += transaction.amount.value
-        }
-        return balance
+        return startingBalance + transactionTotal
     }
     
     /// Sum of uncleared transactions
@@ -91,65 +87,53 @@ public struct BudgetAccount: Equatable, Hashable, Sendable {
         }
     }
     
-    func adding(transaction: TransactionEntity) -> BudgetAccount {
+    init(
+        id: ID<BudgetAccount>,
+        name: String,
+        type: BudgetAccountType,
+        startingBalance: Decimal = 0.00,
+        notes: String? = nil,
+        isClosed: Bool = false,
+        transactions: [BudgetTransaction] = []
+    ) {
+        self.id = id
+        self.name = name
+        self.type = type
+        self.startingBalance = startingBalance
+        self.notes = notes
+        self.isClosed = isClosed
+        self.transactions = transactions
+    }
+    
+    func upserting(transaction: BudgetTransaction) -> BudgetAccount {
+        var updatedTransactions: [BudgetTransaction]
+        
+        if self.transactions.contains(where: { $0.id == transaction.id }) {
+            updatedTransactions = self.transactions.map { $0.id == transaction.id ? transaction : $0 }
+        } else {
+            updatedTransactions = self.transactions + [transaction]
+        }
+        
         return BudgetAccount(
             id: self.id,
             name: self.name,
-            accountType: self.accountType,
+            type: self.type,
             startingBalance: self.startingBalance,
             notes: self.notes,
             isClosed: self.isClosed,
-            transactions: self.transactions + [transaction]
+            transactions: updatedTransactions
         )
     }
     
-    func updating(transaction: TransactionEntity) -> BudgetAccount {
+    func deleting(transactionID: ID<BudgetTransaction>) -> BudgetAccount {
         return BudgetAccount(
             id: self.id,
             name: self.name,
-            accountType: self.accountType,
+            type: self.type,
             startingBalance: self.startingBalance,
             notes: self.notes,
             isClosed: self.isClosed,
-            transactions: self.transactions.map { $0.id == transaction.id ? transaction : $0 }
-        )
-    }
-    
-    func deleting(transaction: TransactionEntity) -> BudgetAccount {
-        return BudgetAccount(
-            id: self.id,
-            name: self.name,
-            accountType: self.accountType,
-            startingBalance: self.startingBalance,
-            notes: self.notes,
-            isClosed: self.isClosed,
-            transactions: self.transactions.filter { $0.id != transaction.id }
+            transactions: self.transactions.filter { $0.id != transactionID }
         )
     }
 }
-
-struct LoanMortgageAccount {}
-struct TrackingAccount {} // one type or separate for assets and liabilities? Prob separate...?
-
-enum AccountType: Codable, Sendable {
-    // Do these need to be further split into Budget, Loan/Mortage, Tracking? Or three separate enums that again conform to a protocol somehow to link them?
-    //  - Budget accounts
-    //    - Checking
-    //    - Savings
-    //    - Cash
-    //    - Line of credit
-    //    - Credit card
-    //  - Mortgages and Loans
-    //    - Mortgage
-    //    - Auto loan
-    //    - Student loan
-    //    - Personal loan
-    //    - Medical debt
-    //    - Other debt
-    //  - Tracking accounts
-    //    - Asset/investmrnt
-    //    - Liability
-    case budget
-    case tracking
-}
-

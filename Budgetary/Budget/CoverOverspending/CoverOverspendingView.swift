@@ -18,7 +18,7 @@ import SwiftUI
 //            
 //            VStack {
 //                VStack(spacing: 16) {
-//                    Text(model.categoryToCover?.name ?? "Select Category")
+//                    Text(model.categoryToCover?.name ?? "Select CategoryRow")
 //                        .font(.title3)
 //                    Text(model.categoryToCover?.available[model.selectedMonthYear]?.total ?? "£0.00")
 //                        .font(.title)
@@ -60,7 +60,7 @@ import SwiftUI
 //                            Image(systemName: "plus")
 //                                .symbolVariant(.circle)
 //                                .symbolVariant(.fill)
-//                            Text(model.selectedCoverFromCategories.isEmpty ? "Select Category" : "Select Another")
+//                            Text(model.selectedCoverFromCategories.isEmpty ? "Select CategoryRow" : "Select Another")
 //                                .fontWeight(.semibold)
 //                        }
 //                        .frame(maxWidth: .infinity)

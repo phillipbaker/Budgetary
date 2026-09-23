@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct EditCategoriesListView: View {
-    let intent: (EditCategoriesIntent) -> Void
+    let action: (EditCategoriesAction) -> Void
     @Bindable var coordinator: EditCategoriesCoordinator
     let categoryGroups: [EditableCategoryGroupPresentation]
 
@@ -44,12 +44,12 @@ struct EditCategoriesListView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
             
-            ForEach(categoryGroups) { group in
+            ForEach(categoryGroups, id: \.id) { group in
                 Section {
-                    ForEach(group.categories) { category in
+                    ForEach(group.categories, id: \.id) { category in
                         EditCategoryRow(
                             id: category.id,
-                            intent: intent,
+                            action: action,
                             editedName: bindingFor(category: category)
                         )
                         .draggable(category)
@@ -72,7 +72,7 @@ struct EditCategoriesListView: View {
                 } header: {
                     EditCategoryGroupRow(
                         id: group.id,
-                        intent: intent,
+                        action: action,
                         editedName: bindingFor(categoryGroup: group)
                     )
                 }
@@ -90,34 +90,34 @@ struct EditCategoriesListView: View {
                 .fontWeight(.semibold)
             }
         }
-        .sheet(item: $coordinator.destination) { destination in
-            switch destination {
-            case .newGroup:
-                NewGroupView(intent: intent)
-            case .newCategory(let groupId):
-                NewCategoryView(groupId: groupId, intent: intent)
-            }
-        }
+//        .sheet(item: $coordinator.destination) { destination in
+//            switch destination {
+//            case .newGroup:
+//                NewGroupView(action: action)
+//            case .newCategory(let groupID):
+//                NewCategoryView(groupID: groupID, action: action)
+//            }
+//        }
     }
     
     private func bindingFor(category: EditableCategoryPresentation) -> Binding<String> {
         return Binding(
-            get: { localValues[category.id, default: category.name] },
-            set: { localValues[category.id] = $0 }
+            get: { localValues[category.id.rawValue.uuidString, default: category.name] },
+            set: { localValues[category.id.rawValue.uuidString] = $0 }
         )
     }
     
     private func bindingFor(categoryGroup: EditableCategoryGroupPresentation) -> Binding<String> {
         return Binding(
-            get: { localValues[categoryGroup.id, default: categoryGroup.name] },
-            set: { localValues[categoryGroup.id] = $0 }
+            get: { localValues[categoryGroup.id.rawValue.uuidString, default: categoryGroup.name] },
+            set: { localValues[categoryGroup.id.rawValue.uuidString] = $0 }
         )
     }
 }
 
 #Preview {
     EditCategoriesListView(
-        intent: { _ in },
+        action: { _ in },
         coordinator: .init(),
         categoryGroups: [EditableCategoryGroupPresentation.obligations, .trueExpenses, .monthlyExpenses, .fun]
     )

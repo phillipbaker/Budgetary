@@ -49,9 +49,9 @@ struct TransactionRowView: View {
                 }
             }
         }
-        .sheet(isPresented: $transactionDetailIsPresented, onDismiss: { transactionDetailIsPresented = false }) {
-            TransactionDetailView(viewModel: Container.shared.transactionDetailViewModel((transaction, false)))
-        }
+//        .sheet(isPresented: $transactionDetailIsPresented, onDismiss: { transactionDetailIsPresented = false }) {
+//            TransactionView(viewModel: Container.shared.transactionViewModel((transaction, false)))
+//        }
         
     }
 }
@@ -59,14 +59,15 @@ struct TransactionRowView: View {
 #Preview {
     TransactionRowView(
         transaction: .init(
-            id: "45",
+            id: .init(),
             date: .now,
             memo: "Weekly shop",
-            amount: AmountPresentation(transactionType: .outflow, value: "500.00"),
+            amount: AmountPresentation(type: .outflow, value: "500.00"),
             isCleared: false,
-            payee: PayeePresentation(id: "9", name: "Sainsbury’s"),
-            category: TransactionCategoryPresentation(id: "11", name: "Groceries"),
-            account: TransactionAccountPresentation(id: "1", name: "HSBC - Joint")
+            payee: PayeePresentation(id: .init(), name: "Sainsbury’s", type: .regular),
+            category: TransactionCategoryPresentation(id: .init(), name: "Groceries"),
+            account: TransactionAccountPresentation(id: .init(), name: "HSBC - Joint"),
+            linkedTransactionID: nil
         )
     )
 }

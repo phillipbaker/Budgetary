@@ -7,10 +7,10 @@
 
 import Factory
 
-public final class PayeesStateMapper {
-    let mapper: PayeePresentationMapper = Container.shared.payeePresentationMapper()
-    
-    func map(payees: [Payee]) -> PayeePickerState {
-        return .success(mapper.map(payees: payees))
-    }
-}
+//public final class PayeesStateMapper {
+//    let mapper: PayeePresentationMapper = Container.shared.payeePresentationMapper()
+//    
+//    func map(payees: [Payee]) -> PayeePickerState {
+//        return .loaded(mapper.map(payees: payees))
+//    }
+//}

@@ -11,7 +11,7 @@ final class MoveCategoryGroupDataSource: MoveCategoryGroupSource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
 
     func allCategoryGroups() async -> [CategoryGroupPlain]? {
-        await categoryGroupsDataSourceLocal.allCategoryGroups()
+        await categoryGroupsDataSourceLocal.categoryGroups()
     }
     
     func update(categoryGroups: [CategoryGroupPlain]) async {

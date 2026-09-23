@@ -9,25 +9,25 @@ import Foundation
 
 extension EditableCategoryGroupPresentation {
     static let obligations = EditableCategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Obligations",
         categories: []
     )
     
     static let trueExpenses = EditableCategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "True Expenses",
         categories: []
     )
     
     static let monthlyExpenses = EditableCategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Monthly Expenses",
         categories: []
     )
     
     static let fun = EditableCategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Fun",
         categories: []
     )

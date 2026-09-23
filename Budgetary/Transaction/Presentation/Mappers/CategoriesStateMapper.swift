@@ -7,10 +7,10 @@
 
 import Factory
 
-public final class CategoriesStateMapper {
-    let mapper: CategoriesPresentationMapper = Container.shared.categoriesPresentationMapper()
-    
-    func map(categoryGroups: [CategoryGroupEntity]) -> CategoryPickerState {
-        return .success(mapper.map(categoryGroups: categoryGroups))
-    }
-}
+//public final class CategoriesStateMapper {
+//    let mapper: CategoriesPresentationMapper = Container.shared.categoriesPresentationMapper()
+//    
+//    func map(categoryGroups: [CategoryGroup]) -> CategoryGroupRowsState {
+//        return .loaded(mapper.map(categoryGroups: categoryGroups))
+//    }
+//}

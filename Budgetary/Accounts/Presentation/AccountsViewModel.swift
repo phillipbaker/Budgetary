@@ -8,31 +8,40 @@
 import Factory
 import SwiftUI
 
+@MainActor
 @Observable
-final class AccountsViewModel {
-    @ObservationIgnored private let stateMapper: AccountsStateMapper = Container.shared.accountsStateMapper()
-    @ObservationIgnored private let getAccountsStreamUseCase: GetAccountsStreamUseCase = Container.shared.getAccountsStreamUseCase()
+public final class AccountsViewModel {
+    @ObservationIgnored private let store: AppStore
+    @ObservationIgnored private let stateMapper: AccountsStateMapper
+    @ObservationIgnored private var observationTask: Task<Void, Never>?
     
-    var state: AccountsState
+    var viewState: AccountsViewState = .notLoaded
     
-    init(state: AccountsState = .loading) {
-        self.state = state
+    init(
+        store: AppStore = Container.shared.appStore(),
+        stateMapper: AccountsStateMapper = Container.shared.accountsStateMapper(),
+        observationTask: Task<Void, Never>? = nil,
+    ) {
+        self.store = store
+        self.stateMapper = stateMapper
+        self.observationTask = observationTask
+        observeStore()
     }
-    
-    @MainActor
-    func handle(intent: AccountsIntent) {
-        Task {
-            switch intent {
-            case .getAccounts:
-                await getAccounts()
-            }
+
+    func handle(action: AccountsAction) {
+        switch action {
+        case .accountsTabAppeared:
+            store.dispatch(.budgetAccountsDataLoadRequested)
+        case .addAccountButtonTapped:
+            store.dispatch(.addAccountSheetRequested)
         }
     }
     
-    // need some task mangement here? Don’t want to add a new listener every time this is called...
-    private func getAccounts() async {
-        for await accounts in await getAccountsStreamUseCase.accounts() {
-            self.state = stateMapper.map(accounts: accounts)
+    private func observeStore() {
+        observationTask = Task {
+            for await state in store.observe() {
+                self.viewState = stateMapper.map(appState: state)
+            }
         }
     }
 }

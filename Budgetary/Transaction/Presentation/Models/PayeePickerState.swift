@@ -5,8 +5,9 @@
 //  Created by Phillip Baker on 09/05/2025.
 //
 
-public enum PayeePickerState: Sendable {
+public enum PayeePickerState: Equatable, Hashable, Sendable {
+    case notLoaded
     case loading
     case error
-    case success([PayeeName])
+    case loaded([Payee])
 }

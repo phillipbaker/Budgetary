@@ -5,110 +5,118 @@
 //  Created by Phillip Baker on 07/08/2024.
 //
 
-import Factory
-import Foundation
 import SwiftUI
-import SwiftData
-
-enum HomeIntent {
-    case addTransaction
-}
-
-@Observable
-final class HomeViewModel {
-    var selectedTab: AppTab {
-        didSet {
-            if selectedTab == .newTransaction {
-                self.newTransactionSheetIsPresented = true
-                self.selectedTab = oldValue
-            }
-        }
-    }
-
-    var newTransactionSheetIsPresented: Bool
-    
-    enum AppTab: Hashable {
-        case budget
-        case accounts
-        case newTransaction
-        case hsbcJoint
-        case discover
-        case ny529
-        case search
-    }
-
-    init(
-        selectedTab: AppTab = .budget,
-        isPresentingTransactionSheet: Bool = false
-    ) {
-        self.selectedTab = selectedTab
-        self.newTransactionSheetIsPresented = isPresentingTransactionSheet
-    }
-}
 
 struct HomeView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Bindable var viewModel: HomeViewModel
     
+    @State private var paths: [AppTab: NavigationPath] = [
+        .budget: NavigationPath(),
+        .accounts: NavigationPath()
+    ]
+    
     var body: some View {
-        TabView(selection: $viewModel.selectedTab) {
+        TabView(selection: $viewModel.viewState.selectedTab) {
             Tab("Budget", systemImage: "banknote", value: .budget) {
-                NavigationStack {
+                tabView(.budget) {
                     BudgetRootView()
                 }
             }
             .customizationBehavior(.disabled, for: .sidebar, .tabBar)
             
             Tab("Accounts", systemImage: "building.columns.fill", value: .accounts) {
-                AccountsRootView()
+                tabView(.accounts) {
+                    AccountsRootView()
+                }
             }
-            
-            if horizontalSizeClass == .regular {
-                TabSection("Budget Accounts") {
-                    Tab("HSBC - Joint", systemImage: "building.columns.fill", value: HomeViewModel.AppTab.hsbcJoint) {
-                        Text("HSBC Joint Account View")
-                    }
+        }
+        .tabViewStyle(.sidebarAdaptable)
+        .tabViewBottomAccessory {
+            Button {
+                viewModel.handle(action: .newTransactionButtonTapped(viewModel.viewState.selectedTab))
+            } label: {
+                HStack {
+                    Image(systemName: "plus")
+                    Text("Transaction")
                 }
-                .defaultVisibility(.hidden, for: .tabBar)
-                
-                TabSection("Loans") {
-                    Tab("Discover Student Loan", systemImage: "building.columns.fill", value: HomeViewModel.AppTab.discover) {
-                        Text("Discover Student Loan")
-                    }
-                }
-                .defaultVisibility(.hidden, for: .tabBar)
-                
-                TabSection("Tracking Accounts") {
-                    Tab("NY 529", systemImage: "building.columns.fill", value: HomeViewModel.AppTab.ny529) {
-                        Text("NY 529")
-                    }
-                }
-                .defaultVisibility(.hidden, for: .tabBar)
+                .frame(maxWidth: .infinity)
+                .contentShape(.capsule)
             }
+        }
+        .sheet(
+            item: $viewModel.viewState.sheet,
+            onDismiss: { viewModel.handle(action: .sheetDismissed) }
+        ) { sheet in
+            SheetView(sheet: sheet)
+        }
+        .onChange(of: viewModel.viewState.selectedTab) { _, newValue in
+            viewModel.handle(action: .tabSelected(newValue))
+        }
+    }
+    
+    @ViewBuilder
+    private func tabView<Content: View>(
+        _ tab: AppTab,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationStack(path: pathBinding(for: tab)) {
+            content()
+                .navigationDestination(for: Destination.self) { destination in
+                    destinationView(destination)
+                }
+        }
+        .tag(tab)
+    }
+    
+    private func pathBinding(for tab: AppTab) -> Binding<NavigationPath> {
+        Binding(
+            get: {
+                NavigationPath(viewModel.viewState.tabDestinations[tab] ?? [])
+            },
+            set: { newPath in
+                let newCount = newPath.count
+                let oldCount = viewModel.viewState.tabDestinations[tab]?.count ?? 0
+
+                if newCount < oldCount {
+                    viewModel.handle(action: .pop(tab))
+                }
+            }
+        )
+    }
+    
+    @ViewBuilder
+    func destinationView(_ destination: Destination) -> some View {
+//        switch destination {
+//        }
+    }
+
+}
+
+//            if horizontalSizeClass == .regular {
+//                TabSection("Budget Accounts") {
+//                    Tab("HSBC - Joint", systemImage: "building.columns.fill", value: AppTab.hsbcJoint) {
+//                        Text("HSBC Joint Account View")
+//                    }
+//                }
+//                .defaultVisibility(.hidden, for: .tabBar)
+//
+//                TabSection("Loans") {
+//                    Tab("Discover Student Loan", systemImage: "building.columns.fill", value: AppTab.discover) {
+//                        Text("Discover Student Loan")
+//                    }
+//                }
+//                .defaultVisibility(.hidden, for: .tabBar)
+//
+//                TabSection("Tracking Accounts") {
+//                    Tab("NY 529", systemImage: "building.columns.fill", value: AppTab.ny529) {
+//                        Text("NY 529")
+//                    }
+//                }
+//                .defaultVisibility(.hidden, for: .tabBar)
+//            }
 
 //            Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
 //                Color.clear
 //            }
-            
-//            if horizontalSizeClass == .compact {
-                Tab("Add Transaction", systemImage: "plus", value: .newTransaction, role: .search) {
-                    Color.clear
-                }
-//            }
-        }
-        .tabViewStyle(.sidebarAdaptable)
-//        .tabViewBottomAccessory(content: {
-//            Button {
-//                
-//            } label: {
-//                HStack {
-//                    Image(systemName: "plus")
-//                    Text("Transaction")
-//                }
-//            }
-//        })
-        .sheet(isPresented: $viewModel.newTransactionSheetIsPresented) {
-            TransactionDetailView(viewModel: Container.shared.transactionDetailViewModel((nil, true)))
-        }
-    }
-}
+

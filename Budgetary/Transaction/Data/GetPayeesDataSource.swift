@@ -13,8 +13,8 @@ final class GetPayeesDataSource: GetPayeesSource {
     
     func getPayeeData() async -> CombinedPayeeData {
         return CombinedPayeeData(
-            payees: await payeesDataSourceLocal.allPayees(),
-            categoryGroups: await categoryGroupsDataSourceLocal.allCategoryGroups()
+            payees: await payeesDataSourceLocal.payees(),
+            categoryGroups: await categoryGroupsDataSourceLocal.categoryGroups()
         )
     }
 }

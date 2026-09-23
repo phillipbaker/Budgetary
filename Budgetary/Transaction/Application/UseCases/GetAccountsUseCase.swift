@@ -8,11 +8,11 @@
 import Factory
 
 final class GetTransactionAccountsUseCase {
-    let source: GetAccountsSource = Container.shared.getAccountsSource()
+    let source: LoadBudgetAccountsSource = Container.shared.loadAccountsSource()
     let mapper: BudgetAccountsMapper = Container.shared.budgetAccountsMapper()
     
     func accounts() async -> [TransactionAccount] {
-        let accountsPlain = await source.allAccounts()
+        let accountsPlain = await source.accounts()
         return mapper.map(accounts: accountsPlain)
     }
 }

@@ -6,7 +6,7 @@
 //
 
 public struct EditableCategoryGroup: Equatable, Sendable {
-    let id: String
+    let id: ID<EditableCategoryGroup>
     let name: String
     let categories: [EditableCategory]
     

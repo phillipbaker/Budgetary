@@ -21,7 +21,7 @@ struct OverspentCategoryPickerView: View {
                             Text(category.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             AvailableView(
-                                available: category.available[model.selectedMonthYear] ?? AvailablePresentation(
+                                available: category.available[model.selectedMonthYear] ?? CategoryAvailablePresentation(
                                     total: "£0.00",
                                     cashFromLastMonth: "£0.00",
                                     assignedThisMonth: "£0.00",

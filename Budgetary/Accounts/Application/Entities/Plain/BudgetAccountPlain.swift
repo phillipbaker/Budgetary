@@ -8,11 +8,18 @@
 import Foundation
 
 public struct BudgetAccountPlain: Equatable, Sendable {
-    let id: String
+    let id: ID<BudgetAccountPlain>
     let name: String
-    let accountType: AccountType
+    let accountType: BudgetAccountTypePlain
     let startingBalance: Decimal
     let notes: String?
     let isClosed: Bool
     let transactions: [TransactionPlain]
+}
+
+enum BudgetAccountTypePlain: Equatable, Hashable, Sendable {
+    case cash
+    case checking
+    case savings
+    case creditCard
 }

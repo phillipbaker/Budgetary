@@ -63,26 +63,28 @@ struct AccountView: View {
 #Preview {
     AccountView(
         account: BudgetAccountPresentation(
-            id: "1",
+            id: .init(),
             name: "HSBC Joint",
+            accountType: .cash(.checking),
             startingBalance: "£0.00",
             notes: "",
             isClosed: false,
             balance: "£1,250.00",
             transactionsByDate: [
                 TransactionDate(
-                    id: UUID().uuidString,
+                    id: .init(),
                     date: .now,
                     transactions: [
                         .init(
-                            id: "2",
+                            id: .init(),
                             date: .now,
                             memo: "",
-                            amount: AmountPresentation(transactionType: .outflow, value: "500.00"),
+                            amount: AmountPresentation(type: .outflow, value: "500.00"),
                             isCleared: true,
-                            payee: PayeePresentation(id: "3", name: "Sainsbury’s"),
-                            category: TransactionCategoryPresentation(id: "4", name: "Groceries"),
-                            account: TransactionAccountPresentation(id: "1", name: "HSBC - Joint")
+                            payee: PayeePresentation(id: .init(), name: "Sainsbury’s", type: .regular),
+                            category: TransactionCategoryPresentation(id: .init(), name: "Groceries"),
+                            account: TransactionAccountPresentation(id: .init(), name: "HSBC - Joint"),
+                            linkedTransactionID: nil
                         )
                     ]
                 )

@@ -8,23 +8,30 @@
 import Factory
 import Foundation
 
-final class NewCategoryUseCase {
-    var source: NewCategorySource = Container.shared.newCategorySource()
-    var mapper: BudgetMapper = Container.shared.budgetMapper()
+final class NewCategoryUseCase: Sendable {
+    let source: NewCategorySource = Container.shared.newCategorySource()
+    let mapper: BudgetMapper = Container.shared.budgetMapper()
     
-    func addCategory(with name: String, toGroupWithId id: String) async {
-        let newCategory = CategoryPlain(
-            id: UUID().uuidString,
+    func execute(for name: String, andGroupID id: ID<CategoryGroup>) async {
+        let newCategory = Category(
+            id: .init(),
             name: name,
             notes: "",
             isHidden: false,
             assigned: [:]
         )
+        print("NewCategoryUseCase - new category created for: ", newCategory.name)
         
-        guard let group = await source.findCategoryGroup(by: id) else { return }
+        // TODO: Handle errors here not just return or that in Effect?
+        guard let categoryGroupPlain = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(id)) else {
+            print("NewCategoryUseCase - no category group found")
+            return
+        }
         
-        let updatedCategories = group.categories + [newCategory]
-        let updatedGroup = CategoryGroupPlain(id: group.id, name: group.name, isHidden: group.isHidden, categories: updatedCategories)
-        await source.update(categoryGroup: updatedGroup)
+        let categoryGroup = mapper.map(categoryGroupPlain: categoryGroupPlain)
+        print("NewCategoryUseCase - updated group count before: ", categoryGroup.categories.count)
+        let updatedGroup = categoryGroup.adding(newCategory)
+        
+        await source.update(categoryGroup: mapper.map(categoryGroup: updatedGroup))
     }
 }

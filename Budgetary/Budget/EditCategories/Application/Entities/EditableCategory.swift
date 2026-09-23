@@ -6,7 +6,7 @@
 //
 
 public struct EditableCategory: Equatable, Sendable {
-    let id: String
+    let id: ID<EditableCategory>
     let name: String
     
     func rename(to newName: String) -> EditableCategory {

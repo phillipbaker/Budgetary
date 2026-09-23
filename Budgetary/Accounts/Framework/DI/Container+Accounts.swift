@@ -11,8 +11,9 @@ extension Container {
     
     // MARK: View Model
     
+    @MainActor
     var accountsViewModel: Factory<AccountsViewModel> {
-        self { AccountsViewModel() }
+        self { @MainActor in AccountsViewModel() }
             .singleton
     }
     
@@ -35,13 +36,44 @@ extension Container {
 
     // MARK: Use Cases & Data Sources
     
-    var getAccountsStreamUseCase: Factory<GetAccountsStreamUseCase> {
-        self { GetAccountsStreamUseCase() }
+    var loadAccountsDataUseCase: Factory<LoadBudgetAccountsUseCase> {
+        self { LoadBudgetAccountsUseCase() }
             .singleton
     }
     
-    var getAccountsStreamSource: Factory<GetAccountsStreamSource> {
-        self { GetAccountsStreamDataSource() }
+    var loadTransactionAccountsUseCase: Factory<LoadTransactionAccountsUseCase> {
+        self { LoadTransactionAccountsUseCase() }
+            .singleton
+    }
+    
+    @MainActor
+    var loadBudgetAccountsEffect: Factory<LoadBudgetAccountsEffect> {
+        self { @MainActor in LoadBudgetAccountsEffect() }
+            .singleton
+    }
+    
+    var loadAccountsSource: Factory<LoadBudgetAccountsSource> {
+        self { LoadAccountsDataSource() }
+            .singleton
+    }
+    
+    var loadTransactionAccountsSource: Factory<LoadTransactionAccountsSource> {
+        self { LoadTransactionAccountsDataSource() }
+            .singleton
+    }
+    
+    var addAccountUseCase: Factory<AddAccountUseCase> {
+        self { AddAccountUseCase() }
+            .singleton
+    }
+    
+    var addAccountSource: Factory<AddBudgetAccountSource> {
+        self { AddAccountDataSource() }
+    }
+    
+    @MainActor
+    var addAccountViewModel: Factory<AddAccountViewModel> {
+        self { @MainActor in AddAccountViewModel() }
             .singleton
     }
 }

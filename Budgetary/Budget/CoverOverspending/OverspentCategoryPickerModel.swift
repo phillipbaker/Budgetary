@@ -9,12 +9,12 @@ import SwiftUI
 
 @Observable
 final class OverspentCategoryPickerModel: Identifiable {
-    var id: String
+    var id: UUID
     var selectedMonthYear: MonthYear
     var overspentCategoryGroups: [CategoryGroupPresentation]
     
     init(
-        id: String = UUID().uuidString,
+        id: UUID = .init(),
         selectedMonthYear: MonthYear,
         overspentCategoryGroups: [CategoryGroupPresentation]
     ) {

@@ -1,5 +1,5 @@
 //
-//  CategoryPresentation+Preview.swift
+//  CategoryRowPresentation+Preview.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 01/11/2024.
@@ -7,36 +7,38 @@
 
 import Foundation
 
-extension CategoryPresentation: @unchecked Sendable {
+typealias CategoryPreview = CategoryRowPresentation<CategoryAssignedPresentation, CategoryActivityPresentation, CategoryAvailablePresentation>
+
+extension CategoryPreview: @unchecked Sendable {
     // MARK: - Immediate Obligations
     
-    static let readyToAssign = CategoryPresentation(
-        id: UUID().uuidString,
+    static let readyToAssign = CategoryPreview(
+        id: .init(),
         name: "Ready to Assign",
         notes: "",
         isHidden: false,
-        assigned: [.sep2024: AssignedPresentation(
+        assigned: [.sep2024: CategoryAssignedPresentation(
             assignedThisMonth: "£90[:]",
             assignedLastMonth: "",
-            spentLastMonth: "",
             averageAssigned: "",
+            spentLastMonth: "",
             averageSpent: ""
         )],
-        activity: [.sep2024: ActivityPresentation(
-            id: "23",
-            total: "",
+        activity: [.sep2024: CategoryActivityPresentation(
+            activityTotal: "",
             transactions: [TransactionPresentation(
-                id: "",
+                id: .init(),
                 date: .now,
                 memo: "",
-                amount: AmountPresentation(transactionType: .inflow, value: "120.00"),
+                amount: AmountPresentation(type: .inflow, value: "120.00"),
                 isCleared: true,
-                payee: PayeePresentation(id: "", name: "Sainsbury’s"),
-                category: TransactionCategoryPresentation(id: "", name: "Groceries"),
-                account: TransactionAccountPresentation(id: "2", name: "HSBC - Joint")
+                payee: PayeePresentation(id: .init(), name: "Sainsbury’s", type: .regular),
+                category: TransactionCategoryPresentation(id: .init(), name: "Groceries"),
+                account: TransactionAccountPresentation(id: .init(), name: "HSBC - Joint"),
+                linkedTransactionID: nil
             )]
         )],
-        available: [.sep2024: AvailablePresentation(
+        available: [.sep2024: CategoryAvailablePresentation(
             total: "",
             cashFromLastMonth: "",
             assignedThisMonth: "",
@@ -50,8 +52,8 @@ extension CategoryPresentation: @unchecked Sendable {
         )]
     )
     
-    static let rent = CategoryPresentation(
-        id: UUID().uuidString,
+    static let rent = CategoryPreview(
+        id: .init(),
         name: "Rent",
         notes: "",
         isHidden: false,
@@ -60,8 +62,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let councilTax = CategoryPresentation(
-        id: UUID().uuidString,
+    static let councilTax = CategoryPreview(
+        id: .init(),
         name: "Council Tax",
         notes: "",
         isHidden: false,
@@ -70,8 +72,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let utilities = CategoryPresentation(
-        id: UUID().uuidString,
+    static let utilities = CategoryPreview(
+        id: .init(),
         name: "Utilities",
         notes: "",
         isHidden: false,
@@ -80,8 +82,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let water = CategoryPresentation(
-        id: UUID().uuidString,
+    static let water = CategoryPreview(
+        id: .init(),
         name: "Water",
         notes: "",
         isHidden: false,
@@ -90,8 +92,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let internet = CategoryPresentation(
-        id: UUID().uuidString,
+    static let internet = CategoryPreview(
+        id: .init(),
         name: "Internet",
         notes: "",
         isHidden: false,
@@ -100,8 +102,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let tvLicense = CategoryPresentation(
-        id: UUID().uuidString,
+    static let tvLicense = CategoryPreview(
+        id: .init(),
         name: "TV License",
         notes: "",
         isHidden: false,
@@ -110,8 +112,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let cellPhones = CategoryPresentation(
-        id: UUID().uuidString,
+    static let cellPhones = CategoryPreview(
+        id: .init(),
         name: "Cell Phones",
         notes: "",
         isHidden: false,
@@ -121,10 +123,10 @@ extension CategoryPresentation: @unchecked Sendable {
     )
     
 
-    // MARK: - CategoryPresentation: True Expenses
+    // MARK: - CategoryPreview: True Expenses
     
-    static let ynab = CategoryPresentation(
-        id: UUID().uuidString,
+    static let ynab = CategoryPreview(
+        id: .init(),
         name: "YNAB",
         notes: "",
         isHidden: false,
@@ -133,8 +135,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let birthdays = CategoryPresentation(
-        id: UUID().uuidString,
+    static let birthdays = CategoryPreview(
+        id: .init(),
         name: "Birthdays",
         notes: "",
         isHidden: false,
@@ -143,8 +145,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let christmas = CategoryPresentation(
-        id: UUID().uuidString,
+    static let christmas = CategoryPreview(
+        id: .init(),
         name: "Christmas",
         notes: "",
         isHidden: false,
@@ -153,8 +155,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
 
-    static let lifeInsurance = CategoryPresentation(
-        id: UUID().uuidString,
+    static let lifeInsurance = CategoryPreview(
+        id: .init(),
         name: "Life Insurance",
         notes: "",
         isHidden: false,
@@ -163,8 +165,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let roadTax = CategoryPresentation(
-        id: UUID().uuidString,
+    static let roadTax = CategoryPreview(
+        id: .init(),
         name: "Road Tax",
         notes: "",
         isHidden: false,
@@ -173,8 +175,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let carInsurance = CategoryPresentation(
-        id: UUID().uuidString,
+    static let carInsurance = CategoryPreview(
+        id: .init(),
         name: "Car Insurance",
         notes: "",
         isHidden: false,
@@ -183,8 +185,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let homeInsurance = CategoryPresentation(
-        id: UUID().uuidString,
+    static let homeInsurance = CategoryPreview(
+        id: .init(),
         name: "Home Insurance",
         notes: "",
         isHidden: false,
@@ -193,8 +195,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let carServiceRepairs = CategoryPresentation(
-        id: UUID().uuidString,
+    static let carServiceRepairs = CategoryPreview(
+        id: .init(),
         name: "Car Service/Repairs",
         notes: "",
         isHidden: false,
@@ -204,10 +206,10 @@ extension CategoryPresentation: @unchecked Sendable {
     )
     
     
-    // MARK: - CategoryPresentation: Monthly Expenses
+    // MARK: - CategoryPreview: Monthly Expenses
     
-    static let groceries = CategoryPresentation(
-        id: UUID().uuidString,
+    static let groceries = CategoryPreview(
+        id: .init(),
         name: "Groceries",
         notes: "",
         isHidden: false,
@@ -216,8 +218,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let commuting = CategoryPresentation(
-        id: UUID().uuidString,
+    static let commuting = CategoryPreview(
+        id: .init(),
         name: "Commuting",
         notes: "",
         isHidden: false,
@@ -226,8 +228,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let classesCamps = CategoryPresentation(
-        id: UUID().uuidString,
+    static let classesCamps = CategoryPreview(
+        id: .init(),
         name: "Classes/Camps",
         notes: "",
         isHidden: false,
@@ -236,8 +238,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let petrolTolls = CategoryPresentation(
-        id: UUID().uuidString,
+    static let petrolTolls = CategoryPreview(
+        id: .init(),
         name: "Gasoline/Tolls",
         notes: "",
         isHidden: false,
@@ -246,8 +248,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let homeSupplies = CategoryPresentation(
-        id: UUID().uuidString,
+    static let homeSupplies = CategoryPreview(
+        id: .init(),
         name: "Home Supplies",
         notes: "",
         isHidden: false,
@@ -256,8 +258,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let homeImprovement = CategoryPresentation(
-        id: UUID().uuidString,
+    static let homeImprovement = CategoryPreview(
+        id: .init(),
         name: "Home Improvement",
         notes: "",
         isHidden: false,
@@ -266,8 +268,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let kidsClothes = CategoryPresentation(
-        id: UUID().uuidString,
+    static let kidsClothes = CategoryPreview(
+        id: .init(),
         name: "Kids’ Clothes",
         notes: "",
         isHidden: false,
@@ -276,8 +278,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let gifts = CategoryPresentation(
-        id: UUID().uuidString,
+    static let gifts = CategoryPreview(
+        id: .init(),
         name: "Gifts",
         notes: "",
         isHidden: false,
@@ -286,8 +288,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let doctors = CategoryPresentation(
-        id: UUID().uuidString,
+    static let doctors = CategoryPreview(
+        id: .init(),
         name: "Doctors",
         notes: "",
         isHidden: false,
@@ -296,8 +298,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let amazonPrime = CategoryPresentation(
-        id: UUID().uuidString,
+    static let amazonPrime = CategoryPreview(
+        id: .init(),
         name: "Amazon Prime",
         notes: "",
         isHidden: false,
@@ -306,8 +308,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let prescriptions = CategoryPresentation(
-        id: UUID().uuidString,
+    static let prescriptions = CategoryPreview(
+        id: .init(),
         name: "Prescriptions",
         notes: "",
         isHidden: false,
@@ -316,8 +318,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let atmBankFees = CategoryPresentation(
-        id: UUID().uuidString,
+    static let atmBankFees = CategoryPreview(
+        id: .init(),
         name: "ATM/Bank Fees",
         notes: "",
         isHidden: false,
@@ -326,8 +328,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let miscellaneous = CategoryPresentation(
-        id: UUID().uuidString,
+    static let miscellaneous = CategoryPreview(
+        id: .init(),
         name: "Miscellaneous",
         notes: "",
         isHidden: false,
@@ -337,10 +339,10 @@ extension CategoryPresentation: @unchecked Sendable {
     )
     
     
-    // MARK: - CategoryPresentation: Fun
+    // MARK: - CategoryPreview: Fun
     
-    static let phil = CategoryPresentation(
-        id: UUID().uuidString,
+    static let phil = CategoryPreview(
+        id: .init(),
         name: "Phil",
         notes: "",
         isHidden: false,
@@ -349,8 +351,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let kids = CategoryPresentation(
-        id: UUID().uuidString,
+    static let kids = CategoryPreview(
+        id: .init(),
         name: "Kids",
         notes: "",
         isHidden: false,
@@ -359,8 +361,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let school = CategoryPresentation(
-        id: UUID().uuidString,
+    static let school = CategoryPreview(
+        id: .init(),
         name: "School",
         notes: "",
         isHidden: false,
@@ -369,8 +371,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let streaming = CategoryPresentation(
-        id: UUID().uuidString,
+    static let streaming = CategoryPreview(
+        id: .init(),
         name: "Streaming",
         notes: "",
         isHidden: false,
@@ -379,8 +381,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
         
-    static let familyActivities = CategoryPresentation(
-        id: UUID().uuidString,
+    static let familyActivities = CategoryPreview(
+        id: .init(),
         name: "Family Activities",
         notes: "",
         isHidden: false,
@@ -389,8 +391,8 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
     
-    static let takeout = CategoryPresentation(
-        id: UUID().uuidString,
+    static let takeout = CategoryPreview(
+        id: .init(),
         name: "Eating Out/Takeout",
         notes: "",
         isHidden: false,
@@ -399,3 +401,4 @@ extension CategoryPresentation: @unchecked Sendable {
         available: [:]
     )
 }
+

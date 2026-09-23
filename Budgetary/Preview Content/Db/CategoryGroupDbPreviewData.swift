@@ -6,13 +6,14 @@
 //
 
 extension Array where Element == CategoryGroupDb {
-    static let mock: [CategoryGroupDb] = [.obligations, .trueExpenses, .monthlyExpenses, .fun]
+    @MainActor static let mock: [CategoryGroupDb] = [.obligations, .trueExpenses, .monthlyExpenses, .fun]
 }
 
-extension CategoryGroupDb: @unchecked Sendable {
-    static let obligations = CategoryGroupDb(
-        id: "1",
+extension CategoryGroupDb {
+    @MainActor static let obligations = CategoryGroupDb(
+        externalID: .init(),
         name: "Immediate Obligations",
+        isHidden: false,
         categories: [
             .rent,
 //            .countilTax,
@@ -24,9 +25,10 @@ extension CategoryGroupDb: @unchecked Sendable {
         ]
     )
     
-    static let trueExpenses = CategoryGroupDb(
-        id: "2",
+    @MainActor static let trueExpenses = CategoryGroupDb(
+        externalID: .init(),
         name: "True Expenses",
+        isHidden: false,
         categories: [
             .ynab,
 //            .birthdays,
@@ -39,9 +41,10 @@ extension CategoryGroupDb: @unchecked Sendable {
         ]
     )
     
-    static let monthlyExpenses = CategoryGroupDb(
-        id: "3",
+    @MainActor static let monthlyExpenses = CategoryGroupDb(
+        externalID: .init(),
         name: "Monthly Expenses",
+        isHidden: false,
         categories: [
             .groceries,
 //            .commuting,
@@ -59,9 +62,10 @@ extension CategoryGroupDb: @unchecked Sendable {
         ]
     )
 
-    static let fun = CategoryGroupDb(
-        id: "4",
+    @MainActor static let fun = CategoryGroupDb(
+        externalID: .init(),
         name: "Fun",
+        isHidden: false,
         categories: [
             .phil,
 //            .kids,

@@ -8,31 +8,35 @@
 import Factory
 
 final class LoadCategoryGroupsDataSource: LoadCategoryGroupsSource {
-    let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
+    let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal
+    
+    init(categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()) {
+        self.categoryGroupsDataSourceLocal = categoryGroupsDataSourceLocal
+    }
     
     let (categoryGroupsStream, continuation) = AsyncStream.makeStream(of: [CategoryGroupPlain].self, bufferingPolicy: .bufferingNewest(1))
     
     let id = "LoadCategoryGroupsDataSource"
     
-    public init() {
-        Task {
-            for await categoryGroups in await categoryGroupsDataSourceLocal.broadcaster.subscribe() {
-                continuation.yield(categoryGroups)
-            }
-//            for await categoryGroups in await categoryGroupsDataSourceLocal.categoryGroupsStream() {
-//                print("load categories data source await gateway:", categoryGroups)
-//                continuation.yield(categoryGroups)
-//            }
-            
-            continuation.onTermination = { @Sendable reason in
-                // Handle any necessary cleanup
-                print("categoryGroupsStream terminated with reason: ", reason)
-            }
-        }
-    }
+//    public init() {
+//        Task {
+////            for await categoryGroups in await categoryGroupsDataSourceLocal.broadcaster.subscribe() {
+////                continuation.yield(categoryGroups)
+////            }
+////            for await categoryGroups in await categoryGroupsDataSourceLocal.categoryGroupsStream() {
+////                print("load categories data source await gateway:", categoryGroups)
+////                continuation.yield(categoryGroups)
+////            }
+////            
+////            continuation.onTermination = { @Sendable reason in
+////                // Handle any necessary cleanup
+////                print("categoryGroupsStream terminated with reason: ", reason)
+////            }
+//        }
+//    }
     
     func loadCategoryGroups() async -> [CategoryGroupPlain] {
-        await categoryGroupsDataSourceLocal.allCategoryGroups()
+        await categoryGroupsDataSourceLocal.categoryGroups()
     }
 
     func categoryGroupsStream() async -> AsyncStream<[CategoryGroupPlain]> {

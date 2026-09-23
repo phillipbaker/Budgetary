@@ -9,11 +9,12 @@ import Foundation
 
 extension Budget {
     static let preview = Budget(
-        id: UUID().uuidString,
+        id: .init(),
         monthYear: .currentMonthYear,
         filter: .allCategories,
         readyToAssign: [.currentMonthYear: .mock],
         categoryGroups: [.obligations, .trueExpenses, .monthlyExpenses, .fun],
+        creditCardPaymentGroup: .creditCards,
         settings: BudgetSettings(
             name: "UK Budget",
             curreny: "GBP",

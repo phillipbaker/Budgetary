@@ -11,8 +11,9 @@ final class RemoveCategoryUseCase {
     var source: RemoveCategorySource = Container.shared.removeCategorySource()
     var mapper: BudgetMapper = Container.shared.budgetMapper()
 
-    func removeCategory(categoryId: String, from groupId: String) async {
-        guard let containingGroup = await source.findCategoryGroup(containing: categoryId) else {
+    // TODO: not suing groupID here?
+    func removeCategory(categoryID: ID<EditableCategoryPresentation>, from groupID: ID<CategoryGroupPresentation>) async {
+        guard let containingGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else {
             print("no group found")
             return
         }
@@ -21,7 +22,7 @@ final class RemoveCategoryUseCase {
             id: containingGroup.id,
             name: containingGroup.name,
             isHidden: containingGroup.isHidden,
-            categories: containingGroup.categories.filter { $0.id != categoryId }
+            categories: containingGroup.categories.filter { $0.id != ID<CategoryPlain>(categoryID) }
         )
         
         await source.update(categoryGroup: updatedGroup)

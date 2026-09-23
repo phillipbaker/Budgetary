@@ -6,7 +6,7 @@
 //
 
 extension Array where Element == PayeeDb {
-    static let mock: [PayeeDb] = [
+    nonisolated(unsafe) static let mock: [PayeeDb] = [
         .anthonyMartin,
         .amazon,
         .councilTax,
@@ -66,548 +66,721 @@ extension Array where Element == PayeeDb {
         .amelia,
         .bakersOfBexley,
         .chipotle,
-        .cineworld
+        .cineworld,
+        .hsbcChecking,
+        .hsbcSavings,
+        .barclays,
+        .capitalOneCard
     ]
 }
 
-extension PayeeDb: @unchecked Sendable {
-    static let anthonyMartin = PayeeDb(
-        id: "1",
+extension PayeeDb {
+    
+    // Transfer Payees
+    
+    nonisolated(unsafe) static let hsbcChecking = PayeeDb(
+        externalID: .init(),
+        name: "HSBC Checking",
+        type: .transfer,
+        aliases: [],
+        includedInPayeeList: false,
+        automaticallyCategorizeIsOn: false,
+        defaultCategoryID: nil, // should never have a category?
+        accountID: .hsbcChecking
+    )
+    
+    nonisolated(unsafe) static let hsbcSavings = PayeeDb(
+        externalID: .init(),
+        name: "HSBC Savings",
+        type: .transfer,
+        aliases: [],
+        includedInPayeeList: false,
+        automaticallyCategorizeIsOn: false,
+        defaultCategoryID: nil, // should never have a category?
+        accountID: .hsbcSavings
+    )
+    
+    nonisolated(unsafe) static let barclays = PayeeDb(
+        externalID: .init(),
+        name: "Barclays",
+        type: .transfer,
+        aliases: [],
+        includedInPayeeList: false,
+        automaticallyCategorizeIsOn: false,
+        defaultCategoryID: nil, // should never have a category?
+        accountID: .barclays
+    )
+
+    nonisolated(unsafe) static let capitalOneCard = PayeeDb(
+        externalID: .init(),
+        name: "Capital One Card",
+        type: .transfer,
+        aliases: [],
+        includedInPayeeList: false,
+        automaticallyCategorizeIsOn: false,
+        defaultCategoryID: nil, // should never have a category?
+        accountID: .capitalOneCard
+    )
+
+    // Regular Payees
+    
+    nonisolated(unsafe) static let anthonyMartin = PayeeDb(
+        externalID: .init(),
         name: "Anthony Martin",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "1"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let councilTax = PayeeDb(
-        id: "2",
+    nonisolated(unsafe) static let councilTax = PayeeDb(
+        externalID: .init(),
         name: "Council Tax",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "2"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let amazon = PayeeDb(
-        id: "3",
+    nonisolated(unsafe) static let amazon = PayeeDb(
+        externalID: .init(),
         name: "Amazon",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let octus = PayeeDb(
-        id: "4",
+    nonisolated(unsafe) static let octus = PayeeDb(
+        externalID: .init(),
         name: "Octus",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "4"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let marksAndSpencer = PayeeDb(
-        id: "5",
+    nonisolated(unsafe) static let marksAndSpencer = PayeeDb(
+        externalID: .init(),
         name: "Marks & Spencer",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "5"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let monica = PayeeDb(
-        id: "6",
+    nonisolated(unsafe) static let monica = PayeeDb(
+        externalID: .init(),
         name: "Monica Taylor",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "6"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let skinTonic = PayeeDb(
-        id: "7",
+    nonisolated(unsafe) static let skinTonic = PayeeDb(
+        externalID: .init(),
         name: "Skin & Tonic",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "7"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let townley = PayeeDb(
-        id: "8",
+    nonisolated(unsafe) static let townley = PayeeDb(
+        externalID: .init(),
         name: "Townley Grammar School",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "8"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let taxi = PayeeDb(
-        id: "9",
+    nonisolated(unsafe) static let taxi = PayeeDb(
+        externalID: .init(),
         name: "London Taxi",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let jdSports = PayeeDb(
-        id: "10",
+    nonisolated(unsafe) static let jdSports = PayeeDb(
+        externalID: .init(),
         name: "JD Sports",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let maidToClean = PayeeDb(
-        id: "11",
+    nonisolated(unsafe) static let maidToClean = PayeeDb(
+        externalID: .init(),
         name: "Maid To Clean",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let royalAcademyOfDance = PayeeDb(
-        id: "12",
+    nonisolated(unsafe) static let royalAcademyOfDance = PayeeDb(
+        externalID: .init(),
         name: "Royal Academy of Dance",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: ""
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let sportsDirect = PayeeDb(
-        id: "13",
+    nonisolated(unsafe) static let sportsDirect = PayeeDb(
+        externalID: .init(),
         name: "Sports Direct",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let tesco = PayeeDb(
-        id: "14",
+    nonisolated(unsafe) static let tesco = PayeeDb(
+        externalID: .init(),
         name: "Tesco",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let asda = PayeeDb(
-        id: "15",
+    nonisolated(unsafe) static let asda = PayeeDb(
+        externalID: .init(),
         name: "Asda",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let hextable = PayeeDb(
-        id: "16",
+    nonisolated(unsafe) static let hextable = PayeeDb(
+        externalID: .init(),
         name: "Hextable Primary School",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let simplyFood = PayeeDb(
-        id: "17",
+    nonisolated(unsafe) static let simplyFood = PayeeDb(
+        externalID: .init(),
         name: "M&S Simply Food",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let macInASac = PayeeDb(
-        id: "18",
+    nonisolated(unsafe) static let macInASac = PayeeDb(
+        externalID: .init(),
         name: "Mac in a Sac",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let madeleines = PayeeDb(
-        id: "19",
+    nonisolated(unsafe) static let madeleines = PayeeDb(
+        externalID: .init(),
         name: "Madeleine’s Creperie",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let magicMemories = PayeeDb(
-        id: "20",
+    nonisolated(unsafe) static let magicMemories = PayeeDb(
+        externalID: .init(),
         name: "Magic Memories",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let mahan = PayeeDb(
-        id: "21",
+    nonisolated(unsafe) static let mahan = PayeeDb(
+        externalID: .init(),
         name: "Mahan",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let mammaMia = PayeeDb(
-        id: "22",
+    nonisolated(unsafe) static let mammaMia = PayeeDb(
+        externalID: .init(),
         name: "Mamma Mia",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let manorPark = PayeeDb(
-        id: "23",
+    nonisolated(unsafe) static let manorPark = PayeeDb(
+        externalID: .init(),
         name: "Manor Park Country Park",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let brownies = PayeeDb(
-        id: "24",
+    nonisolated(unsafe) static let brownies = PayeeDb(
+        externalID: .init(),
         name: "1st Baldwyn’s Park Brownies",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let aa = PayeeDb(
-        id: "25",
+    nonisolated(unsafe) static let aa = PayeeDb(
+        externalID: .init(),
         name: "AA",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let abeBooks = PayeeDb(
-        id: "26",
+    nonisolated(unsafe) static let abeBooks = PayeeDb(
+        externalID: .init(),
         name: "Abe Books",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let masterFryer = PayeeDb(
-        id: "27",
+    nonisolated(unsafe) static let masterFryer = PayeeDb(
+        externalID: .init(),
         name: "Master Fryer",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let mcDonalds = PayeeDb(
-        id: "28",
+    nonisolated(unsafe) static let mcDonalds = PayeeDb(
+        externalID: .init(),
         name: "McDonald’s",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let meluccis = PayeeDb(
-        id: "29",
+    nonisolated(unsafe) static let meluccis = PayeeDb(
+        externalID: .init(),
         name: "Melucci’s",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: true,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let salman = PayeeDb(
-        id: "30",
+    nonisolated(unsafe) static let salman = PayeeDb(
+        externalID: .init(),
         name: "Salman Kahn",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let schoolGateway = PayeeDb(
-        id: "31",
+    nonisolated(unsafe) static let schoolGateway = PayeeDb(
+        externalID: .init(),
         name: "School Gateway",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let scienceMuseum = PayeeDb(
-        id: "32",
+    nonisolated(unsafe) static let scienceMuseum = PayeeDb(
+        externalID: .init(),
         name: "Science Museum",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let shell = PayeeDb(
-        id: "33",
+    nonisolated(unsafe) static let shell = PayeeDb(
+        externalID: .init(),
         name: "Shell Oil",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let shirtPocket = PayeeDb(
-        id: "34",
+    nonisolated(unsafe) static let shirtPocket = PayeeDb(
+        externalID: .init(),
         name: "Shirt Pocket",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let tkMaxx = PayeeDb(
-        id: "35",
+    nonisolated(unsafe) static let tkMaxx = PayeeDb(
+        externalID: .init(),
         name: "TK Maxx",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let tateBritain = PayeeDb(
-        id: "36",
+    nonisolated(unsafe) static let tateBritain = PayeeDb(
+        externalID: .init(),
         name: "Tate Britain",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let armouryStore = PayeeDb(
-        id: "37",
+    nonisolated(unsafe) static let armouryStore = PayeeDb(
+        externalID: .init(),
         name: "The Armoury Store",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let athletic = PayeeDb(
-        id: "38",
+    nonisolated(unsafe) static let athletic = PayeeDb(
+        externalID: .init(),
         name: "The Athletic",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let thamesWater = PayeeDb(
-        id: "39",
+    nonisolated(unsafe) static let thamesWater = PayeeDb(
+        externalID: .init(),
         name: "Thames Water",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let bodyShop = PayeeDb(
-        id: "40",
+    nonisolated(unsafe) static let bodyShop = PayeeDb(
+        externalID: .init(),
         name: "The Body Shop",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let cornishBakery = PayeeDb(
-        id: "41",
+    nonisolated(unsafe) static let cornishBakery = PayeeDb(
+        externalID: .init(),
         name: "The Cornish Bakery",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let apple = PayeeDb(
-        id: "42",
+    nonisolated(unsafe) static let apple = PayeeDb(
+        externalID: .init(),
         name: "Apple",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let backblaze = PayeeDb(
-        id: "43",
+    nonisolated(unsafe) static let backblaze = PayeeDb(
+        externalID: .init(),
         name: "Backblaze",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let linear = PayeeDb(
-        id: "44",
+    nonisolated(unsafe) static let linear = PayeeDb(
+        externalID: .init(),
         name: "Linear",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let namecheap = PayeeDb(
-        id: "45",
+    nonisolated(unsafe) static let namecheap = PayeeDb(
+        externalID: .init(),
         name: "Namecheap",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let argos = PayeeDb(
-        id: "46",
+    nonisolated(unsafe) static let argos = PayeeDb(
+        externalID: .init(),
         name: "Argos",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let origin = PayeeDb(
-        id: "47",
+    nonisolated(unsafe) static let origin = PayeeDb(
+        externalID: .init(),
         name: "Origin Coffee",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let aviva = PayeeDb(
-        id: "48",
+    nonisolated(unsafe) static let aviva = PayeeDb(
+        externalID: .init(),
         name: "Aviva",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let sixtyFiveMM = PayeeDb(
-        id: "49",
+    nonisolated(unsafe) static let sixtyFiveMM = PayeeDb(
+        externalID: .init(),
         name: "65mm Coffee",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let barrels = PayeeDb(
-        id: "50",
+    nonisolated(unsafe) static let barrels = PayeeDb(
+        externalID: .init(),
         name: "Barrels",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let bespokeAutocentre = PayeeDb(
-        id: "51",
+    nonisolated(unsafe) static let bespokeAutocentre = PayeeDb(
+        externalID: .init(),
         name: "Bespoke Autocentre",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let southeastern = PayeeDb(
-        id: "52",
+    nonisolated(unsafe) static let southeastern = PayeeDb(
+        externalID: .init(),
         name: "Southeastern",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let waitrose = PayeeDb(
-        id: "53",
+    nonisolated(unsafe) static let waitrose = PayeeDb(
+        externalID: .init(),
         name: "Waitrose",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let ocado = PayeeDb(
-        id: "54",
+    nonisolated(unsafe) static let ocado = PayeeDb(
+        externalID: .init(),
         name: "Ocado",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let aldi = PayeeDb(
-        id: "55",
+    nonisolated(unsafe) static let aldi = PayeeDb(
+        externalID: .init(),
         name: "Aldi",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let jade = PayeeDb(
-        id: "56",
+    nonisolated(unsafe) static let jade = PayeeDb(
+        externalID: .init(),
         name: "Jade",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let amelia = PayeeDb(
-        id: "57",
+    nonisolated(unsafe) static let amelia = PayeeDb(
+        externalID: .init(),
         name: "Amelia Bakery",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let bakersOfBexley = PayeeDb(
-        id: "58",
+    nonisolated(unsafe) static let bakersOfBexley = PayeeDb(
+        externalID: .init(),
         name: "Bakers of Bexley",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let chipotle = PayeeDb(
-        id: "59",
+    nonisolated(unsafe) static let chipotle = PayeeDb(
+        externalID: .init(),
         name: "Chipotle",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
     
-    static let cineworld = PayeeDb(
-        id: "60",
+    nonisolated(unsafe) static let cineworld = PayeeDb(
+        externalID: .init(),
         name: "Cineworld",
+        type: .regular,
         aliases: [],
         includedInPayeeList: true,
         automaticallyCategorizeIsOn: false,
-        defaultCategoryId: "3"
+        defaultCategoryID: .init(),
+        accountID: nil
     )
 }

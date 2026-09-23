@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct EditCategoryRow: View {
-    let id: String
-    let intent: (EditCategoriesIntent) -> Void
-    
+    let id: ID<EditableCategoryPresentation>
+    let action: (EditCategoriesAction) -> Void
+
     @Binding var editedName: String
     @FocusState var focus: FocusedField?
     @State private var displayAlert: Bool = false
-    
+
     enum FocusedField: Hashable {
         case listRow(id: String)
     }
-    
+
     var body: some View {
         Text(editedName)
 //        TextField("Category Name", text: $editedName)
@@ -34,7 +34,7 @@ struct EditCategoryRow: View {
 //                    displayAlert = true
 //                    return
 //                }
-//                intent(.renameCategory(id: id, newName: editedName))
+//                action(.renameCategory(id: id, newName: editedName))
 //            }
 //            .alert(Text("Category name cannot be empty"), isPresented: $displayAlert) {
 //                Button("OK") {
@@ -46,8 +46,8 @@ struct EditCategoryRow: View {
 
 #Preview {
     EditCategoryRow(
-        id: UUID().uuidString,
-        intent: { _ in },
+        id: .init(),
+        action: { _ in },
         editedName: .constant("Groceries")
     )
 }

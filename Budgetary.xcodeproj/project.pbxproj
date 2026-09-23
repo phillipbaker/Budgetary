@@ -20,13 +20,6 @@
 			remoteGlobalIDString = F8BBE86E2C64047800E6F3C0;
 			remoteInfo = Budgetary;
 		};
-		F8BBE88B2C64047A00E6F3C0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F8BBE8672C64047800E6F3C0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F8BBE86E2C64047800E6F3C0;
-			remoteInfo = Budgetary;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,7 +38,6 @@
 /* Begin PBXFileReference section */
 		F8BBE86F2C64047800E6F3C0 /* Budgetary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Budgetary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8BBE8802C64047A00E6F3C0 /* BudgetaryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetaryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F8BBE88A2C64047A00E6F3C0 /* BudgetaryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetaryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -61,7 +53,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F8BBE8712C64047800E6F3C0 /* Budgetary */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F879A0B72DC4F2390081811E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Budgetary; sourceTree = "<group>"; };
 		F8BBE8832C64047A00E6F3C0 /* BudgetaryTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BudgetaryTests; sourceTree = "<group>"; };
-		F8BBE88D2C64047A00E6F3C0 /* BudgetaryUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BudgetaryUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,13 +67,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F8BBE87D2C64047A00E6F3C0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F8BBE8872C64047A00E6F3C0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -104,7 +88,6 @@
 			children = (
 				F8BBE8712C64047800E6F3C0 /* Budgetary */,
 				F8BBE8832C64047A00E6F3C0 /* BudgetaryTests */,
-				F8BBE88D2C64047A00E6F3C0 /* BudgetaryUITests */,
 				F869AE972C91782E0077F4D9 /* Frameworks */,
 				F8BBE8702C64047800E6F3C0 /* Products */,
 			);
@@ -115,7 +98,6 @@
 			children = (
 				F8BBE86F2C64047800E6F3C0 /* Budgetary.app */,
 				F8BBE8802C64047A00E6F3C0 /* BudgetaryTests.xctest */,
-				F8BBE88A2C64047A00E6F3C0 /* BudgetaryUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -172,29 +154,6 @@
 			productReference = F8BBE8802C64047A00E6F3C0 /* BudgetaryTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F8BBE8892C64047A00E6F3C0 /* BudgetaryUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F8BBE89A2C64047A00E6F3C0 /* Build configuration list for PBXNativeTarget "BudgetaryUITests" */;
-			buildPhases = (
-				F8BBE8862C64047A00E6F3C0 /* Sources */,
-				F8BBE8872C64047A00E6F3C0 /* Frameworks */,
-				F8BBE8882C64047A00E6F3C0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F8BBE88C2C64047A00E6F3C0 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				F8BBE88D2C64047A00E6F3C0 /* BudgetaryUITests */,
-			);
-			name = BudgetaryUITests;
-			packageProductDependencies = (
-			);
-			productName = BudgetaryUITests;
-			productReference = F8BBE88A2C64047A00E6F3C0 /* BudgetaryUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -209,10 +168,6 @@
 						CreatedOnToolsVersion = 16.0;
 					};
 					F8BBE87F2C64047A00E6F3C0 = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = F8BBE86E2C64047800E6F3C0;
-					};
-					F8BBE8892C64047A00E6F3C0 = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = F8BBE86E2C64047800E6F3C0;
 					};
@@ -238,7 +193,6 @@
 			targets = (
 				F8BBE86E2C64047800E6F3C0 /* Budgetary */,
 				F8BBE87F2C64047A00E6F3C0 /* BudgetaryTests */,
-				F8BBE8892C64047A00E6F3C0 /* BudgetaryUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -252,13 +206,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F8BBE87E2C64047A00E6F3C0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F8BBE8882C64047A00E6F3C0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -282,13 +229,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F8BBE8862C64047A00E6F3C0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -296,11 +236,6 @@
 			isa = PBXTargetDependency;
 			target = F8BBE86E2C64047800E6F3C0 /* Budgetary */;
 			targetProxy = F8BBE8812C64047A00E6F3C0 /* PBXContainerItemProxy */;
-		};
-		F8BBE88C2C64047A00E6F3C0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F8BBE86E2C64047800E6F3C0 /* Budgetary */;
-			targetProxy = F8BBE88B2C64047A00E6F3C0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -526,9 +461,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.0;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.phillipbaker.BudgetaryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -538,7 +474,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Budgetary.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Budgetary";
-				XROS_DEPLOYMENT_TARGET = 2.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -549,9 +485,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.0;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.phillipbaker.BudgetaryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -561,51 +498,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Budgetary.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Budgetary";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		F8BBE89B2C64047A00E6F3C0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.phillipbaker.BudgetaryUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = Budgetary;
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		F8BBE89C2C64047A00E6F3C0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.phillipbaker.BudgetaryUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = Budgetary;
-				XROS_DEPLOYMENT_TARGET = 2.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -635,15 +528,6 @@
 			buildConfigurations = (
 				F8BBE8982C64047A00E6F3C0 /* Debug */,
 				F8BBE8992C64047A00E6F3C0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F8BBE89A2C64047A00E6F3C0 /* Build configuration list for PBXNativeTarget "BudgetaryUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F8BBE89B2C64047A00E6F3C0 /* Debug */,
-				F8BBE89C2C64047A00E6F3C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

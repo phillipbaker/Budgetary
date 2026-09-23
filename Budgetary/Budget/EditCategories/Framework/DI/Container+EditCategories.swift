@@ -18,8 +18,9 @@ extension Container {
     
     // MARK: View Model
 
+    @MainActor
     var editCategoriesViewModel: Factory<EditCategoriesViewModel> {
-        self { EditCategoriesViewModel() }
+        self { @MainActor in EditCategoriesViewModel() }
             .singleton
     }
     
@@ -42,10 +43,10 @@ extension Container {
     
     // MARK: Use Cases & Date Sources
     
-    var loadCategoryGroupsUseCase: Factory<LoadCategoryGroupsUseCase> {
-        self { LoadCategoryGroupsUseCase() }
-            .singleton
-    }
+//    var loadCategoryGroupsUseCase: Factory<LoadCategoryGroupsUseCase> {
+//        self { LoadCategoryGroupsUseCase() }
+//            .singleton
+//    }
     
     var loadCategoryGroupsSource: Factory<LoadCategoryGroupsSource> {
         self { LoadCategoryGroupsDataSource() }

@@ -13,19 +13,22 @@ struct AccountsRootView: View {
     
     var body: some View {
         Group {
-            switch viewModel.state {
-            case .error:
-                Text("Accounts Error")
+            switch viewModel.viewState {
+            case .notLoaded:
+                EmptyView() // TODO: - Need to figure out notLoaded -> Loading everywhere
             case .loading:
                 ProgressView()
-            case .success(let accounts):
-                NavigationStack {
-                    AccountsListView(accounts: accounts)
-                }
+            case .error(let error):
+                Text(error.localizedDescription)
+            case .loaded(let accountsPresentationState):
+                AccountsView(
+                    state: accountsPresentationState,
+                    action: viewModel.handle
+                )
             }
         }
-        .task {
-            viewModel.handle(intent: .getAccounts)
+        .onAppear {
+            viewModel.handle(action: .accountsTabAppeared)
         }
     }
 }

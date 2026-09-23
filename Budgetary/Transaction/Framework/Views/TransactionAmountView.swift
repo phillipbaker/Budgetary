@@ -8,86 +8,49 @@
 import SwiftUI
 
 struct TransactionAmountView: View {
-    @Binding var localValues: Operands
-    let currencyCode: String
-    @Binding var transactionType: TransactionType
-    @FocusState var focusedField: TransactionDetailViewModel.FocusedField?
+    @Bindable var model: TransactionAmountViewModel
+    @FocusState var focusedField: TransactionView.FocusedField?
     
     let onAppear: () -> Void
-    let onEquals: () -> Void
-    let onSubmit: () -> Void
-    let onOperation: (String) -> Void
-    let onPrimaryOperandTextChanged: (String) -> Void
-    let onSecondaryOperandTextChanged: (String) -> Void
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 8) {
             CurrencyTextField(
-                text: $localValues.primary,
-                currencyCode: currencyCode,
-                onEquals: {},
-                onSubmit: onSubmit,
-                onCancel: {},
-                onOperation: onOperation,
-                onTextChanged: onPrimaryOperandTextChanged,
-                textColor: UIColor(transactionType == .outflow ? .red : .green),
-                textStyle: .largeTitle,
-                fontWeight: .semibold,
-                textAlignment: .center,
-                cancelButtonIsPresented: false,
-                navigationRowIsPresented: false,
-                destination: { _ in }
+                value: $model.primary,
+                onSubmit: model.onSubmit,
+                onOperation: model.onOperation,
+                onTextChanged: model.updatePrimary,
+                textColor: model.transactionType.uiColor,
+                primaryIsNegative: model.primaryIsNegative
             )
             .focused($focusedField, equals: .primaryOperand)
             
-            if !self.localValues.operation.isEmpty {
-                HStack(spacing: 0) {
-                    Text(localValues.operation)
+            if !model.operationString.isEmpty {
+                HStack(spacing: 8) {
+                    Text(model.operationString)
                         .font(.largeTitle)
-                        .foregroundStyle(transactionType == .outflow ? .red : .green)
                         .fontWeight(.semibold)
+                        .foregroundStyle(model.transactionType.color)
                     CurrencyTextField(
-                        text: $localValues.secondary,
-                        currencyCode: currencyCode,
-                        onEquals: onEquals,
-                        onSubmit: onSubmit,
-                        onCancel: {},
-                        onOperation: onOperation,
-                        onTextChanged: onSecondaryOperandTextChanged,
-                        textColor: UIColor(transactionType == .outflow ? .red : .green),
-                        textStyle: .largeTitle,
-                        fontWeight: .semibold,
-                        textAlignment: .center,
-                        cancelButtonIsPresented: false,
-                        navigationRowIsPresented: false,
-                        destination: { _ in }
+                        value: $model.secondary,
+                        onEquals: model.onEquals,
+                        onSubmit: model.onSubmit,
+                        onOperation: model.onOperation,
+                        onTextChanged: model.updateSecondary,
+                        onDeleteWhileEmpty: model.onDeleteWhileEmpty,
+                        textColor: model.transactionType.uiColor
                     )
                     .focused($focusedField, equals: .secondaryOperand)
                 }
             }
         }
-        .listRowSeparator(.hidden)
-        .listRowBackground(Color.clear)
+        .frame(maxWidth: .infinity)
         .onAppear {
             onAppear()
-            
-            if self.transactionType == .outflow, !self.localValues.primary.hasPrefix("-") {
-                self.localValues.primary.insert("-", at: self.localValues.primary.startIndex)
-            }
         }
     }
 }
 
 #Preview {
-    TransactionAmountView(
-        localValues: .constant(.init(primary: "", secondary: "", operation: "")),
-        currencyCode: "GBP",
-        transactionType: .constant(.outflow),
-        onAppear: {},
-        onEquals: {},
-        onSubmit: {},
-        onOperation: { _ in },
-        onPrimaryOperandTextChanged: { _ in },
-        onSecondaryOperandTextChanged: { _ in }
-    )
+    TransactionAmountView(model: .init(), onAppear: {})
 }

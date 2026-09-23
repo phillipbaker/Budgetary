@@ -11,14 +11,14 @@ final class HideCategoryUseCase {
     let source: HideCategorySource = Container.shared.hideCategorySource()
     let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-    func hide(categoryWithId categoryId: String) async {
-        guard let categoryGroup = await source.findCategoryGroup(containing: categoryId) else {
+    func hide(categoryWithID categoryID: ID<CategoryRow>) async {
+        guard let categoryGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else {
             // throw error
             print("could not find category group matching provided id")
             return
         }
         
-        guard let category = categoryGroup.categories.first(where: { $0.id == categoryId }) else {
+        guard let category = categoryGroup.categories.first(where: { $0.id == ID<CategoryPlain>(categoryID) }) else {
             // throw error
             print("could not find category matching provided id")
             return

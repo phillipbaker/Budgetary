@@ -10,12 +10,12 @@ import XCTestDynamicOverlay
 
 @Observable
 final class CoverOverspendingFromModel: Identifiable {
-    var id: String
+    var id: UUID
     var selectedMonthYear: MonthYear
     var moneyAvailableCategoryGroups: [CategoryGroupPresentation]
     var filteredMoneyAvailableCategoryGroups: [CategoryGroupPresentation]
     
-    var addCoverFromCategory: (CategoryPresentation) -> Void = unimplemented("CoverOverspendingFromModel.addCoverFromCategory")
+    var addCoverFromCategory: (CategoryRowPresentation<CategoryAssignedPresentation, CategoryActivityPresentation, CategoryAvailablePresentation>) -> Void = unimplemented("CoverOverspendingFromModel.addCoverFromCategory")
     
     var searchText: String = "" {
         didSet {
@@ -28,7 +28,7 @@ final class CoverOverspendingFromModel: Identifiable {
     }
     
     init(
-        id: String = UUID().uuidString,
+        id: UUID = .init(),
         selectedMonthYear: MonthYear,
         moneyAvailableCategoryGroups: [CategoryGroupPresentation]
     ) {
@@ -38,7 +38,7 @@ final class CoverOverspendingFromModel: Identifiable {
         self.filteredMoneyAvailableCategoryGroups = moneyAvailableCategoryGroups
     }
     
-    func selectCategoryButtonTapped(for category: CategoryPresentation) {
+    func selectCategoryButtonTapped(for category: CategoryRowPresentation<CategoryAssignedPresentation, CategoryActivityPresentation, CategoryAvailablePresentation>) {
         addCoverFromCategory(category)
     }
 }

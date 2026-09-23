@@ -10,7 +10,7 @@ import CoreTransferable
 import UniformTypeIdentifiers
 
 public struct EditableCategoryPresentation: Equatable, Identifiable, Sendable {
-    public let id: String
+    public let id: ID<EditableCategoryPresentation>
     let name: String
 }
 

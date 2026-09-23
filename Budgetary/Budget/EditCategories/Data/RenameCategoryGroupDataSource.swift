@@ -10,7 +10,7 @@ import Factory
 class RenameGroupDataSource: RenameGroupSource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
-    func findCategoryGroup(by id: String) async -> CategoryGroupPlain? {
+    func findCategoryGroup(by id: ID<CategoryGroupPlain>) async -> CategoryGroupPlain? {
         await categoryGroupsDataSourceLocal.findCategoryGroup(by: id)
     }
     

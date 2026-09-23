@@ -7,10 +7,10 @@
 
 import Factory
 
-class NewGroupDataSource: NewGroupSource {
+final class NewGroupDataSource: NewGroupSource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
 
     func addNew(categoryGroup: CategoryGroupPlain) async {
-        await categoryGroupsDataSourceLocal.addNew(categoryGroup: categoryGroup)
+        await categoryGroupsDataSourceLocal.create(categoryGroup: categoryGroup)
     }
 }

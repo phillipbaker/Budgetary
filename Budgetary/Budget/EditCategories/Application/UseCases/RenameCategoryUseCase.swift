@@ -11,13 +11,13 @@ final class RenameCategoryUseCase {
     let source: RenameCategorySource = Container.shared.renameCategorySource()
     let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-    func rename(categoryWithId id: String, to newName: String) async {
-        guard let categoryGroupPlain = await source.findCategoryGroup(containing: id) else {
+     func rename(categoryWithID id: ID<EditableCategoryPresentation>, to newName: String) async {
+        guard let categoryGroupPlain = await source.findCategoryGroup(containing: ID<CategoryPlain>(id)) else {
             print("no category group containing category found")
             return
         }
         
-        guard let categoryPlain = categoryGroupPlain.categories.first(where: { $0.id == id }) else {
+        guard let categoryPlain = categoryGroupPlain.categories.first(where: { $0.id == ID<CategoryPlain>(id) }) else {
             print("no category in returned group with id")
             return
         }

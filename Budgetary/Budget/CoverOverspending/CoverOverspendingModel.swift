@@ -9,11 +9,11 @@ import SwiftUI
 
 //@Observable
 //final class CoverOverspendingModel: Identifiable {
-//    var id: String = UUID().uuidString
-//    
+//    var id: UUID = .init()
+//
 //    var selectedMonthYear: MonthYear
-//    var categoryToCover: CategoryPresentation?
-//    var selectedCoverFromCategories: [CategoryPresentation]
+//    var categoryToCover: CategoryRowPresentation?
+//    var selectedCoverFromCategories: [CategoryRowPresentation]
 //    var categoryGroups: [CategoryGroupPresentation]
 //    
 //    var totalToMove: String {
@@ -35,8 +35,8 @@ import SwiftUI
 //    
 //    init(
 //        selectedMonthYear: MonthYear,
-//        categoryToCover: CategoryPresentation? = nil,
-//        selectedCoverFromCategories: [CategoryPresentation] = [],
+//        categoryToCover: CategoryRowPresentation? = nil,
+//        selectedCoverFromCategories: [CategoryRowPresentation] = [],
 //        categoryGroups: [CategoryGroupPresentation],
 //        destination: Destination? = nil
 //    ) {

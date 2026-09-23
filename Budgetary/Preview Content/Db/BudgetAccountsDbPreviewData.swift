@@ -7,138 +7,109 @@
 
 import Foundation
 
-extension Array where Element == BudgetAccountDb {
-    static let mock = [BudgetAccountDb.hsbcChecking, .account2, .account3, .account4]
+extension UUID {
+    static let hsbcChecking: Self = .init(uuidString: "00000000-0000-0000-0000-000000000001")!
+    static let barclays: Self = .init(uuidString: "00000000-0000-0000-0000-000000000002")!
+    static let hsbcSavings: Self = .init(uuidString: "00000000-0000-0000-0000-000000000003")!
+    static let capitalOneCard: Self = .init(uuidString: "00000000-0000-0000-0000-000000000004")!
 }
 
-extension BudgetAccountDb: @unchecked Sendable {
-    static let hsbcChecking = BudgetAccountDb(
-        id: "1",
+extension Array where Element == BudgetAccountDb {
+    nonisolated(unsafe) static let mock = [BudgetAccountDb.hsbcChecking, .barclays, .hsbcSavings, .capitalOneCard]
+}
+
+extension BudgetAccountDb {
+    nonisolated(unsafe) static let hsbcChecking = BudgetAccountDb(
+        externalID: .hsbcChecking,
         name: "HSBC Checking",
-        accountType: .budget,
+        accountType: .checking,
         startingBalance: 0.0,
         notes: "Notes go here...",
         isClosed: false,
         transactions: [
             TransactionDb(
-                id: "97",
+                externalID: .init(),
                 date: .sepEigth2024,
                 memo: "",
                 amount: .inflow(100),
                 isCleared: true,
-                payeeId: "4",
-                categoryId: "16"
+                payeeID: .init(),
+                categoryID: .init()
             ),
             TransactionDb(
-                id: "98",
+                externalID: .init(),
                 date: .octEigth2024,
                 memo: "",
                 amount: .inflow(100),
                 isCleared: true,
-                payeeId: "4",
-                categoryId: "17"
+                payeeID: .init(),
+                categoryID: .init()
             ),
             TransactionDb(
-                id: "99",
+                externalID: .init(),
                 date: .novEigth2024,
                 memo: "",
                 amount: .inflow(1000),
                 isCleared: true,
-                payeeId: "4",
-                categoryId: "23"
+                payeeID: .init(),
+                categoryID: .init()
             ),
             TransactionDb(
-                id: "100",
+                externalID: .init(),
                 date: .decEigth2024,
                 memo: "",
                 amount: .inflow(100),
                 isCleared: true,
-                payeeId: "4",
-                categoryId: "24"
+                payeeID: .init(),
+                categoryID: .init()
             ),
             TransactionDb(
-                id: "1",
+                externalID: .init(),
                 date: .octEigth2024,
                 memo: "",
                 amount: .outflow(40),
                 isCleared: true,
-                payeeId: "1",
-                categoryId: "28"
+                payeeID: .init(),
+                categoryID: .init()
             ),
             TransactionDb(
-                id: "1",
+                externalID: .init(),
                 date: .novEigth2024,
                 memo: "Memo goes here...",
                 amount: .outflow(500),
                 isCleared: true,
-                payeeId: "29",
-                categoryId: "1"
+                payeeID: .init(),
+                categoryID: .init()
             )
-//            TransactionDb(
-//                id: "3",
-//                date: .octEigth2024,
-//                payeeId: "1",
-//                categoryId: "1",
-//                memo: "Memo goes here...",
-//                amount: .outflow(2350),
-//                isCleared: true
-//            ),
-//            TransactionDb(
-//                id: "4",
-//                date: .augEigth2024,
-//                payeeId: "2",
-//                categoryId: "2",
-//                memo: "No memo...",
-//                amount: .outflow(300),
-//                isCleared: true
-//            ),
-//            TransactionDb(
-//                id: "5",
-//                date: .sepEigth2024,
-//                payeeId: "2",
-//                categoryId: "2",
-//                memo: "No memo...",
-//                amount: .outflow(300),
-//                isCleared: true
-//            ),
-//            TransactionDb(
-//                id: "6",
-//                date: .octEigth2024,
-//                payeeId: "2",
-//                categoryId: "2",
-//                memo: "",
-//                amount: .outflow(300),
-//                isCleared: true
-//            ),
         ]
     )
     
-    static let account2 = BudgetAccountDb(
-        id: "2",
-        name: "Account 2",
-        accountType: .budget,
+    nonisolated(unsafe) static let barclays = BudgetAccountDb(
+        externalID: .barclays,
+        name: "Barclays",
+        accountType: .checking,
+        startingBalance: 0.00,
+        notes: "Notes",
+        isClosed: false,
+        transactions: []
+    )
+
+    nonisolated(unsafe) static let hsbcSavings = BudgetAccountDb(
+        externalID: .hsbcSavings,
+        name: "HSBC Savings",
+        accountType: .savings,
         startingBalance: 0.00,
         notes: "Notes",
         isClosed: false,
         transactions: []
     )
     
-    static let account3 = BudgetAccountDb(
-        id: "3",
-        name: "Account 3",
-        accountType: .budget,
+    nonisolated(unsafe) static let capitalOneCard = BudgetAccountDb(
+        externalID: .capitalOneCard,
+        name: "Capital One Card",
+        accountType: .creditCard,
         startingBalance: 0.00,
-        notes: "Notes",
-        isClosed: false,
-        transactions: []
-    )
-    
-    static let account4 = BudgetAccountDb(
-        id: "4",
-        name: "Account 4",
-        accountType: .budget,
-        startingBalance: 0.00,
-        notes: "Notes",
+        notes: "",
         isClosed: false,
         transactions: []
     )

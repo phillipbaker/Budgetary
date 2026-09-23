@@ -11,31 +11,62 @@ extension Container {
     
     // MARK: View Model
     
-    var transactionDetailViewModel: ParameterFactory<(TransactionPresentation?, Bool), TransactionDetailViewModel> {
-        self { TransactionDetailViewModel(transaction: $0, isNewTransaction: $1) }
-    }
-    
-    var payeePickerViewModel: Factory<PayeePickerViewModel> {
-        self { PayeePickerViewModel() }
+    @MainActor
+    var transactionViewModel: Factory<TransactionViewModel> {
+        self { @MainActor in TransactionViewModel() }
             .singleton
     }
     
-    var categoryPickerViewModel: Factory<CategoryPickerViewModel> {
-        self { CategoryPickerViewModel() }
+    @MainActor
+    var amountViewModel: Factory<TransactionAmountViewModel> {
+        self { @MainActor in TransactionAmountViewModel() }
             .singleton
     }
     
-    var accountPickerViewModel: Factory<AccountPickerViewModel> {
-        self { AccountPickerViewModel() }
-            .singleton
+    @MainActor
+    var newCategoryViewModel: ParameterFactory<(String, (TransactionCategoryPresentation) -> Void, () -> Void), NewCategoryViewModel> {
+        self { @MainActor params in
+            NewCategoryViewModel(
+                newCategoryName: params.0,
+                onCategoryCreated: params.1,
+                onCancel: params.2
+            )
+        }
+        .shared
     }
+    
+    
+    @MainActor
+    var newCategoryGroupViewModel: ParameterFactory<((CategoryGroupNamePresentation) -> Void, () -> Void), NewCategoryGroupViewModel> {
+        self { @MainActor params in
+            NewCategoryGroupViewModel(
+                onGroupCreated: params.0,
+                onCancel: params.1
+            )
+        }
+    }
+
+//    var payeePickerViewModel: Factory<PayeePickerViewModel> {
+//        self { PayeePickerViewModel() }
+//            .singleton
+//    }
+    
+//    var categoryPickerViewModel: Factory<CategoryPickerViewModel> {
+//        self { CategoryPickerViewModel() }
+//            .singleton
+//    }
+    
+//    var accountPickerViewModel: Factory<AccountPickerViewModel> {
+//        self { AccountPickerViewModel() }
+//            .singleton
+//    }
     
     // MARK: Mappers
     
-    var payeesStateMapper: Factory<PayeesStateMapper> {
-        self { PayeesStateMapper() }
-            .singleton
-    }
+//    var payeesStateMapper: Factory<PayeesStateMapper> {
+//        self { PayeesStateMapper() }
+//            .singleton
+//    }
     
     var payeeMapper: Factory<PayeeMapper> {
         self { PayeeMapper() }
@@ -47,10 +78,10 @@ extension Container {
             .singleton
     }
     
-    var categoriesStateMapper: Factory<CategoriesStateMapper> {
-        self { CategoriesStateMapper() }
-            .singleton
-    }
+//    var categoriesStateMapper: Factory<CategoriesStateMapper> {
+//        self { CategoriesStateMapper() }
+//            .singleton
+//    }
     
     var categoriesPresentationMapper: Factory<CategoriesPresentationMapper> {
         self { CategoriesPresentationMapper() }
@@ -64,23 +95,13 @@ extension Container {
     
     // MARK: Use Cases & Data Sources
     
-    var addTransactionUseCase: Factory<AddTransactionUseCase> {
-        self { AddTransactionUseCase() }
+    var saveTransactionUseCase: Factory<SaveTransactionUseCase> {
+        self { SaveTransactionUseCase() }
             .singleton
     }
     
-    var addTransactionSource: Factory<AddTransactionSource> {
+    var saveTransactionSource: Factory<SaveTransactionSource> {
         self { AddTransactionDataSource() }
-            .singleton
-    }
-    
-    var updateTransactionUseCase: Factory<UpdateTransactionUseCase> {
-        self { UpdateTransactionUseCase() }
-            .singleton
-    }
-    
-    var updateTransactionSource: Factory<UpdateTransactionSource> {
-        self { UpdateTransactionDataSource() }
             .singleton
     }
     
@@ -94,8 +115,8 @@ extension Container {
             .singleton
     }
     
-    var getPayeesUseCase: Factory<GetPayeesUseCase> {
-        self { GetPayeesUseCase() }
+    var loadPayeesUseCase: Factory<LoadPayeesUseCase> {
+        self { LoadPayeesUseCase() }
             .singleton
     }
     
@@ -113,8 +134,8 @@ extension Container {
         self { NewPayeeDataSource() }
     }
     
-    var getCategoryGroupsUseCase: Factory<GetCategoryGroupsUseCase> {
-        self { GetCategoryGroupsUseCase() }
+    var loadCategoryGroupsUseCase: Factory<LoadCategoryGroupsUseCase> {
+        self { LoadCategoryGroupsUseCase() }
             .singleton
     }
     
@@ -125,11 +146,6 @@ extension Container {
     
     var getTransactionAccountsUseCase: Factory<GetTransactionAccountsUseCase> {
         self { GetTransactionAccountsUseCase() }
-            .singleton
-    }
-    
-    var getAccountsSource: Factory<GetAccountsSource> {
-        self { GetAccountsDataSource() }
             .singleton
     }
 }

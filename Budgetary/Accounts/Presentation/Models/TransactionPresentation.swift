@@ -8,12 +8,13 @@
 import Foundation
 
 public struct TransactionPresentation: Equatable, Hashable, Identifiable, Sendable {
-    public let id: String
+    public let id: ID<TransactionPresentation>
     let date: Date
     let memo: String
     let amount: AmountPresentation
     let isCleared: Bool
     let payee: PayeePresentation?
     let category: TransactionCategoryPresentation? 
-    let account: TransactionAccountPresentation?
+    let account: TransactionAccountPresentation
+    let linkedTransactionID: UUID?
 }

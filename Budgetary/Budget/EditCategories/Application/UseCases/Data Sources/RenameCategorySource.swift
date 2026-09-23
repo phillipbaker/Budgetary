@@ -6,6 +6,6 @@
 //
 
 public protocol RenameCategorySource {
-    func findCategoryGroup(containing categoryId: String) async -> CategoryGroupPlain?
+    func findCategoryGroup(containing categoryID: ID<CategoryPlain>) async -> CategoryGroupPlain?
     func update(categoryGroup: CategoryGroupPlain) async
 }

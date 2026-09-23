@@ -9,7 +9,7 @@ import Foundation
 
 extension CategoryGroupPresentation: @unchecked Sendable {
     static let obligations = CategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Immediate Obligations",
         isHidden: false,
         assignedTotal: [.currentMonthYear:"£90,090.62"],
@@ -27,7 +27,7 @@ extension CategoryGroupPresentation: @unchecked Sendable {
     )
     
     static let trueExpenses = CategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "True Expenses",
         isHidden: false,
         assignedTotal: [:],
@@ -46,7 +46,7 @@ extension CategoryGroupPresentation: @unchecked Sendable {
     )
     
     static let monthlyExpenses = CategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Monthly Expenses",
         isHidden: false,
         assignedTotal: [:],
@@ -70,7 +70,7 @@ extension CategoryGroupPresentation: @unchecked Sendable {
     )
     
     static let fun = CategoryGroupPresentation(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Fun",
         isHidden: false,
         assignedTotal: [:],

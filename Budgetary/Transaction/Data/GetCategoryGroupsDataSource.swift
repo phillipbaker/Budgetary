@@ -11,6 +11,6 @@ final class GetCategoryGroupsDataSource: GetCategoryGroupsSource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
     func getCategoryGroups() async -> [CategoryGroupPlain] {
-        return await categoryGroupsDataSourceLocal.allCategoryGroups()
+        return await categoryGroupsDataSourceLocal.categoryGroups()
     }
 }

@@ -8,8 +8,29 @@
 import Foundation
 
 public final class PayeePresentationMapper {
+    func map(payees: [Payee]) -> PayeePickerDataPresentation {
+        let transferPayees = payees.filter { payee in
+            if case .transfer = payee.type { return true }
+            return false
+        }
+        
+        return PayeePickerDataPresentation(
+            id: .init(),
+            alphabeticalPayees: map(payees: payees),
+            transferPayees: transferPayees.map { map(payee: $0) }
+        )
+    }
+    
     func map(payees: [Payee]) -> [PayeeName] {
-        let grouped = Dictionary(grouping: payees, by: { $0.name.prefix(1) })
+        let regularPayees = payees.filter { payee in
+            if case .regular = payee.type { return true }
+            return false
+        }
+        let includedRegularPayees = regularPayees.filter { payee in
+            payee.includedInPayeeList == true
+        }
+        
+        let grouped = Dictionary(grouping: includedRegularPayees, by: { $0.name.prefix(1) })
         let sorted = grouped.sorted { $0.key < $1.key }
 
         return sorted.map { letter, payees in
@@ -17,7 +38,7 @@ public final class PayeePresentationMapper {
                 map(payee: payee)
             }
             return PayeeName(
-                id: UUID().uuidString,
+                id: .init(),
                 letter: String(letter),
                 payees: mapped.sorted { $0.name < $1.name } // Sorts payees alphabetically within letter sections
             )
@@ -25,6 +46,17 @@ public final class PayeePresentationMapper {
     }
     
     func map(payee: Payee) -> PayeePresentation {
-        return PayeePresentation(id: payee.id, name: payee.name)
+        return PayeePresentation(
+            id: ID<PayeePresentation>(payee.id),
+            name: payee.name,
+            type: map(payeeType: payee.type)
+        )
+    }
+    
+    func map(payeeType: PayeeType) -> PayeeTypePresentation {
+        switch payeeType {
+        case .regular: .regular
+        case .transfer(let accountID): .transfer(ID<BudgetAccountPresentation>(accountID))
+        }
     }
 }

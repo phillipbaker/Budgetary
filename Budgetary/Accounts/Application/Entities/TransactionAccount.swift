@@ -6,6 +6,6 @@
 //
 
 public struct TransactionAccount: Equatable, Hashable, Identifiable, Sendable {
-    public let id: String
+    public let id: ID<TransactionAccount>
     let name: String
 }

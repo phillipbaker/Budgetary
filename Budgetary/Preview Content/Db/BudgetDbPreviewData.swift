@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension BudgetDb: @unchecked Sendable {
-    static let mock = BudgetDb(
-        id: UUID().uuidString,
+extension BudgetDb {
+    @MainActor static let mock = BudgetDb(
+        externalID: .init(),
         settings: BudgetSettingsDb(
             name: "UK Budget",
             curreny: "GBR",
@@ -17,7 +17,7 @@ extension BudgetDb: @unchecked Sendable {
             numberFormat: "",
             dateFormat: ""
         ),
-        budgetAccountIds: ["1", "2", "3"],
-        categoryGroupIds: ["1", "2", "3", "4"]
+        budgetAccountIDs: [.init(), .init(), .init()],
+        categoryGroupIDs: [.init(), .init(), .init()]
     )
 }

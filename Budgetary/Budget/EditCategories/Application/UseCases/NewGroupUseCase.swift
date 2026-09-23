@@ -8,16 +8,15 @@
 import Factory
 import Foundation
 
-final class NewGroupUseCase {
+final class NewGroupUseCase: Sendable {
     let source: NewGroupSource = Container.shared.newGroupSource()
     let mapper: BudgetMapper = Container.shared.budgetMapper()
     
-    func addNew(group name: String) async {
-        let newGroup = CategoryGroupEntity(
-            id: UUID().uuidString,
+    func execute(for name: String) async {
+        let newGroup = CategoryGroup(
+            id: .init(),
             name: name,
             isHidden: false,
-            assignedTotal: [:],
             categories: []
         )
         await source.addNew(categoryGroup: mapper.map(categoryGroup: newGroup))

@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension Array where Element == TransactionEntity {
-    static let preview: [TransactionEntity] = [
+extension Array where Element == BudgetTransaction {
+    static let preview: [BudgetTransaction] = [
         .augSalary,
         .augRent,
         .augCouncilTax,
@@ -42,441 +42,484 @@ extension Array where Element == TransactionEntity {
     ].sorted { $0.date < $1.date }
 }
 
-extension TransactionEntity {
+extension TransactionAccount {
+    static let hsbc = TransactionAccount(id: .init(), name: "HSBC")
+}
+
+extension BudgetTransaction {
     // August 2024
     
-    static let augSalary = TransactionEntity(
-        id: "",
+    static let augSalary = BudgetTransaction(
+        id: .init(),
         date: .augEigth2024,
         memo: "",
         amount: .inflow(1000),
         isCleared: true,
         payee: .reorg,
         category: .readyToAssign,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augRent = TransactionEntity(
-        id: "",
+    static let augRent = BudgetTransaction(
+        id: .init(),
         date: .augEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .anthonyMartin,
         category: .rent,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
 
     )
     
-    static let augCouncilTax = TransactionEntity(
-        id: "",
+    static let augCouncilTax = BudgetTransaction(
+        id: .init(),
         date: .augNinth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .bexley,
         category: .councilTax,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augUtilities = TransactionEntity(
-        id: "",
+    static let augUtilities = BudgetTransaction(
+        id: .init(),
         date: .augNinth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .eonNext,
         category: .utilities,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augWater = TransactionEntity(
-        id: "",
+    static let augWater = BudgetTransaction(
+        id: .init(),
         date: .augTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .thamesWater,
         category: .water,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augInternet = TransactionEntity(
-        id: "",
+    static let augInternet = BudgetTransaction(
+        id: .init(),
         date: .augFourteenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .plusnet,
         category: .internet,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augTvLicense = TransactionEntity(
-        id: "",
+    static let augTvLicense = BudgetTransaction(
+        id: .init(),
         date: .augTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .tvLicence,
         category: .tvLicense,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augCellPhones = TransactionEntity(
-        id: "",
+    static let augCellPhones = BudgetTransaction(
+        id: .init(),
         date: .augTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .giffGaff,
         category: .cellPhones,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augGroceries1 = TransactionEntity(
-        id: "",
+    static let augGroceries1 = BudgetTransaction(
+        id: .init(),
         date: .augEigth2024,
         memo: "",
         amount: .outflow(300),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augGroceries2 = TransactionEntity(
-        id: "",
+    static let augGroceries2 = BudgetTransaction(
+        id: .init(),
         date: .augEigth2024,
         memo: "",
         amount: .outflow(200),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augGroceries3 = TransactionEntity(
-        id: "",
+    static let augGroceries3 = BudgetTransaction(
+        id: .init(),
         date: .augTenth2024,
         memo: "",
         amount: .outflow(200),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augGroceries4 = TransactionEntity(
-        id: "",
+    static let augGroceries4 = BudgetTransaction(
+        id: .init(),
         date: .augFourteenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let augGroceries5 = TransactionEntity(
-        id: "",
+    static let augGroceries5 = BudgetTransaction(
+        id: .init(),
         date: .augEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
     // September 2024
     
-    static let sepSalary = TransactionEntity(
-        id: "",
+    static let sepSalary = BudgetTransaction(
+        id: .init(),
         date: .sepEigth2024,
         memo: "",
         amount: .inflow(1000),
         isCleared: true,
         payee: .reorg,
         category: .readyToAssign,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepRent = TransactionEntity(
-        id: "",
+    static let sepRent = BudgetTransaction(
+        id: .init(),
         date: .sepEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .anthonyMartin,
         category: .rent,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepCouncilTax = TransactionEntity(
-        id: "",
+    static let sepCouncilTax = BudgetTransaction(
+        id: .init(),
         date: .sepNinth2024,
         memo: "",
         amount: .outflow(0),
         isCleared: true,
         payee: .bexley,
         category: .councilTax,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepUtilities = TransactionEntity(
-        id: "",
+    static let sepUtilities = BudgetTransaction(
+        id: .init(),
         date: .sepNinth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .eonNext,
         category: .utilities,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepWater = TransactionEntity(
-        id: "",
+    static let sepWater = BudgetTransaction(
+        id: .init(),
         date: .sepTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .thamesWater,
         category: .water,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepInternet = TransactionEntity(
-        id: "",
+    static let sepInternet = BudgetTransaction(
+        id: .init(),
         date: .sepFourteenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .plusnet,
         category: .internet,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepTvLicense = TransactionEntity(
-        id: "",
+    static let sepTvLicense = BudgetTransaction(
+        id: .init(),
         date: .sepTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .tvLicence,
         category: .tvLicense,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepCellPhones = TransactionEntity(
-        id: "",
+    static let sepCellPhones = BudgetTransaction(
+        id: .init(),
         date: .sepTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .giffGaff,
         category: .cellPhones,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepGroceries1 = TransactionEntity(
-        id: "",
+    static let sepGroceries1 = BudgetTransaction(
+        id: .init(),
         date: .sepEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepGroceries2 = TransactionEntity(
-        id: "",
+    static let sepGroceries2 = BudgetTransaction(
+        id: .init(),
         date: .sepEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepGroceries3 = TransactionEntity(
-        id: "",
+    static let sepGroceries3 = BudgetTransaction(
+        id: .init(),
         date: .sepTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepGroceries4 = TransactionEntity(
-        id: "",
+    static let sepGroceries4 = BudgetTransaction(
+        id: .init(),
         date: .sepFourteenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let sepGroceries5 = TransactionEntity(
-        id: "",
+    static let sepGroceries5 = BudgetTransaction(
+        id: .init(),
         date: .sepEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
     // October 2024
     
-    static let octSalary = TransactionEntity(
-        id: "",
+    static let octSalary = BudgetTransaction(
+        id: .init(),
         date: .octEigth2024,
         memo: "",
         amount: .inflow(1000),
         isCleared: true,
         payee: .reorg,
         category: .readyToAssign,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octRent = TransactionEntity(
-        id: "",
+    static let octRent = BudgetTransaction(
+        id: .init(),
         date: .octEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .anthonyMartin,
         category: .rent,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
+        
     
-    static let octCouncilTax = TransactionEntity(
-        id: "",
+    static let octCouncilTax = BudgetTransaction(
+        id: .init(),
         date: .octNinth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .bexley,
         category: .councilTax,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octUtilities = TransactionEntity(
-        id: "",
+    static let octUtilities = BudgetTransaction(
+        id: .init(),
         date: .octNinth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .eonNext,
         category: .utilities,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octWater = TransactionEntity(
-        id: "",
+    static let octWater = BudgetTransaction(
+        id: .init(),
         date: .octTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .thamesWater,
         category: .water,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octInternet = TransactionEntity(
-        id: "",
+    static let octInternet = BudgetTransaction(
+        id: .init(),
         date: .octFourteenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .plusnet,
         category: .internet,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc, linkedTransactionID: nil
     )
     
-    static let octTvLicense = TransactionEntity(
-        id: "",
+    static let octTvLicense = BudgetTransaction(
+        id: .init(),
         date: .octTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .tvLicence,
         category: .tvLicense,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octCellPhones = TransactionEntity(
-        id: "",
+    static let octCellPhones = BudgetTransaction(
+        id: .init(),
         date: .octTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .giffGaff,
         category: .cellPhones,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octGroceries1 = TransactionEntity(
-        id: "",
+    static let octGroceries1 = BudgetTransaction(
+        id: .init(),
         date: .octEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octGroceries2 = TransactionEntity(
-        id: "",
+    static let octGroceries2 = BudgetTransaction(
+        id: .init(),
         date: .octEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octGroceries3 = TransactionEntity(
-        id: "",
+    static let octGroceries3 = BudgetTransaction(
+        id: .init(),
         date: .octTenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octGroceries4 = TransactionEntity(
-        id: "",
+    static let octGroceries4 = BudgetTransaction(
+        id: .init(),
         date: .octFourteenth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
     
-    static let octGroceries5 = TransactionEntity(
-        id: "",
+    static let octGroceries5 = BudgetTransaction(
+        id: .init(),
         date: .octEigth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
         payee: .sainsburys,
         category: .groceries,
-        account: TransactionAccount(id: "4", name: "HSBC")
+        account: .hsbc,
+        linkedTransactionID: nil
     )
 }
 
@@ -484,47 +527,47 @@ extension TransactionCategory {
     // August 2024
     
     static let readyToAssign = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Ready to Assign"
     )
     
     static let rent = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Rent"
     )
     
     static let councilTax = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Council Tax"
     )
     
     static let utilities = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Utilities"
     )
     
     static let water = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Water"
     )
     
     static let internet = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Internet"
     )
 
     static let tvLicense = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "TV License"
     )
     
     static let cellPhones = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Cell Phones"
     )
     
     static let groceries = TransactionCategory(
-        id: UUID().uuidString,
+        id: .init(),
         name: "Groceries"
     )
 }

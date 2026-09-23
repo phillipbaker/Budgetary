@@ -6,7 +6,7 @@
 //
 
 public struct BudgetAccountDetailPresentation: Equatable, Hashable, Sendable {
-    public let id: String
+    public let id: ID<BudgetAccountDetailPresentation>
     let name: String
     let balance: String
     let isSelected: Bool

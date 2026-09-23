@@ -10,8 +10,8 @@ import Factory
 final class RemoveCategoryDataSource: RemoveCategorySource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
-    func findCategoryGroup(containing categoryId: String) async -> CategoryGroupPlain? {
-        await categoryGroupsDataSourceLocal.findCategoryGroup(containing: categoryId)
+    func findCategoryGroup(containing categoryID: ID<CategoryPlain>) async -> CategoryGroupPlain? {
+        await categoryGroupsDataSourceLocal.findCategoryGroup(containing: categoryID)
     }
     
     func update(categoryGroup: CategoryGroupPlain) async {

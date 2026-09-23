@@ -5,10 +5,10 @@
 //  Created by Phillip Baker on 19/09/2024.
 //
 
-extension Category {
+extension CategoryRow {
     // MARK: - Category: Immediate Obligations
     
-    static let readyToAssign = Category(
+    static let readyToAssign = CategoryRow(
         id: .init(),
         name: "Ready To Assign",
         notes: "",
@@ -30,7 +30,7 @@ extension Category {
         )]
     )
     
-    static let rent = Category(
+    static let rent = CategoryRow(
         id: .init(),
         name: "Rent",
         notes: "",
@@ -40,7 +40,7 @@ extension Category {
         available: [:]
     )
     
-    static let councilTax = Category(
+    static let councilTax = CategoryRow(
         id: .init(),
         name: "Council Tax",
         notes: "",
@@ -50,7 +50,7 @@ extension Category {
         available: [:]
     )
     
-    static let utilities = Category(
+    static let utilities = CategoryRow(
         id: .init(),
         name: "Utilities",
         notes: "",
@@ -60,7 +60,7 @@ extension Category {
         available: [:]
     )
     
-    static let water = Category(
+    static let water = CategoryRow(
         id: .init(),
         name: "Water",
         notes: "",
@@ -70,7 +70,7 @@ extension Category {
         available: [:]
     )
     
-    static let internet = Category(
+    static let internet = CategoryRow(
         id: .init(),
         name: "Internet",
         notes: "",
@@ -80,7 +80,7 @@ extension Category {
         available: [:]
     )
     
-    static let tvLicense = Category(
+    static let tvLicense = CategoryRow(
         id: .init(),
         name: "TV License",
         notes: "",
@@ -90,7 +90,7 @@ extension Category {
         available: [:]
     )
     
-    static let cellPhones = Category(
+    static let cellPhones = CategoryRow(
         id: .init(),
         name: "Cell Phones",
         notes: "",
@@ -103,7 +103,7 @@ extension Category {
     
     // MARK: - Category: True Expenses
     
-    static let ynab = Category(
+    static let ynab = CategoryRow(
         id: .init(),
         name: "YNAB",
         notes: "",
@@ -113,7 +113,7 @@ extension Category {
         available: [:]
     )
     
-    static let birthdays = Category(
+    static let birthdays = CategoryRow(
         id: .init(),
         name: "Birthdays",
         notes: "",
@@ -123,7 +123,7 @@ extension Category {
         available: [:]
     )
     
-    static let christmas = Category(
+    static let christmas = CategoryRow(
         id: .init(),
         name: "Christmas",
         notes: "",
@@ -133,7 +133,7 @@ extension Category {
         available: [:]
     )
     
-    static let lifeInsurance = Category(
+    static let lifeInsurance = CategoryRow(
         id: .init(),
         name: "Life Insurance",
         notes: "",
@@ -143,7 +143,7 @@ extension Category {
         available: [:]
     )
     
-    static let roadTax = Category(
+    static let roadTax = CategoryRow(
         id: .init(),
         name: "Road Tax",
         notes: "",
@@ -153,7 +153,7 @@ extension Category {
         available: [:]
     )
     
-    static let carInsurance = Category(
+    static let carInsurance = CategoryRow(
         id: .init(),
         name: "Car Insurance",
         notes: "",
@@ -163,7 +163,7 @@ extension Category {
         available: [:]
     )
     
-    static let homeInsurance = Category(
+    static let homeInsurance = CategoryRow(
         id: .init(),
         name: "Home Insurance",
         notes: "",
@@ -173,7 +173,7 @@ extension Category {
         available: [:]
     )
     
-    static let carServiceRepairs = Category(
+    static let carServiceRepairs = CategoryRow(
         id: .init(),
         name: "Car Service/Repairs",
         notes: "",
@@ -186,7 +186,7 @@ extension Category {
     
     // MARK: - Category: Monthly Expenses
     
-    static let groceries = Category(
+    static let groceries = CategoryRow(
         id: .init(),
         name: "Groceries",
         notes: "",
@@ -196,7 +196,7 @@ extension Category {
         available: [:]
     )
     
-    static let commuting = Category(
+    static let commuting = CategoryRow(
         id: .init(),
         name: "Commuting",
         notes: "",
@@ -206,7 +206,7 @@ extension Category {
         available: [:]
     )
     
-    static let classesCamps = Category(
+    static let classesCamps = CategoryRow(
         id: .init(),
         name: "Classes/Camps",
         notes: "",
@@ -216,7 +216,7 @@ extension Category {
         available: [:]
     )
     
-    static let petrolTolls = Category(
+    static let petrolTolls = CategoryRow(
         id: .init(),
         name: "Gasoline/Tolls",
         notes: "",
@@ -226,7 +226,7 @@ extension Category {
         available: [:]
     )
     
-    static let homeSupplies = Category(
+    static let homeSupplies = CategoryRow(
         id: .init(),
         name: "Home Supplies",
         notes: "",
@@ -236,7 +236,7 @@ extension Category {
         available: [:]
     )
     
-    static let homeImprovement = Category(
+    static let homeImprovement = CategoryRow(
         id: .init(),
         name: "Home Improvement",
         notes: "",
@@ -246,7 +246,7 @@ extension Category {
         available: [:]
     )
     
-    static let kidsClothes = Category(
+    static let kidsClothes = CategoryRow(
         id: .init(),
         name: "Kids’ Clothes",
         notes: "",
@@ -256,7 +256,7 @@ extension Category {
         available: [:]
     )
     
-    static let gifts = Category(
+    static let gifts = CategoryRow(
         id: .init(),
         name: "Gifts",
         notes: "",
@@ -266,7 +266,7 @@ extension Category {
         available: [:]
     )
     
-    static let doctors = Category(
+    static let doctors = CategoryRow(
         id: .init(),
         name: "Doctors",
         notes: "",
@@ -276,7 +276,7 @@ extension Category {
         available: [:]
     )
     
-    static let amazonPrime = Category(
+    static let amazonPrime = CategoryRow(
         id: .init(),
         name: "Amazon Prime",
         notes: "",
@@ -286,7 +286,7 @@ extension Category {
         available: [:]
     )
     
-    static let prescriptions = Category(
+    static let prescriptions = CategoryRow(
         id: .init(),
         name: "Prescriptions",
         notes: "",
@@ -296,7 +296,7 @@ extension Category {
         available: [:]
     )
     
-    static let atmBankFees = Category(
+    static let atmBankFees = CategoryRow(
         id: .init(),
         name: "ATM/Bank Fees",
         notes: "",
@@ -306,7 +306,7 @@ extension Category {
         available: [:]
     )
     
-    static let miscellaneous = Category(
+    static let miscellaneous = CategoryRow(
         id: .init(),
         name: "Miscellaneous",
         notes: "",
@@ -319,7 +319,7 @@ extension Category {
     
     // MARK: - Category: Fun
     
-    static let phil = Category(
+    static let phil = CategoryRow(
         id: .init(),
         name: "Phil",
         notes: "",
@@ -329,7 +329,7 @@ extension Category {
         available: [:]
     )
     
-    static let kids = Category(
+    static let kids = CategoryRow(
         id: .init(),
         name: "Kids",
         notes: "",
@@ -339,7 +339,7 @@ extension Category {
         available: [:]
     )
     
-    static let school = Category(
+    static let school = CategoryRow(
         id: .init(),
         name: "School",
         notes: "",
@@ -349,7 +349,7 @@ extension Category {
         available: [:]
     )
     
-    static let streaming = Category(
+    static let streaming = CategoryRow(
         id: .init(),
         name: "Streaming",
         notes: "",
@@ -359,7 +359,7 @@ extension Category {
         available: [:]
     )
     
-    static let familyActivities = Category(
+    static let familyActivities = CategoryRow(
         id: .init(),
         name: "Family Activities",
         notes: "",
@@ -369,7 +369,7 @@ extension Category {
         available: [:]
     )
     
-    static let takeout = Category(
+    static let takeout = CategoryRow(
         id: .init(),
         name: "Eating Out/Takeout",
         notes: "",

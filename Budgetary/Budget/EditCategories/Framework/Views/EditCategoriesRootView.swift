@@ -23,7 +23,7 @@ struct EditCategoriesRootView: View {
                 ProgressView()
             case .success(let categoryGroups):
                 EditCategoriesListView(
-                    intent: { intent in viewModel.handle(intent: intent) },
+                    action: { action in viewModel.handle(action: action) },
                     coordinator: coordinator,
                     categoryGroups: categoryGroups
                 )
@@ -31,7 +31,7 @@ struct EditCategoriesRootView: View {
             }
         }
         .task {
-            viewModel.handle(intent: .loadCategoryGroups)
+            viewModel.handle(action: .loadCategoryGroups)
         }
     }
 }

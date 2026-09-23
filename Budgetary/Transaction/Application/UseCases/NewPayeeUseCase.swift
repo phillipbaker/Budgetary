@@ -8,20 +8,12 @@
 import Factory
 import Foundation
 
-final class NewPayeeUseCase {
+final class NewPayeeUseCase: Sendable {
     let source: NewPayeeSource = Container.shared.newPayeeSource()
     let mapper: PayeeMapper = Container.shared.payeeMapper()
     
-    func createPayee(from name: String) async {
-        let payee = Payee(
-            id: UUID().uuidString,
-            name: name,
-            aliases: [],
-            includedInPayeeList: true,
-            automaticallyCategorizeIsOn: true,
-            defaultCategory: nil
-        )
-
+    func execute(for name: String) async {
+        let payee = Payee.regular(name: name)
         await source.create(payee: mapper.map(payee: payee))
     }
 }

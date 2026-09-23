@@ -7,10 +7,9 @@
 
 import Foundation
 
-extension CategoryDb: @unchecked Sendable {
-    
-    static let inflow = CategoryDb(
-        id: "99",
+extension CategoryDb {
+    @MainActor static let inflow = CategoryDb(
+        externalID: .init(),
         name: "Inflow: Ready to Assign",
         notes: "",
         isHidden: false,
@@ -19,8 +18,8 @@ extension CategoryDb: @unchecked Sendable {
     
     // MARK: - Immediate Obligations
     
-    static let rent = CategoryDb(
-        id: "1",
+    @MainActor static let rent = CategoryDb(
+        externalID: .init(),
         name: "Rent",
         notes: "",
         isHidden: false,
@@ -31,8 +30,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let countilTax = CategoryDb(
-        id: "2",
+    @MainActor static let countilTax = CategoryDb(
+        externalID: .init(),
         name: "Council Tax",
         notes: "",
         isHidden: false,
@@ -43,8 +42,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let utilities = CategoryDb(
-        id: "3",
+    @MainActor static let utilities = CategoryDb(
+        externalID: .init(),
         name: "Utilities",
         notes: "",
         isHidden: false,
@@ -55,8 +54,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let water = CategoryDb(
-        id: "4",
+    @MainActor static let water = CategoryDb(
+        externalID: .init(),
         name: "Water",
         notes: "",
         isHidden: false,
@@ -67,8 +66,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let internet = CategoryDb(
-        id: "5",
+    @MainActor static let internet = CategoryDb(
+        externalID: .init(),
         name: "Internet",
         notes: "",
         isHidden: false,
@@ -79,8 +78,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let tvLicense = CategoryDb(
-        id: "6",
+    @MainActor static let tvLicense = CategoryDb(
+        externalID: .init(),
         name: "TV License",
         notes: "",
         isHidden: false,
@@ -91,8 +90,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let cellPhones = CategoryDb(
-        id: "7",
+    @MainActor static let cellPhones = CategoryDb(
+        externalID: .init(),
         name: "Cell Phones",
         notes: "",
         isHidden: false,
@@ -106,8 +105,8 @@ extension CategoryDb: @unchecked Sendable {
 
     // MARK: - True Expenses
     
-    static let ynab = CategoryDb(
-        id: "8",
+    @MainActor static let ynab = CategoryDb(
+        externalID: .init(),
         name: "YNAB",
         notes: "",
         isHidden: false,
@@ -118,8 +117,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let birthdays = CategoryDb(
-        id: "9",
+    @MainActor static let birthdays = CategoryDb(
+        externalID: .init(),
         name: "Birthdays",
         notes: "",
         isHidden: false,
@@ -130,8 +129,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let christmas = CategoryDb(
-        id: "10",
+    @MainActor static let christmas = CategoryDb(
+        externalID: .init(),
         name: "Christmas",
         notes: "",
         isHidden: false,
@@ -142,8 +141,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
 
-    static let lifeInsurance = CategoryDb(
-        id: "11",
+    @MainActor static let lifeInsurance = CategoryDb(
+        externalID: .init(),
         name: "Life Insurance",
         notes: "",
         isHidden: false,
@@ -154,8 +153,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let roadTax = CategoryDb(
-        id: "12",
+    @MainActor static let roadTax = CategoryDb(
+        externalID: .init(),
         name: "Road Tax",
         notes: "",
         isHidden: false,
@@ -166,8 +165,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let carInsurance = CategoryDb(
-        id: "13",
+    @MainActor static let carInsurance = CategoryDb(
+        externalID: .init(),
         name: "Car Insurance",
         notes: "",
         isHidden: false,
@@ -178,8 +177,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let homeInsurance = CategoryDb(
-        id: "14",
+    @MainActor static let homeInsurance = CategoryDb(
+        externalID: .init(),
         name: "Home Insurance",
         notes: "",
         isHidden: false,
@@ -190,8 +189,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let carServiceRepairs = CategoryDb(
-        id: "15",
+    @MainActor static let carServiceRepairs = CategoryDb(
+        externalID: .init(),
         name: "Car Service/Repairs",
         notes: "",
         isHidden: false,
@@ -205,8 +204,8 @@ extension CategoryDb: @unchecked Sendable {
     
     // MARK: - Monthly Expenses
     
-    static let groceries = CategoryDb(
-        id: "16",
+    @MainActor static let groceries = CategoryDb(
+        externalID: .init(),
         name: "Groceries",
         notes: "",
         isHidden: false,
@@ -217,8 +216,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let commuting = CategoryDb(
-        id: "17",
+    @MainActor static let commuting = CategoryDb(
+        externalID: .init(),
         name: "Commuting",
         notes: "",
         isHidden: false,
@@ -229,8 +228,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let classesCamps = CategoryDb(
-        id: "18",
+    @MainActor static let classesCamps = CategoryDb(
+        externalID: .init(),
         name: "Classes/Camps",
         notes: "",
         isHidden: false,
@@ -241,8 +240,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let petrolTolls = CategoryDb(
-        id: "19",
+    @MainActor static let petrolTolls = CategoryDb(
+        externalID: .init(),
         name: "Gasoline/Tolls",
         notes: "",
         isHidden: false,
@@ -253,8 +252,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let homeSupplies = CategoryDb(
-        id: "20",
+    @MainActor static let homeSupplies = CategoryDb(
+        externalID: .init(),
         name: "Home Supplies",
         notes: "",
         isHidden: false,
@@ -265,8 +264,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let homeImprovement = CategoryDb(
-        id: "21",
+    @MainActor static let homeImprovement = CategoryDb(
+        externalID: .init(),
         name: "Home Improvement",
         notes: "",
         isHidden: false,
@@ -277,8 +276,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let kidsClothes = CategoryDb(
-        id: "22",
+    @MainActor static let kidsClothes = CategoryDb(
+        externalID: .init(),
         name: "Kids’ Clothes",
         notes: "",
         isHidden: false,
@@ -289,8 +288,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let gifts = CategoryDb(
-        id: "23",
+    @MainActor static let gifts = CategoryDb(
+        externalID: .init(),
         name: "Gifts",
         notes: "",
         isHidden: false,
@@ -301,8 +300,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let doctors = CategoryDb(
-        id: "24",
+    @MainActor static let doctors = CategoryDb(
+        externalID: .init(),
         name: "Doctors",
         notes: "",
         isHidden: false,
@@ -313,8 +312,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let amazonPrime = CategoryDb(
-        id: "25",
+    @MainActor static let amazonPrime = CategoryDb(
+        externalID: .init(),
         name: "Amazon Prime",
         notes: "",
         isHidden: false,
@@ -325,8 +324,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let prescriptions = CategoryDb(
-        id: "26",
+    @MainActor static let prescriptions = CategoryDb(
+        externalID: .init(),
         name: "Prescriptions",
         notes: "",
         isHidden: false,
@@ -337,8 +336,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let atmBankFees = CategoryDb(
-        id: "27",
+    @MainActor static let atmBankFees = CategoryDb(
+        externalID: .init(),
         name: "ATM/Bank Fees",
         notes: "",
         isHidden: false,
@@ -349,8 +348,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let miscellaneous = CategoryDb(
-        id: "28",
+    @MainActor static let miscellaneous = CategoryDb(
+        externalID: .init(),
         name: "Miscellaneous",
         notes: "",
         isHidden: false,
@@ -364,8 +363,8 @@ extension CategoryDb: @unchecked Sendable {
     
     // MARK: - Fun
     
-    static let phil = CategoryDb(
-        id: "29",
+    @MainActor static let phil = CategoryDb(
+        externalID: .init(),
         name: "Phil",
         notes: "",
         isHidden: false,
@@ -376,8 +375,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let kids = CategoryDb(
-        id: "30",
+    @MainActor static let kids = CategoryDb(
+        externalID: .init(),
         name: "Kids",
         notes: "",
         isHidden: false,
@@ -388,8 +387,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let school = CategoryDb(
-        id: "31",
+    @MainActor static let school = CategoryDb(
+        externalID: .init(),
         name: "School",
         notes: "",
         isHidden: false,
@@ -400,8 +399,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let streaming = CategoryDb(
-        id: "32",
+    @MainActor static let streaming = CategoryDb(
+        externalID: .init(),
         name: "Streaming",
         notes: "",
         isHidden: false,
@@ -412,8 +411,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
         
-    static let familyActivities = CategoryDb(
-        id: "33",
+    @MainActor static let familyActivities = CategoryDb(
+        externalID: .init(),
         name: "Family Activities",
         notes: "",
         isHidden: false,
@@ -424,8 +423,8 @@ extension CategoryDb: @unchecked Sendable {
         ]
     )
     
-    static let takeout = CategoryDb(
-        id: "34",
+    @MainActor static let takeout = CategoryDb(
+        externalID: .init(),
         name: "Eating Out/Takeout",
         notes: "",
         isHidden: false,

@@ -8,7 +8,7 @@
 import Foundation
 
 public struct TransactionDate: Equatable, Hashable, Identifiable, Sendable {
-    public let id: String
+    public let id: ID<TransactionDate>
     let date: Date
     let transactions: [TransactionPresentation]
 }
