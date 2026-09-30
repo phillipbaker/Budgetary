@@ -15,11 +15,7 @@ struct AccountsView: View {
     let addAccountViewModel: AddAccountViewModel = Container.shared.addAccountViewModel()
 
     var body: some View {
-        List {
-            Section {
-                Text("All Transactions")
-            }
-            
+        List {            
             ForEach(BudgetAccountGroupPresentation.allCases) { accountType in
                 if let accountsForType = state.accounts[accountType] {
                     Section {
