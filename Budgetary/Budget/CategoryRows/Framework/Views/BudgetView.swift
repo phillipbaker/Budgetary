@@ -135,11 +135,7 @@ struct BudgetView: View {
                     }
                 }
         )
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                BudgetMenu()
-            }
-            
+        .toolbar {            
             ToolbarItem(placement: .navigation) {
                 GlassEffectContainer {
                     HStack(spacing: 0) {
