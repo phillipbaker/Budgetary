@@ -43,11 +43,6 @@ extension Container {
     
     // MARK: Use Cases & Date Sources
     
-//    var loadCategoryGroupsUseCase: Factory<LoadCategoryGroupsUseCase> {
-//        self { LoadCategoryGroupsUseCase() }
-//            .singleton
-//    }
-    
     var loadCategoryGroupsSource: Factory<LoadCategoryGroupsSource> {
         self { LoadCategoryGroupsDataSource() }
             .singleton

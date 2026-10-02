@@ -12,6 +12,5 @@ public struct CreditCardAvailable: Equatable, Hashable, Sendable {
     let cashFromLastMonth: Decimal
     let assignedThisMonth: Decimal
     let cashSpendingThisMonth: Decimal
-//    let creditSpendingThisMonth: String
     let message: String
 }

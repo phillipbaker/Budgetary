@@ -7,40 +7,7 @@
 
 import SwiftUI
 
-//@Observable
-final class CategoryDetailModel: Identifiable {
-    var category: CategoryRow
-    
-    init(category: CategoryRow) {
-        self.category = category
-    }
-    
-    func createTargetButtonTapped() {
-        // add method to add target on Category entity
-    }
-    
-    func renameCategoryButtonTapped() {
-        
-    }
-    
-    func hideCategoryButtonTapped() {
-        
-    }
-    
-    func deleteCategoryButtonTapped() {
-        
-    }
-    
-    func doneEditingButtonTapped() {
-        // Do something
-        // Dismiss view
-    }
-}
-
-struct CategoryDetailView: View {
-//    @Bindable var model: CategoryDetailModel
-//    let category: CategoryRowPresentation
-    
+struct CategoryDetailView: View {    
     var body: some View {
         NavigationStack {
             List {
@@ -54,7 +21,7 @@ struct CategoryDetailView: View {
                             .foregroundStyle(.secondary)
                         
                         Button {
-//                            model.createTargetButtonTapped()
+
                         } label: {
                             Text("Create Target")
                                 .font(.headline)
@@ -80,21 +47,21 @@ struct CategoryDetailView: View {
                 
                 Section {
                     Button {
-//                        model.renameCategoryButtonTapped()
+
                     } label: {
                         Label("Rename Category", systemImage: "square.and.pencil")
                             .symbolVariant(.fill)
                     }
                     
                     Button {
-//                        model.hideCategoryButtonTapped()
+
                     } label: {
                         Label("Hide Category", systemImage: "eye.slash")
                             .symbolVariant(.fill)
                     }
                     
                     Button {
-//                        model.deleteCategoryButtonTapped()
+
                     } label: {
                         Label("Delete Category", systemImage: "trash")
                             .symbolVariant(.fill)
@@ -107,7 +74,7 @@ struct CategoryDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-//                        model.doneEditingButtonTapped()
+
                     } label: {
                         Text("Done")
                             .fontWeight(.semibold)

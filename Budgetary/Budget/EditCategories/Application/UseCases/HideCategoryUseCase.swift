@@ -13,13 +13,13 @@ final class HideCategoryUseCase {
     
     func hide(categoryWithID categoryID: ID<CategoryRow>) async {
         guard let categoryGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else {
-            // throw error
+            // TODO: throw error
             print("could not find category group matching provided id")
             return
         }
         
         guard let category = categoryGroup.categories.first(where: { $0.id == ID<CategoryPlain>(categoryID) }) else {
-            // throw error
+            // TODO: throw error
             print("could not find category matching provided id")
             return
         }

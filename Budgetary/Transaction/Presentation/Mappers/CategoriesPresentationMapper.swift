@@ -91,8 +91,4 @@ public final class CategoriesPresentationMapper {
     func map(category: CategoryRow) -> TransactionCategoryPresentation {
         return TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>(category.id), name: category.name)
     }
-    
-//    func map(category: TransactionCategoryPresentation) -> TransactionCategory {
-//        return TransactionCategory(id: ID<TransactionCategory>(category.id), name: category.name)
-//    }
 }

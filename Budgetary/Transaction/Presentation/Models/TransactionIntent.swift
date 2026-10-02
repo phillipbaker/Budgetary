@@ -22,8 +22,6 @@ public enum TransactionAction {
     
     // Category Picker
     case categoryPickerButtonTapped
-//    case newCategoryButtonTapped
-//    case saveNewCategoryButtonTapped(name: String, group: CategoryGroupNamePresentation)
     
     // Account Picker
     case accountPickerButtonTapped

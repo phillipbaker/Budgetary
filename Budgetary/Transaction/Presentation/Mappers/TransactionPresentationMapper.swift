@@ -73,36 +73,7 @@ enum TransactionPresentationMapper {
     static func map(transactionAccount: TransactionAccountPresentation) -> TransactionAccount {
         return TransactionAccount(id: ID<TransactionAccount>(transactionAccount.id), name: transactionAccount.name)
     }
-    
-//    static func map(payeePresentation: PayeePresentation?) -> Payee? {
-//        guard let payee = payeePresentation else { return nil }
-//        return Payee(
-//            id: ID<Payee>(payee.id),
-//            name: payee.name,
-//            type: map(payeeTypePresentation: payee.type)
-//        )
-//    }
-    
-//    static func map(payeeTypePresentation: PayeeTypePresentation) -> PayeeType {
-//        switch payeeTypePresentation {
-//        case .regular: .regular
-//        case .transfer: .transfer)
-//        }
-//    }
-    
-//    static func map(account: BudgetAccount) -> BudgetAccountPresentation {
-//        return BudgetAccountPresentation(
-//            id: ID<BudgetAccountPresentation>(account.id),
-//            name: account.name,
-//            accountType: map(accountType: account.type),
-//            startingBalance: account.startingBalance.formatted(),
-//            notes: account.notes,
-//            isClosed: account.isClosed,
-//            balance: account.balance.formatted(.currency(code: "GBP")),
-//            transactionsByDate: map(transactions: account.transactions)
-//        )
-//    }
-    
+
     static func map(account: AccountData) -> BudgetAccountPresentation {
         return BudgetAccountPresentation(
             id: ID<BudgetAccountPresentation>(account.id),
@@ -182,20 +153,6 @@ enum TransactionPresentationMapper {
             return AmountDraft(type: .outflow, value: "-" + value.formatted(.currency(code: "GBP")))
         }
     }
-    
-//    static func map(transactionDraft: TransactionDraft) -> BudgetTransaction {
-//        return BudgetTransaction(
-//            id: ID<BudgetTransaction>(transactionDraft.id),
-//            date: transactionDraft.date,
-//            memo: transactionDraft.memo,
-//            amount: map(amountRequest: transactionDraft.amount),
-//            isCleared: transactionDraft.isCleared,
-//            payee: TransactionPresentationMapper.map(payeePresentation: transactionDraft.payee),
-//            category: TransactionCategory(id: ID<TransactionCategory>(transactionDraft.category?.id) ?? .init(), name: transactionDraft.category?.name ?? ""), // TODO: Map this from somewhere and deal with blank string
-//            account: TransactionPresentationMapper.map(transactionAccount: transactionDraft.account!), // TODO: Deal with force unwrapping
-//            linkedTransactionID: ID<BudgetTransaction>(transactionDraft.id)
-//        )
-//    }
     
     // TODO: Check this correct with positive, negative values, errors go somewhere
     // TODO: Also I wrote a function like this in a view or view model which needs to be deleted

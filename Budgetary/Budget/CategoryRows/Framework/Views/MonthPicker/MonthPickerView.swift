@@ -53,7 +53,6 @@ struct MonthPickerView: View {
                         if month.monthYear.year == year {
                             Button {
                                 action(.monthPickerMonthSelected(monthYear: month.monthYear))
-//                                coordinator.dismiss()
                             } label: {
                                 Text(month.monthYear.monthAbbreviated)
                                     .fontWeight(month.monthYear == monthYear ? .semibold : .regular)

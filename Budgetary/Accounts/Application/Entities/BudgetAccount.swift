@@ -19,7 +19,7 @@ public struct BudgetAccount: Equatable, Hashable, Sendable {
     let notes: String?
     
     /// Boolean value for whether or not an account has been “closed” and no longer appears in the budget calculation
-    // Need to know what calculations to perform when closing an account...
+    // TODO: Need to know what calculations to perform when closing an account...
     let isClosed: Bool
     
     /// All transactions that belong to the account. Non-optional, defaults to empty.
@@ -65,26 +65,7 @@ public struct BudgetAccount: Equatable, Hashable, Sendable {
     
     /// Working balance provides the actual value for available funds.
     var workingBalance: Decimal {
-        get {
-            cleared - uncleared
-        }
-        // Is settable - if set a new transaction is created to cover the diference and keep budget balanced...
-        // Write logic for that...
-        set {
-//            if larger than current workingBalance
-//                let adjustment = Transaction(
-//                    day: .now,
-//                    payee: Payee(),
-//                    category: Category(
-//                        id: .init(),
-//                        name: "Inflow: Ready to Assign"
-//                    ),
-//                    type: workingBalance > newValue ? .inflow(workingBalance - newValue) : .outflow(workingBalance - newValue),
-//                    isCleared: true
-//                )
-//                transactions.append(
-            // create/append a new cleared transaction for the difference between current working balance and new total
-        }
+        cleared - uncleared
     }
     
     init(
