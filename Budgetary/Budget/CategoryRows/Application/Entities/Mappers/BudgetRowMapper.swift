@@ -10,24 +10,6 @@ import Foundation
 public final class BudgetRowMapper: Sendable {
     // MARK: - Budget Data
     
-//    func mapBudgetData(
-//        for monthYear: MonthYear,
-//        filteredBy filter: CategoryFilter,
-//        from data: CombinedBudgetData
-//    ) -> BudgetData {
-//        return BudgetData(
-//            id: ID<BudgetData>(data.budgetPlain.id),
-//            monthYear: monthYear,
-//            filter: filter,
-//            readyToAssign: mapReadyToAssign(from: data),
-//            categoryGroups: mapCategoryGroups(for: monthYear, filteredBy: filter, from: data),
-//            creditCardPaymentGroup: mapCreditCardPaymentGroup(for: monthYear, filteredBy: filter, from: data),
-//            settings: mapBudgetSettings(plain: data.budgetPlain.settings),
-//            start: mapBudgetStart(from: data),
-//            end: mapBudgetEnd(from: data)
-//        )
-//    }
-    
     func mapBudgetData(from data: CombinedBudgetData) -> BudgetData {
         return BudgetData(
             id: ID<BudgetData>(data.budgetPlain.id),
@@ -131,20 +113,6 @@ public final class BudgetRowMapper: Sendable {
             .map { $0.value } // [Decimal]
             .reduced
     }
-    
-    // MARK: - Uncategorized Transactions
-    
-//    func mapUncategorizedTransactions(for monthYear: MonthYear, in data: CombinedBudgetData) -> CategoryRow {
-//        return CategoryRow(
-//            id: .init(),
-//            name: "Uncategorized Transactions",
-//            notes: "",
-//            isHidden: false,
-//            assigned: [:],
-//            activity: ,
-//            available: <#T##[MonthYear : Available]#>
-//        )
-//    }
 
     // MARK: - Credit Card Payments Plain -> Rows
     
@@ -272,7 +240,7 @@ public final class BudgetRowMapper: Sendable {
             // Signed from the payment set-aside's perspective, which is the
             // opposite of the account balance: a payment is a card inflow but
             // consumes the money set aside to pay the card, so it is negative.
-            // Returns?
+            // TODO: Returns?
             let paymentsAndReturns = monthlyCardTransactions
                 .filteredByTransfers
                 .reduce(Decimal(0)) { running, transaction in
@@ -283,9 +251,6 @@ public final class BudgetRowMapper: Sendable {
                 }
 
             // TODO: calculate here or use spending and returns totals? Do both and check they match or do that in tests?
-//            let totalActivity = monthlyCardTransactions
-//                .compactMap { $0.amount.value }
-//                .reduce(0.00, +)
             
             activity[monthYear] = CreditCardActivity(
                 spending: spending,
@@ -301,7 +266,7 @@ public final class BudgetRowMapper: Sendable {
         return activity
     }
     
-    // No one calling this one
+    // TODO: No one calling this one
     func mapActivity(for creditCard: BudgetAccountPlain, in monthYear: MonthYear, from data: CombinedBudgetData) -> [MonthYear: CreditCardActivity] {
         
         // TODO: Guard this properly - even contrain what can be sent into this function? Or rename parameter to account...
@@ -395,35 +360,10 @@ public final class BudgetRowMapper: Sendable {
         return available
     }
     
-    // TODO: - this is returning a stub
+    // TODO: - this is returning a stub. Identify payments from given month - how are these different? transfer from one account to another - what if paid from an account outside of budget (i..e by someone else)? Needs to exlude refunds
     func payment(for cardPaymentPlain: CreditCardPaymentPlain, in monthYear: MonthYear, from data: CombinedBudgetData) -> Decimal {
-        // identify payments from given month - how are these different? transfer from one account to another - what if paid from an account outside of budget (i..e by someone else)? Needs to exlude refunds
         return 99.99
     }
-    
-    //    func activity(for category: CategoryRow, in monthYear: MonthYear, from data: CombinedBudgetData) -> Decimal {
-    //        return data.budgetAccountsPlain
-    //            .transactions
-    //            .filtered(by: monthYear)
-    //            .filteredByCategory(matching: category.id)
-    //            .mappedToAmounts
-    //            .reduced
-    //    }
-    
-//    func mapGroupActivityTotal(for categories: [CategoryRow]) -> [MonthYear: Decimal] {
-//        var totals = [MonthYear: Decimal]()
-//
-//        for category in categories {
-//            for (monthYear, activity) in category.activity {
-//                if let existingValue = totals[monthYear] {
-//                    totals[monthYear] = existingValue + activity.total
-//                } else {
-//                    totals[monthYear] = activity.total
-//                }
-//            }
-//        }
-//        return totals
-//    }
     
     func mapGroupAvailableTotal(for cardPayments: [CreditCardPaymentRow]) -> [MonthYear: Decimal] {
         var totals: [MonthYear: Decimal] = [:]

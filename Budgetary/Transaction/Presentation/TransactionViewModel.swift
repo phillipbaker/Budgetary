@@ -67,12 +67,7 @@ final class TransactionViewModel {
 
     // MARK: - Handle
 
-    // Note: TransactionAction.saveTransactionButtonTapped should be updated to carry no
-    // associated value — the draft is now owned by this view model.
-    //
-    // Note: TransactionAction no longer needs selectCategoryButtonTapped,
-    // selectPayeeButtonTapped, or selectAccountButtonTapped. Use the direct
-    // selectCategory / selectPayee / selectAccount methods below.
+    // TODO: TransactionAction.saveTransactionButtonTapped should be updated to carry no associated value — the draft is now owned by this view model. TransactionAction no longer needs selectCategoryButtonTapped,selectPayeeButtonTapped, or selectAccountButtonTapped. Use the direct selectCategory / selectPayee / selectAccount methods below.
 
     func handle(action: TransactionAction) {
         switch action {
@@ -190,19 +185,6 @@ final class TransactionViewModel {
     }
     
     // MARK: - Mapping
-
-    func map(pickerState: PickerState?) -> PickerStatePresentation? {
-        switch pickerState {
-        case .categoryPicker:
-            return .categoryPicker
-        case .payeePicker:
-            return .payeePicker
-        case .accountPicker:
-            return .accountPicker
-        case .none:
-            return nil
-        }
-    }
     
     @ObservationIgnored let payeeMapper: PayeePresentationMapper = Container.shared.payeePresentationMapper()
     

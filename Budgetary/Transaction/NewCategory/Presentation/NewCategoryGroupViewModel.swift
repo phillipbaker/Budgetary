@@ -90,10 +90,6 @@ final public class NewCategoryGroupViewModel {
 
         pendingSaveName = trimmed
         store.dispatch(.newCategoryGroupRequested(trimmed))
-        // The observation loop below detects the new category group in the next store emission
-        // and calls onGroupCreated, which calls XXX —
-        // setting the new group as the selected group and dispatching .categorySelected so the navigation
-        // stack unwinds to the new category view.
     }
     
     func confirmAlertButtonTapped() {

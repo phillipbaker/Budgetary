@@ -9,14 +9,7 @@ import Foundation
 
 public struct TransactionStateData: Equatable, Hashable, Sendable {
     var transactionToEdit: TransactionData?
-//    var pickerState: PickerState?
     var isNewTransaction: Bool
-}
-
-public enum PickerState: Equatable, Hashable, Sendable {
-    case categoryPicker
-    case payeePicker
-    case accountPicker
 }
 
 public struct TransactionData: Equatable, Hashable, Sendable {

@@ -47,7 +47,6 @@ class CategoryGroupDao {
     }
     
     func update(categoryGroup: CategoryGroupDb) {
-//        print("Updatede Category Group count before: ", categoryGroup.categories.count)
         let newMock = mock.map { $0.externalID == categoryGroup.externalID ? categoryGroup : $0 }
         mock = newMock
         guard let updateCategoryGroup = mock.first(where: { categoryGroup.id == $0.id }) else {
@@ -67,13 +66,9 @@ class CategoryGroupDao {
     }
     
     func delete(categoryGroup: CategoryGroupDb) {
-        // Is this necessary or does removeAll simply skip/fail silently if no groups match?
-        guard mock.contains(where: { $0.externalID == categoryGroup.externalID }) else {
-            // throw error?
-            print("could not locate category group to delete")
-            return
-        }
+        let countBefore = mock.count
         mock.removeAll(where: { $0.externalID == categoryGroup.externalID })
+        guard mock.count != countBefore else { return }
         continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
     }
     

@@ -33,20 +33,10 @@ class BudgetAccountDao {
     }
     
     func findBudgetAccount(by externalID: ID<BudgetAccountDb>) -> BudgetAccountDb? {
-        //        if let budgetAccount = try container.mainContext.fetch(
-        //            FetchDescriptor<BudgetAccountDb>(predicate: #Predicate { $0.id == id })
-        //        ).first {
-        //            return budgetAccount
-        //        }
         return mock.first { $0.externalID == externalID.rawValue }
     }
     
     func findBudgetAccount(containing id: ID<TransactionDb>) -> BudgetAccountDb? {
-        //        if let budgetAccount = try container.mainContext.fetch(
-        //            FetchDescriptor<BudgetAccountDb>(predicate: #Predicate { $0.id == id })
-        //        ).first {
-        //            return budgetAccount
-        //        }
         return mock.first { $0.externalID == id.rawValue }
     }
     

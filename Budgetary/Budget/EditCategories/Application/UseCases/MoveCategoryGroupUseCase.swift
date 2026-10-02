@@ -14,7 +14,7 @@ final class MoveCategoryGroupUseCase {
 
     func moveCategoryGroup(from sourceIndex: IndexSet, to destinationIndex: Int) async {
         guard let groups = await source.allCategoryGroups() else {
-            // throw error
+            // TODO: throw error
             return
         }
         

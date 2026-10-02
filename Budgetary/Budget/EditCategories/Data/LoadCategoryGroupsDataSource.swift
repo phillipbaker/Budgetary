@@ -18,23 +18,6 @@ final class LoadCategoryGroupsDataSource: LoadCategoryGroupsSource {
     
     let id = "LoadCategoryGroupsDataSource"
     
-//    public init() {
-//        Task {
-////            for await categoryGroups in await categoryGroupsDataSourceLocal.broadcaster.subscribe() {
-////                continuation.yield(categoryGroups)
-////            }
-////            for await categoryGroups in await categoryGroupsDataSourceLocal.categoryGroupsStream() {
-////                print("load categories data source await gateway:", categoryGroups)
-////                continuation.yield(categoryGroups)
-////            }
-////            
-////            continuation.onTermination = { @Sendable reason in
-////                // Handle any necessary cleanup
-////                print("categoryGroupsStream terminated with reason: ", reason)
-////            }
-//        }
-//    }
-    
     func loadCategoryGroups() async -> [CategoryGroupPlain] {
         await categoryGroupsDataSourceLocal.categoryGroups()
     }
@@ -43,19 +26,3 @@ final class LoadCategoryGroupsDataSource: LoadCategoryGroupsSource {
         return categoryGroupsStream
     }
 }
-
-//class Listener {
-//    let id: String
-//
-//    init(id: String) {
-//        self.id = id
-//    }
-//
-//    func startListening() {
-//        Task {
-//            for await value in await broadcaster.subscribe() {
-//                print("Listener \(id) received: \(value)")
-//            }
-//        }
-//    }
-//}

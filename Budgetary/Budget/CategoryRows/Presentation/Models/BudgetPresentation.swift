@@ -7,16 +7,6 @@
 
 import Foundation
 
-//public struct BudgetPresentation: Equatable, Identifiable, Sendable {
-//    public var id: ID<BudgetPresentation>
-//    let months: [MonthPresentation]
-//    let readyToAssign: [MonthYear: ReadyToAssignPresentation]
-//    let categoryGroups: [CategoryGroupPresentation]
-//    let creditCardPaymentGroup: CreditCardPaymentGroupPresentation
-//    let start: MonthYear
-//    let end: MonthYear
-//}
-
 public struct BudgetPresentation: Equatable, Identifiable, Sendable {
     public let id: ID<BudgetPresentation>
     let monthYear: MonthYear
@@ -25,5 +15,3 @@ public struct BudgetPresentation: Equatable, Identifiable, Sendable {
     let categoryGroups: [CategoryGroupPresentation]
     let creditCardPaymentGroup: CreditCardPaymentGroupPresentation
 }
-
-

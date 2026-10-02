@@ -12,7 +12,6 @@ public protocol AvailablePresentation: Equatable, Sendable {
     var cashFromLastMonth: String { get }
     var assignedThisMonth: String { get }
     var cashSpendingThisMonth: String { get }
-//    var creditSpendingThisMonth: String
     var message: String { get }
     var lightModeForegroundColor: Color { get }
     var lightModeBackgroundColor: Color { get }

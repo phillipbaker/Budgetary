@@ -100,7 +100,9 @@ extension MonthYear: Equatable, Hashable {
 }
 
 
-// Document what this is for - ordering dictionary keys for available calcukations...
+// Comparable lets MonthYear dictionary keys be sorted, filtered and
+// bounded with .sorted(), .min(), max() and comparisons like `$0.key > monthYear`.
+// It enables MonthYear to be used as a range bound. Strideable also requires it.
 extension MonthYear: Comparable {
     public static func < (lhs: MonthYear, rhs: MonthYear) -> Bool {
         if lhs.year == rhs.year {
@@ -110,8 +112,10 @@ extension MonthYear: Comparable {
     }
 }
 
+// Strideable lets MonthYear ranges be iterated and used as collections.
+// The standard library calls distance(to:) for ClosedRange's count and indexing,
+// so it's needed even though we never call it directly.
 extension MonthYear: Strideable {
-    // Why was Stridable needed again?
     // Distance in months from this month to another month
     public func distance(to other: MonthYear) -> Int {
         let yearDifference = other.year - self.year
@@ -125,13 +129,5 @@ extension MonthYear: Strideable {
         let newMonth = totalMonths % 12 == 0 ? 12 : totalMonths % 12
         let newYear = (totalMonths - 1) / 12 // Adjust for the case where newMonth is 12
         return MonthYear(month: newMonth, year: newYear)
-//        let totalMonths = (year * 12 + month) + n
-//        let newYear = totalMonths / 12
-//        let newMonth = totalMonths % 12 == 0 ? 12 : totalMonths % 12
-//        return MonthYear(month: newMonth, year: newYear)
     }
-}
-
-enum DateError: Error {
-    case invalidDate
 }

@@ -5,12 +5,6 @@
 //  Created by Phillip Baker on 05/02/2026.
 //
 
-public enum PickerStatePresentation: Equatable, Hashable, Sendable {
-    case categoryPicker
-    case payeePicker
-    case accountPicker
-}
-
 public enum CategoryGroupRowsStatePresentation: Equatable, Hashable, Sendable {
     case notLoaded
     case loading

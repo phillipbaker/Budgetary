@@ -11,12 +11,7 @@ extension Array where Element == BudgetTransaction {
     func filtered(by monthYear: MonthYear) -> [BudgetTransaction] {
         return self.filter { MonthYear(from: $0.date) == monthYear }
     }
-//
-//    func filtered(by id: ID<CreditCardPaymentPlain>) -> [BudgetTransaction] {
-//        return self.filter { $0.account.id == ID<TransactionAccount>(id) }
-//    }
-//    
-    // Array+BudgetTransaction.swift — replace the ID<CreditCardPaymentPlain> overload
+
     func filtered(byAccount accountID: UUID) -> [BudgetTransaction] {
         self.filter { $0.account.id == ID<TransactionAccount>(accountID) }
     }

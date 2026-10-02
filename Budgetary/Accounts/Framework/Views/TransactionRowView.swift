@@ -49,10 +49,6 @@ struct TransactionRowView: View {
                 }
             }
         }
-//        .sheet(isPresented: $transactionDetailIsPresented, onDismiss: { transactionDetailIsPresented = false }) {
-//            TransactionView(viewModel: Container.shared.transactionViewModel((transaction, false)))
-//        }
-        
     }
 }
 

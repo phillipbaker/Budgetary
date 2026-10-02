@@ -31,18 +31,6 @@ final class AppCoordinator: Identifiable {
         case editCategories
 
     }
-    
-//    func editCateogoriesButtonTapped() {
-//        destination = .editCategories
-//    }
-//    
-//    func monthPickerButtonTapped() {
-//        destination = .monthPicker
-//    }
-//    
-//    func dismiss() {
-//        destination = nil
-//    }
 }
 
 @Observable

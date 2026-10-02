@@ -21,26 +21,6 @@ struct EditCategoryRow: View {
 
     var body: some View {
         Text(editedName)
-//        TextField("Category Name", text: $editedName)
-//            .focused($focus, equals: .listRow(id: id))
-//            .listRowBackground(
-//                focus == .listRow(id: id)
-//                ? Color(.blue.opacity(0.08))
-//                : nil
-//            )
-//            .onSubmit {
-//                guard !editedName.isEmpty else {
-//                    focus = .listRow(id: id)
-//                    displayAlert = true
-//                    return
-//                }
-//                action(.renameCategory(id: id, newName: editedName))
-//            }
-//            .alert(Text("Category name cannot be empty"), isPresented: $displayAlert) {
-//                Button("OK") {
-//                    displayAlert = false
-//                }
-//            }
     }
 }
 
