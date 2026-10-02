@@ -90,14 +90,6 @@ struct EditCategoriesListView: View {
                 .fontWeight(.semibold)
             }
         }
-//        .sheet(item: $coordinator.destination) { destination in
-//            switch destination {
-//            case .newGroup:
-//                NewGroupView(action: action)
-//            case .newCategory(let groupID):
-//                NewCategoryView(groupID: groupID, action: action)
-//            }
-//        }
     }
     
     private func bindingFor(category: EditableCategoryPresentation) -> Binding<String> {

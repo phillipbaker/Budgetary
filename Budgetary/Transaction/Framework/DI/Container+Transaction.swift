@@ -45,28 +45,8 @@ extension Container {
             )
         }
     }
-
-//    var payeePickerViewModel: Factory<PayeePickerViewModel> {
-//        self { PayeePickerViewModel() }
-//            .singleton
-//    }
-    
-//    var categoryPickerViewModel: Factory<CategoryPickerViewModel> {
-//        self { CategoryPickerViewModel() }
-//            .singleton
-//    }
-    
-//    var accountPickerViewModel: Factory<AccountPickerViewModel> {
-//        self { AccountPickerViewModel() }
-//            .singleton
-//    }
     
     // MARK: Mappers
-    
-//    var payeesStateMapper: Factory<PayeesStateMapper> {
-//        self { PayeesStateMapper() }
-//            .singleton
-//    }
     
     var payeeMapper: Factory<PayeeMapper> {
         self { PayeeMapper() }
@@ -77,11 +57,6 @@ extension Container {
         self { PayeePresentationMapper() }
             .singleton
     }
-    
-//    var categoriesStateMapper: Factory<CategoriesStateMapper> {
-//        self { CategoriesStateMapper() }
-//            .singleton
-//    }
     
     var categoriesPresentationMapper: Factory<CategoriesPresentationMapper> {
         self { CategoriesPresentationMapper() }

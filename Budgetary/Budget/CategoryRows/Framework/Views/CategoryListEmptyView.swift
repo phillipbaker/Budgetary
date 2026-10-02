@@ -20,8 +20,8 @@ struct CategoryListEmptyView: View {
                 .font(.largeTitle)
                 .imageScale(.large)
             
-            // Fix with grammar agreement?
-            // Put current month year and/or monthYear into Environemnt for global use?
+            // TODO: Fix with grammar agreement?
+            // TODO: Put current month year and/or monthYear into Environemnt for global use?
             if monthYear == .currentMonthYear {
                 Text("You have no \(filter.rawValue) categories this month.")
                     .font(.subheadline)

@@ -10,7 +10,6 @@ import SwiftUI
 public struct ReadyToAssignPresentation: Equatable, Sendable {
     let readyToAssignFromLastMonth: String
     let cashOverspendingFromLastMonth: String
-    // TODO: Add credit overspending logic when adding debt group
     let inflowThisMonth: String
     let assignedThisMonth: String
     let assignedInFuture: String
@@ -20,5 +19,4 @@ public struct ReadyToAssignPresentation: Equatable, Sendable {
     let lightModeBackgroundColor: Color
     let darkModeBackgroundColor: Color
     let message: String
-//    let destination: BudgetViewModel.Destination
 }

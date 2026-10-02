@@ -15,16 +15,8 @@ actor CreditCardPaymentGroupLocalDataGateway: CreditCardPaymentGroupDataSourceLo
         let creditCardPaymentGroupDb = dao.creditCardPaymentGroup()
         return mapper.mapDbToPlain(creditCardPaymentGroupDb: creditCardPaymentGroupDb)
     }
-    
-//    func create(creditCardPayment: CreditCardPaymentPlain) async {
-//        dao.create(creditCardPayment: mapper.mapPlainToDb(creditCardPaymentPlain: creditCardPayment))
-//    }
 
     func update(creditCardPaymentGroup: CreditCardPaymentGroupPlain) {
         dao.update(creditCardPaymentGroup: mapper.mapPlainToDb(creditCardPaymentGroup: creditCardPaymentGroup))
     }
-    
-//    func delete(creditCardPayment: CreditCardPaymentPlain) {
-//        dao.delete(creditCardPayment: mapper.mapPlainToDb(creditCardPaymentPlain: creditCardPayment))
-//    }
 }

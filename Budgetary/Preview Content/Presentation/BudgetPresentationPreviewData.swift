@@ -50,6 +50,5 @@ extension ReadyToAssignPresentation {
         lightModeBackgroundColor: .secondary,
         darkModeBackgroundColor: .secondary,
         message: "Message.."
-//        destination: .assignMoney
     )
 }

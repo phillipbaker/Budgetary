@@ -16,12 +16,9 @@ extension CategoryGroupDb {
         isHidden: false,
         categories: [
             .rent,
-//            .countilTax,
             .utilities,
             .water,
-            .internet,
-//            .tvLicense,
-//            .cellPhones
+            .internet
         ]
     )
     
@@ -30,14 +27,7 @@ extension CategoryGroupDb {
         name: "True Expenses",
         isHidden: false,
         categories: [
-            .ynab,
-//            .birthdays,
-//            .christmas,
-//            .lifeInsurance,
-//            .roadTax,
-//            .carInsurance,
-//            .homeInsurance,
-//            .carServiceRepairs
+            .ynab
         ]
     )
     
@@ -46,19 +36,7 @@ extension CategoryGroupDb {
         name: "Monthly Expenses",
         isHidden: false,
         categories: [
-            .groceries,
-//            .commuting,
-//            .classesCamps,
-//            .petrolTolls,
-//            .homeSupplies,
-//            .homeImprovement,
-//            .kidsClothes,
-//            .gifts,
-//            .doctors,
-//            .amazonPrime,
-//            .prescriptions,
-//            .atmBankFees,
-//            .miscellaneous
+            .groceries
         ]
     )
 
@@ -67,12 +45,7 @@ extension CategoryGroupDb {
         name: "Fun",
         isHidden: false,
         categories: [
-            .phil,
-//            .kids,
-//            .school,
-//            .streaming,
-//            .familyActivities,
-//            .takeout
+            .phil
         ]
     )
 }

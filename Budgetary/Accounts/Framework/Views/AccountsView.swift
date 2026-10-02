@@ -53,21 +53,6 @@ struct AccountsView: View {
         .navigationDestination(for: BudgetAccountPresentation.self) { account in
             AccountView(account: account)
         }
-//        .sheet(isPresented: sheet) {
-//            NavigationStack {
-//                AddAccountView(viewModel: addAccountViewModel, addAccountIsPresented: $addAccountIsPresented, action: action)
-//            }
-//        }
-//        .tabViewBottomAccessory(content: {
-//            Button {
-//                viewModel.selectedTab = HomeViewModel.AppTab.newTransaction
-//            } label: {
-//                HStack {
-//                    Image(systemName: "plus")
-//                    Text("Transaction")
-//                }
-//            }
-//        })
     }
     
     private func image(for accountType: BudgetAccountTypePresentation) -> String {

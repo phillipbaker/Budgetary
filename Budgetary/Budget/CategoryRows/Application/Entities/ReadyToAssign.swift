@@ -12,7 +12,6 @@ public struct ReadyToAssign: Equatable, Sendable {
     let inflowThisMonth: Decimal
     let totalInflowsThisMonth: Decimal
     let cashOverspendingLastMonth: Decimal
-    // TODO: Add credit overspending logic when adding debt group
     let assignedThisMonth: Decimal
     let assignedInFuture: Decimal
     let totalOutflowsThisMonth: Decimal

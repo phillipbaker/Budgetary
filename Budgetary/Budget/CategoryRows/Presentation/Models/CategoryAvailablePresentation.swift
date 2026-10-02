@@ -12,7 +12,6 @@ public struct CategoryAvailablePresentation: AvailablePresentation, Equatable {
     public let cashFromLastMonth: String
     public let assignedThisMonth: String
     public let cashSpendingThisMonth: String
-//    let creditSpendingThisMonth: String
     public let message: String
     public let lightModeForegroundColor: Color
     public let lightModeBackgroundColor: Color

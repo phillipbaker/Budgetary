@@ -61,13 +61,10 @@ final class AssignMoneyViewModel {
     }
     
     func onDeleteWhileEmpty() {
-//        guard focusIntent == .secondary(id: rowID) else { return }
-//        focusIntent = .primary(id: rowID)
         localValues.operation = nil
     }
     
     func onEquals() {
-//        focusIntent = .primary(id: rowID)
         applyOperation()
     }
     
@@ -77,7 +74,7 @@ final class AssignMoneyViewModel {
             applyOperation()
         }
     // TODO: Connect to action
-//        action(.updateAssignedAmount(assignedAmount: localValues.primary, categoryID: rowID, monthYear: monthYear))
+    // action(.updateAssignedAmount(assignedAmount: localValues.primary, categoryID: rowID, monthYear: monthYear))
         localValues.lastCommitted = localValues.primary
     }
     
@@ -89,7 +86,6 @@ final class AssignMoneyViewModel {
     }
     
     func handle(operation: AmountOperation) {
-//        if focusIntent != .secondary(id: rowID) { focusIntent = .secondary(id: rowID) }
         if localValues.operation != nil { applyOperation() } // If operation in progress, commit
         localValues.operation = operation // Set the operation for the next entry
     }

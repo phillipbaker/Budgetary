@@ -40,7 +40,6 @@ struct DatePickerView: View {
                 .labelsHidden()
                 .datePickerStyle(.graphical)
                 .id("datePicker")
-            //                            .transition(.move(edge: .bottom))
         }
     }
 }

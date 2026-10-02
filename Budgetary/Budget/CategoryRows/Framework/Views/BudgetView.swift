@@ -14,7 +14,6 @@ struct BudgetView: View {
     let state: BudgetPresentationState
     @Bindable var coordinator: AppCoordinator
     
-    //    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSize
     
@@ -30,16 +29,6 @@ struct BudgetView: View {
                 )
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-            
-            //            Section {
-            //                FilterCategoriesView(
-            //                    filter: budget.filter,
-            //                    filterAction: { id in action(.filterButtonTapped(monthYear: budget.monthYear, filterID: id)) }
-            //                )
-            //            }
-            //            .listRowSeparator(.hidden)
-            //            .scrollIndicators(.hidden)
-            //            .listRowBackground(Color(.systemGroupedBackground))
             
             if !state.budget.creditCardPaymentGroup.categories.isEmpty {
                 Section {
@@ -111,18 +100,10 @@ struct BudgetView: View {
                     }
                 }
             }
-            
-            //            Section {
-            //                if budget.filter != .allCategories && !budget.categoryGroups.isEmpty {
-            //                    Button("Clear Filter") {
-            //                        action(.clearFilterButtonTapped(monthYear: budget.monthYear))
-            //                    }
-            //                }
-            //            }
         }
         .contentMargins(.top, 12)
         .listSectionSpacing(8)
-        .safeAreaPadding(.bottom, 24) // causing a jolt on keyboard dismiss
+        .safeAreaPadding(.bottom, 24) // TODO: causing a jolt on keyboard dismiss
         .gesture(
             DragGesture()
                 .onEnded { value in
@@ -144,7 +125,6 @@ struct BudgetView: View {
                         } label: {
                             Text(state.monthYear.monthWide + " " + state.monthYear.year.description)
                                 .fontWeight(.semibold)
-                            //                            .padding(.top, 4)
                                 .padding(.horizontal, 8)
 //                                .popover(
 //                                    isPresented: $coordinator.destination.monthPicker,
@@ -170,11 +150,6 @@ struct BudgetView: View {
                 }
             }
         }
-//        .sheet(isPresented: $coordinator.destination.editCategories) {
-//            NavigationStack {
-//                EditCategoriesRootView()
-//            }
-//        }
     }
     
     private func bindingFor<Row: BudgetRowPresentation>(monthYear: MonthYear, budgetRow: Row) -> Binding<AssignedValues> {

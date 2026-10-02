@@ -37,13 +37,11 @@ class PayeeDao {
         return mock
     }
     
-    // Remove try? error do/try/catch
     func findPayee(by id: UUID) -> PayeeDb? {
         mock.first(where: { $0.externalID == id })
     }
     
     func create(payee: PayeeDb) {
-        // validations not duping etc here?
         let newMock = mock + [payee]
         mock = newMock
         continuation.yield(mapper.map(payeesDb: newMock))

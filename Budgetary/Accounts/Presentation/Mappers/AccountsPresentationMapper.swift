@@ -29,14 +29,6 @@ public final class AccountsPresentationMapper {
             name: account.name
         )
     }
-        
-    
-//    func map(accounts: [BudgetAccount]) -> [BudgetAccountGroupPresentation : [BudgetAccountPresentation]] {
-//        let accounts = accounts.map { account in
-//            return TransactionPresentationMapper.map(account: account)
-//        }
-//        return Dictionary(grouping: accounts, by: { $0.accountType.group })
-//    }
     
     func map(accounts: [TransactionAccount]) -> [TransactionAccountPresentation] {
         accounts.map { account in

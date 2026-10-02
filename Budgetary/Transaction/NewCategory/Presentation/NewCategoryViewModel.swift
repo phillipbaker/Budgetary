@@ -111,10 +111,6 @@ final class NewCategoryViewModel {
 
         pendingSaveName = trimmed
         store.dispatch(.newCategoryRequested(name: trimmed, groupID: ID<CategoryGroup>(group.id)))
-        // The observation loop below detects the new category in the next store emission
-        // and calls onCategoryCreated, which calls TransactionViewModel.selectCategory —
-        // setting draft.category and dispatching .categorySelected so the navigation
-        // stack unwinds all the way back to TransactionView.
     }
     
     func confirmAlertButtonTapped() {

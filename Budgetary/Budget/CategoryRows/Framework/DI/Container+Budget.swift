@@ -90,12 +90,6 @@ extension Container {
             .singleton
     }
     
-//    @MainActor
-//    var assignMoneyEffect: Factory<AssignMoneyEffect> {
-//        self { @MainActor in AssignMoneyEffect(assignedAmount: <#String#>, categoryID: <#UUID#>, monthYear: <#MonthYear#>) }
-//            .singleton
-//    }
-    
     var assignMoneyUseCase: Factory<AssignMoneyUseCase> {
         self { AssignMoneyUseCase() }
             .singleton
