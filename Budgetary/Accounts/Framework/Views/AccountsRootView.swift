@@ -15,7 +15,7 @@ struct AccountsRootView: View {
         Group {
             switch viewModel.viewState {
             case .notLoaded:
-                EmptyView() // TODO: - Need to figure out notLoaded -> Loading everywhere
+                Color.clear
             case .loading:
                 ProgressView()
             case .error(let error):

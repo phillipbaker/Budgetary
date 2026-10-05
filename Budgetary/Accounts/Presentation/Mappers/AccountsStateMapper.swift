@@ -13,7 +13,7 @@ public final class AccountsStateMapper {
     func map(appState: AppState) -> AccountsViewState {
         switch appState.accountsState {
         case .notLoaded:
-            return .loading // TODO: Not loading state
+            return .notLoaded
         case .loading:
             return .loading
         case .error(let accountsError):
