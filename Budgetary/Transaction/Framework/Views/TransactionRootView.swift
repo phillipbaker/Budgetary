@@ -13,7 +13,7 @@ struct TransactionRootView: View {
     var body: some View {
         switch model.viewState {
         case .notLoaded:
-            EmptyView() // TODO: - Figure out notLoaded -> loading -> loaded/error
+            Color.clear
         case .loading:
             ProgressView()
         case .error(let error):

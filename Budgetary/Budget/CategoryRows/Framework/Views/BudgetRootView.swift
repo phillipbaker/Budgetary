@@ -16,7 +16,7 @@ struct BudgetRootView: View {
         Group {
             switch viewModel.viewState {
             case .notLoaded:
-                EmptyView() // TODO: - Figure out notLoaded -> loading -> loaded/error
+                Color.clear
             case .loading:
                 ProgressView()
             case .error(let error):

@@ -13,7 +13,7 @@ public final class BudgetStateMapper {
     func map(appState: AppState) throws -> BudgetViewState {
         switch appState.budgetState {
         case .notLoaded:
-            return .loading // TODO: Not Loaded State
+            return .notLoaded
         case .loading:
             return .loading
         case .error(let error):
