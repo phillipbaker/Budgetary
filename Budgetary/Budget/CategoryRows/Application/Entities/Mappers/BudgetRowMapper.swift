@@ -266,41 +266,6 @@ public final class BudgetRowMapper: Sendable {
         return activity
     }
     
-    // TODO: No one calling this one
-    func mapActivity(for creditCard: BudgetAccountPlain, in monthYear: MonthYear, from data: CombinedBudgetData) -> [MonthYear: CreditCardActivity] {
-        
-        // TODO: Guard this properly - even contrain what can be sent into this function? Or rename parameter to account...
-        guard creditCard.accountType == .creditCard else {
-            print("not credit card account")
-            return [:]
-        }
-
-        var activity: [MonthYear: CreditCardActivity] = [:]
-        
-        for monthYear in budgetRange(from: data) {
-            let spending = mapSpending(for: creditCard, in: monthYear)
-            let returns = mapReturns(for: creditCard, in: monthYear)
-            
-            // assigned per category for which there are transactions on this credit card
-            // plus assigned directly to credit card
-            let fundedSpending = Decimal(0.00)
-            let payments = Decimal(0.00)
-            let paymentsAndReturns = payments + returns
-            
-            activity[monthYear] = CreditCardActivity(
-                spending: spending,
-                returns: returns,
-                totalSpending: spending + returns,
-                fundedSpending: fundedSpending,
-                paymentsAndReturns: paymentsAndReturns,
-                totalActivity: fundedSpending + paymentsAndReturns,
-                transactions: TransactionMapper.mapTransactions(for: creditCard, fromPayees: data.payeesPlain, andCategoryGroups: data.categoryGroupsPlain)
-            )
-        }
-        
-        return activity
-    }
-    
     func mapSpending(for account: BudgetAccountPlain, in monthYear: MonthYear) -> Decimal {
         return account.transactions
             .filteredByOutflows
@@ -381,53 +346,6 @@ public final class BudgetRowMapper: Sendable {
     }
 
     // MARK: - Category Groups Plain -> Rows
-    
-    func mapCategoryGroups(
-        for monthYear: MonthYear,
-        filteredBy filter: CategoryFilter,
-        from data: CombinedBudgetData
-    ) -> [CategoryGroupRow] {
-        let categoryGroups = map(categoryGroupsPlain: data.categoryGroupsPlain, from: data)
-        
-        switch filter {
-        case .allCategories:
-            return categoryGroups
-        case .underfunded:
-            var groups: [CategoryGroupRow] = []
-            for group in categoryGroups {
-                let underfundedCategories = group.categories.filter { $0.available[monthYear]?.total ?? 0.00 < 0.00 }
-                groups.append(
-                    CategoryGroupRow(
-                        id: group.id,
-                        name: group.name,
-                        isHidden: group.isHidden,
-                        assignedTotal: mapGroupAssignedTotal(for: underfundedCategories),
-                        activityTotal: mapGroupActivityTotal(for: underfundedCategories),
-                        availableTotal: mapGroupAvailableTotal(for: underfundedCategories),
-                        categories: underfundedCategories
-                    )
-                )
-            }
-            return groups.filter { !$0.categories.isEmpty }
-        case .moneyAvailable:
-            var groups: [CategoryGroupRow] = []
-            for group in categoryGroups {
-                let moneyAvailableCategories = group.categories.filter { $0.available[monthYear]?.total ?? 0.00 > 0.00 }
-                groups.append(
-                    CategoryGroupRow(
-                        id: group.id,
-                        name: group.name,
-                        isHidden: group.isHidden,
-                        assignedTotal: mapGroupAssignedTotal(for: moneyAvailableCategories),
-                        activityTotal: mapGroupActivityTotal(for: moneyAvailableCategories),
-                        availableTotal: mapGroupAvailableTotal(for: moneyAvailableCategories),
-                        categories: moneyAvailableCategories
-                    )
-                )
-            }
-            return groups.filter { !$0.categories.isEmpty }
-        }
-    }
     
     func map(categoryGroupPlain: CategoryGroupPlain, from data: CombinedBudgetData) -> CategoryGroupRow {
         let categories = map(categoriesPlain: categoryGroupPlain.categories, from: data)

@@ -155,7 +155,6 @@ enum TransactionPresentationMapper {
     }
     
     // TODO: Check this correct with positive, negative values, errors go somewhere
-    // TODO: Also I wrote a function like this in a view or view model which needs to be deleted
     static func map(amountRequest: AmountDraft) -> Amount {
         switch amountRequest.type {
         case .inflow:

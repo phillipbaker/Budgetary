@@ -53,20 +53,6 @@ enum TransactionMapper {
         }
     }
     
-    static func map(transaction: TransactionPlain, for account: BudgetAccountPlain, fromPayees payees: [PayeePlain], andCategoryGroups categoryGroups: [CategoryGroupPlain]) -> BudgetTransaction {
-        return BudgetTransaction(
-            id: ID<BudgetTransaction>(transaction.id),
-            date: transaction.date,
-            memo: transaction.memo,
-            amount: transaction.amount,
-            isCleared: transaction.isCleared,
-            payee: Self.map(payeeID: transaction.payeeID, payeesPlain: payees, categoryGroups: categoryGroups),
-            category: Self.mapCategory(categoryID: transaction.categoryID, categoryGroups: categoryGroups),
-            account: TransactionAccount(id: ID<TransactionAccount>(account.id), name: account.name),
-            linkedTransactionID: nil
-        )
-    }
-    
     static func map(payeeID: ID<PayeePlain>?, payeesPlain: [PayeePlain], categoryGroups: [CategoryGroupPlain]) -> Payee? {
         guard let payeePlain = payeesPlain.first(where: { payeeID == $0.id }) else { return nil }
         return map(payeePlain: payeePlain, categoryGroups: categoryGroups)

@@ -132,7 +132,6 @@ final class TransactionAmountViewModel {
     func onSubmit() {
         if focusIntent != .none { focusIntent = .none }
         commit()
-        // TODO: Bubble up to parent view model
     }
     
     func onDeleteWhileEmpty() {
@@ -147,12 +146,6 @@ final class TransactionAmountViewModel {
         guard !transactionTypePickerIsDisabled else { return }
         guard newType != userIntendedType else { return }
         userIntendedType = newType
-    }
-    
-    // MARK: Category
-    
-    func onAddCategory(name: String, groupID: String) {
-        // TODO: implement
     }
     
     // MARK: Delete
