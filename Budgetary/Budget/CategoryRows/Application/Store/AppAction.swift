@@ -12,9 +12,6 @@ enum AppAction {
     case tabSelected(AppTab)
     case transactionSheetRequested(AppTab, TransactionData?)
     case sheetDismissed
-    case push(AppTab, Destination)
-    case pop(AppTab)
-    case popToRoot(AppTab)
     
     // Transaction
     case saveTransactionRequested(SaveTransactionRequest)

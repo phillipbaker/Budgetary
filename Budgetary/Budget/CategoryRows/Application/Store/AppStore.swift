@@ -18,8 +18,7 @@ final class AppStore {
         state: AppState = AppState(
             homeState: .init(
                 selectedTab: .budget,
-                sheet: nil,
-                tabDestinations: [.budget: [], .accounts: []]
+                sheet: nil
             ),
             payeesState: .notLoaded,
             budgetState: .notLoaded,
@@ -27,7 +26,6 @@ final class AppStore {
             transactionState: .notLoaded,
             monthYear: .currentMonthYear,
             filter: .allCategories,
-            tabDestinations: [.budget: [], .accounts: []],
             sheet: nil,
             currencyCode: "GBP"
         ),
@@ -116,19 +114,6 @@ import Factory
     case .sheetDismissed:
         state.transactionState = .notLoaded
         state.sheet = nil
-        return []
-        
-    case .push(let tab, let destination):
-        state.homeState.selectedTab = tab // TODO: Is this necessary?
-        state.tabDestinations[tab]?.append(destination)
-        return []
-        
-    case .pop(let tab):
-        state.tabDestinations[tab]?.removeLast()
-        return []
-        
-    case .popToRoot(let tab):
-        state.tabDestinations[tab]?.removeAll()
         return []
         
         // MARK: - Transaction

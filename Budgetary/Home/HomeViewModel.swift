@@ -14,7 +14,7 @@ final class HomeViewModel {
     @ObservationIgnored private let store: AppStore
     @ObservationIgnored private var observationTask: Task<Void, Never>?
     
-    var viewState: HomeState = .init(selectedTab: .budget, sheet: nil, tabDestinations: [.budget: [], .accounts: []])
+    var viewState: HomeState = .init(selectedTab: .budget, sheet: nil)
     
     init(
         store: AppStore = Container.shared.appStore(),
@@ -33,12 +33,6 @@ final class HomeViewModel {
             store.dispatch(.transactionSheetRequested(tab, nil))
         case .sheetDismissed:
             store.dispatch(.sheetDismissed)
-        case .push(let tab, let destination):
-            store.dispatch(.push(tab, destination))
-        case .pop(let tab):
-            store.dispatch(.pop(tab))
-        case .popToRoot(let tab):
-            store.dispatch(.popToRoot(tab))
         }
     }
     
@@ -47,9 +41,7 @@ final class HomeViewModel {
             for await state in store.observe() {
                 self.viewState = HomeState(
                     selectedTab: state.homeState.selectedTab,
-                    sheet: state.sheet,
-                    tabDestinations: state.tabDestinations
-                )
+                    sheet: state.sheet                )
             }
         }
     }

@@ -8,13 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Bindable var viewModel: HomeViewModel
-    
-    @State private var paths: [AppTab: NavigationPath] = [
-        .budget: NavigationPath(),
-        .accounts: NavigationPath()
-    ]
     
     var body: some View {
         TabView(selection: $viewModel.viewState.selectedTab) {
@@ -60,33 +54,8 @@ struct HomeView: View {
         _ tab: AppTab,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationStack(path: pathBinding(for: tab)) {
+        NavigationStack() {
             content()
-                .navigationDestination(for: Destination.self) { destination in
-                    destinationView(destination)
-                }
         }
-        .tag(tab)
-    }
-    
-    private func pathBinding(for tab: AppTab) -> Binding<NavigationPath> {
-        Binding(
-            get: {
-                NavigationPath(viewModel.viewState.tabDestinations[tab] ?? [])
-            },
-            set: { newPath in
-                let newCount = newPath.count
-                let oldCount = viewModel.viewState.tabDestinations[tab]?.count ?? 0
-
-                if newCount < oldCount {
-                    viewModel.handle(action: .pop(tab))
-                }
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func destinationView(_ destination: Destination) -> some View {
-
     }
 }
