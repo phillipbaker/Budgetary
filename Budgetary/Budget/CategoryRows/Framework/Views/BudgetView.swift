@@ -5,14 +5,14 @@
 //  Created by Phillip Baker on 07/08/2024.
 //
 
-import Factory
 import SwiftUI
 import SwiftUINavigation
 
 struct BudgetView: View {
     let action: (BudgetAction) -> Void
     let state: BudgetPresentationState
-    @Bindable var coordinator: AppCoordinator
+    
+    @Binding var destination: BudgetViewModel.Destination?
     
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.horizontalSizeClass) var horizontalSize
@@ -116,36 +116,32 @@ struct BudgetView: View {
                     }
                 }
         )
-        .toolbar {            
+        .toolbar {
             ToolbarItem(placement: .navigation) {
-                GlassEffectContainer {
-                    HStack(spacing: 0) {
-                        Button {
-//                            coordinator.monthPickerButtonTapped()
-                        } label: {
-                            Text(state.monthYear.monthWide + " " + state.monthYear.year.description)
-                                .fontWeight(.semibold)
-                                .padding(.horizontal, 8)
-//                                .popover(
-//                                    isPresented: $coordinator.destination.monthPicker,
-//                                    attachmentAnchor: .point(.bottom)
-//                                ) {
-//                                    MonthPickerView(
-//                                        monthYear: state.monthYear,
-//                                        months: state.budget.months,
-//                                        filter: state.filter,
-//                                        action: action,
-//                                        year: state.monthYear.year
-//                                    )
-//                                    .presentationCompactAdaptation(.popover)
-//                                }
-                        }
-                        //                        .buttonStyle(.glass)
-                        
-                        if state.monthYear != .currentMonthYear {
-                            TodayButton(action: action, filter: state.filter)
-                            //                                .buttonStyle(.glass)
-                        }
+                HStack(spacing: 0) {
+                    Button {
+                        action(.monthPickerButtonTapped)
+                    } label: {
+                        Text(state.monthYear.monthWide + " " + state.monthYear.year.description)
+                            .fontWeight(.semibold)
+                            .padding(.horizontal, 8)
+                    }
+                    .popover(
+                        isPresented: $destination.monthPicker,
+                        attachmentAnchor: .point(.bottom)
+                    ) {
+                        MonthPickerView(
+                            monthYear: state.monthYear,
+                            months: state.budget.months,
+                            filter: state.filter,
+                            action: action,
+                            year: state.monthYear.year
+                        )
+                        .presentationCompactAdaptation(.popover)
+                    }
+                    
+                    if state.monthYear != .currentMonthYear {
+                        TodayButton(action: action, filter: state.filter)
                     }
                 }
             }
@@ -185,7 +181,7 @@ struct BudgetView: View {
             swipeLeftGesture: {},
             swipeRightGesture: {}
         ),
-        coordinator: .init()
+        destination: .constant(nil)
     )
 }
 

@@ -1,37 +1,11 @@
 //
-//  AppCoordinator.swift
+//  EditCategoriesCoordinator.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 31/03/2025.
 //
 
 import SwiftUI
-import SwiftUINavigation
-
-@Observable
-final class AppCoordinator: Identifiable {
-    var path: [Destination]
-    
-    init(path: [Destination] = []) {
-        self.path = path
-    }
-    
-    let id = UUID()
-    
-    @CasePathable
-    enum Destination: Hashable {
-        // Transaction
-        case transactionSheet
-        case payeePicker
-        case categoryPicker
-        case accountPicker
-        
-        // Budget
-        case monthPicker
-        case editCategories
-
-    }
-}
 
 @Observable
 final class EditCategoriesCoordinator: Identifiable {

@@ -9,13 +9,6 @@ import Factory
 
 extension Container {
     
-    // MARK: Coordinator
-    
-    var appCoordinator: Factory<AppCoordinator> {
-        self { AppCoordinator() }
-            .singleton
-    }
-    
     // MARK: View Model
     
     @MainActor
