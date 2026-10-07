@@ -9,6 +9,6 @@ struct BudgetPresentationState {
     let budget: BudgetPresentation
     let monthYear: MonthYear
     let filter: CategoryFilterPresentation
-    let swipeLeftGesture: () -> Void
-    let swipeRightGesture: () -> Void
+    let canGoToPreviousMonth: Bool
+    let canGoToNextMonth: Bool
 }

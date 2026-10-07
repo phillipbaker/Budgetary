@@ -14,8 +14,8 @@ public final class BudgetPresentationMapper {
             budget: try mapBudgetPresentation(from: budgetData, for: monthYear),
             monthYear: monthYear,
             filter: map(categoryFilter: filter),
-            swipeLeftGesture: { guard monthYear > budgetData.start && monthYear <= budgetData.end else { return } },
-            swipeRightGesture: { guard monthYear >= budgetData.start && monthYear < budgetData.end else { return } }
+            canGoToPreviousMonth: mapCanGoToPreviousMonth(from: monthYear, budgetStart: budgetData.start),
+            canGoToNextMonth: mapCanGoToNextMonth(from: monthYear, budgetEnd: budgetData.end)
         )
     }
 
@@ -98,6 +98,14 @@ public final class BudgetPresentationMapper {
         case .moneyAvailable:
             return .moneyAvailable
         }
+    }
+    
+    func mapCanGoToPreviousMonth(from monthYear: MonthYear, budgetStart: MonthYear) -> Bool {
+        monthYear > budgetStart
+    }
+
+    func mapCanGoToNextMonth(from monthYear: MonthYear, budgetEnd: MonthYear) -> Bool {
+        monthYear < budgetEnd
     }
     
     // TODO: Pass currency/formatting settings in here and incorpoate into formatting logic
