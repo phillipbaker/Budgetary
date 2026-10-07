@@ -9,8 +9,7 @@ import Factory
 import SwiftUI
 
 struct BudgetRootView: View {
-    let viewModel: BudgetViewModel = Container.shared.budgetViewModel()
-    let coordinator: AppCoordinator = Container.shared.appCoordinator()
+    @Bindable var viewModel: BudgetViewModel = Container.shared.budgetViewModel()
     
     var body: some View {
         Group {
@@ -25,9 +24,8 @@ struct BudgetRootView: View {
                 BudgetView(
                     action: viewModel.handle,
                     state: budgetPresentationState,
-                    coordinator: coordinator
+                    destination: $viewModel.destination
                 )
-                .environment(coordinator)
             }
         }
         .onAppear {

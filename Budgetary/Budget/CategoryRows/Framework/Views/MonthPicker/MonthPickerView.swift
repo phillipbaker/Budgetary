@@ -14,7 +14,6 @@ struct MonthPickerView: View {
     let action: (BudgetAction) -> Void
 
     @State var year: Int
-    @Environment(AppCoordinator.self) var coordinator
 
     let columns = [
         GridItem(.flexible(minimum: 72, maximum: .infinity), alignment: .leading),

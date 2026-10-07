@@ -7,6 +7,7 @@
 
 import Factory
 import SwiftUI
+import SwiftUINavigation
 
 @MainActor
 @Observable
@@ -16,6 +17,13 @@ public final class BudgetViewModel {
     @ObservationIgnored private var observationTask: Task<Void, Never>?
     
     var viewState: BudgetViewState = .notLoaded
+    
+    var destination: Destination?
+    
+    @CasePathable
+    enum Destination {
+        case monthPicker
+    }
     
     init(
         store: AppStore = Container.shared.appStore(),
@@ -32,11 +40,14 @@ public final class BudgetViewModel {
         switch action {
         case .budgetTabAppeared:
             store.dispatch(.loadBudgetRequested)
+        case .monthPickerButtonTapped:
+            destination = .monthPicker
         case let .budgetSwipedLeftGesture(monthYear):
             store.dispatch(.monthYearUpdated(monthYear.advanced(by: -1)))
         case let .budgetSwipedRightGesture(monthYear):
             store.dispatch(.monthYearUpdated(monthYear.advanced(by: 1)))
         case let .monthPickerMonthSelected(monthYear):
+            destination = nil
             store.dispatch(.monthYearUpdated(monthYear))
         case let .filterButtonTapped(filterID):
             store.dispatch(.budgetRowsFiltered(filterID))
