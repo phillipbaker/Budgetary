@@ -163,6 +163,10 @@ import Factory
         return [Container.shared.loadBudgetEffect()]
         
     case .monthYearUpdated(let monthYear):
+        if case .loaded(let budget) = state.budgetState,
+           !(budget.start...budget.end).contains(monthYear) {
+            return []
+        }
         state.monthYear = monthYear
         return [Container.shared.loadBudgetEffect()]
         

@@ -108,10 +108,10 @@ struct BudgetView: View {
             DragGesture()
                 .onEnded { value in
                     if value.translation.width > 50 {
-                        state.swipeLeftGesture()
+                        guard state.canGoToPreviousMonth else { return }
                         action(.budgetSwipedLeftGesture(monthYear: state.monthYear))
                     } else if value.translation.width < -50 {
-                        state.swipeRightGesture()
+                        guard state.canGoToNextMonth else { return }
                         action(.budgetSwipedRightGesture(monthYear: state.monthYear))
                     }
                 }
@@ -178,8 +178,8 @@ struct BudgetView: View {
             ),
             monthYear: .currentMonthYear,
             filter: .allCategories,
-            swipeLeftGesture: {},
-            swipeRightGesture: {}
+            canGoToPreviousMonth: true,
+            canGoToNextMonth: true
         ),
         destination: .constant(nil)
     )
