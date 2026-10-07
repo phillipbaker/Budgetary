@@ -13,16 +13,8 @@ struct AppState: Sendable {
     var transactionState: TransactionState
     var monthYear: MonthYear
     var filter: CategoryFilter
-    var tabDestinations: [AppTab: [Destination]]
     var sheet: Sheet?
     var currencyCode: String
-}
-
-public enum Destination: Hashable, Sendable {
-//     // Transaction
-//    case payeePicker(PayeePresentation?)
-//    case accountPicker(TransactionAccountPresentation?)
-//    case categoryPicker(TransactionCategoryPresentation?)
 }
 
 public enum Sheet: String, Hashable, Identifiable, Sendable {

@@ -8,5 +8,4 @@
 struct HomeState: Sendable {
     var selectedTab: AppTab
     var sheet: Sheet?
-    var tabDestinations: [AppTab: [Destination]]
 }
