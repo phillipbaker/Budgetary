@@ -21,7 +21,9 @@ final class PayeePickerViewModel {
     
     var viewState: PayeesStatePresentation = .loading
     var searchText: String = ""
-    var newPayeeSheetIsPresented: Bool = false
+    
+    // Set when a save is dispatched; cleared once the matching payee appears in the store.
+    private var pendingSaveName: String?
     
     // MARK: - Derived State
     
@@ -36,18 +38,34 @@ final class PayeePickerViewModel {
     }
     
     var filteredPayees: [PayeePresentation] {
-        guard !searchText.isEmpty else { return [] }
-        return payeeNames
-            .flatMap(\.payees)
-            .filter { $0.name.normalizedForComparison().contains(searchText.normalizedForComparison()) }
-            .sorted { $0.name.rankedAgainst(text: searchText) < $1.name.rankedAgainst(text: searchText) }
+        guard isSearching else { return [] }
+        let trimmed = trimmedSearchText
+        let candidate = trimmed.normalizedForComparison()
+        return allPayees
+            .filter { $0.name.normalizedForComparison().contains(candidate) }
+            .sorted { $0.name.rankedAgainst(text: trimmed) < $1.name.rankedAgainst(text: trimmed) }
+    }
+    
+    var isSearching: Bool {
+        !trimmedSearchText.isEmpty
     }
     
     var isNameClash: Bool {
-        payeeNames
-            .flatMap(\.payees)
-            .map { $0.name.normalizedForComparison() }
-            .contains(searchText.normalizedForComparison())
+        let candidate = trimmedSearchText.normalizedForComparison()
+        return allPayees
+            .contains { $0.name.normalizedForComparison() == candidate }
+    }
+    
+    var canCreatePayee: Bool {
+        isSearching && !isNameClash && pendingSaveName == nil
+    }
+    
+    var trimmedSearchText: String {
+        searchText.trimmingCharacters(in: .whitespaces)
+    }
+    
+    private var allPayees: [PayeePresentation] {
+        transferPayees + payeeNames.flatMap(\.payees)
     }
     
     // MARK: - Init
@@ -65,25 +83,14 @@ final class PayeePickerViewModel {
     
     // MARK: - Intent
     
-    func newPayeeButtonTapped() {
-        newPayeeSheetIsPresented = true
-    }
-    
     func selectPayeeButtonTapped(_ payee: PayeePresentation) {
         onSelect(payee)
     }
     
-    func cancelNewPayeeButtonTapped() {
-        newPayeeSheetIsPresented = false
-    }
-    
-    func onPayeeCreated(_ payee: PayeePresentation) {
-        newPayeeSheetIsPresented = false
-        onSelect(payee)
-    }
-    
-    func onDismissPicker() {
-
+    func newPayeeFromSearchText() {
+        guard canCreatePayee else { return }
+        pendingSaveName = trimmedSearchText
+        store.dispatch(.createNewPayeeRequested(trimmedSearchText))
     }
     
     // MARK: - Store Observation
@@ -99,7 +106,21 @@ final class PayeePickerViewModel {
                 case .error:
                     viewState = .error
                 case .loaded(let payees):
-                    viewState = .loaded(mapper.map(payees: payees))
+                    let payeePickerData: PayeePickerDataPresentation = mapper.map(payees: payees)
+                    viewState = .loaded(payeePickerData)
+
+                    // If a save is in flight, check whether the new payee has landed.
+                    if let pendingName = self.pendingSaveName {
+                        let created = payeePickerData.alphabeticalPayees
+                            .flatMap(\.payees)
+                            .first { $0.name.normalizedForComparison() == pendingName.normalizedForComparison() }
+                        if let created {
+                            withAnimation {
+                                self.pendingSaveName = nil
+                                self.onSelect(created)
+                            }
+                        }
+                    }
                 }
             }
         }

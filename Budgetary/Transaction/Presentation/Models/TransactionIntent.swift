@@ -18,7 +18,6 @@ public enum TransactionAction {
     
     // Payee Picker
     case payeePickerButtonTapped
-    case newPayeeButtonTapped(String)
     
     // Category Picker
     case categoryPickerButtonTapped

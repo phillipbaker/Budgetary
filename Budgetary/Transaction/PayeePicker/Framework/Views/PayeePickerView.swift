@@ -21,11 +21,7 @@ struct PayeePickerView: View {
             .background(Color(.systemGroupedBackground))
             
             List {
-                if model.searchText.isEmpty {
-                    AddItemButton("New Payee") {
-                        model.newPayeeButtonTapped()
-                    }
-                    
+                if !model.isSearching {
                     Section {
                         ForEach(model.transferPayees) { transferPayee in
                             PayeeNameRow(
@@ -50,6 +46,13 @@ struct PayeePickerView: View {
                         }
                     }
                 } else {
+                    if model.canCreatePayee {
+                        Section {
+                            AddItemButton("Create “\(model.trimmedSearchText)” Payee") {
+                                model.newPayeeFromSearchText()
+                            }
+                        }
+                    }
                     ForEach(model.filteredPayees) { payee in
                         PayeeNameRow(
                             payee: payee,

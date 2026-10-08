@@ -90,9 +90,6 @@ final class TransactionViewModel {
             destination = .payeePicker
             store.dispatch(.payeeDataLoadRequested)
 
-        case .newPayeeButtonTapped(let name):
-            store.dispatch(.createNewPayeeRequested(name))
-
         case .categoryPickerButtonTapped:
             destination = .categoryPicker
             store.dispatch(.loadBudgetRequested)
