@@ -257,7 +257,7 @@ import Factory
         return [NewPayeeEffect(name: name)]
         
     case .createNewPayeeSucceeded:
-        return [Container.shared.loadBudgetEffect(), Container.shared.loadBudgetAccountsEffect()]
+        return [LoadPayeesEffect()]
         
     case .createNewPayeeFailed:
         return []
