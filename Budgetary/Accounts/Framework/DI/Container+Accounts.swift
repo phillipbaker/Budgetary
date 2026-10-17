@@ -46,12 +46,6 @@ extension Container {
             .singleton
     }
     
-    @MainActor
-    var loadBudgetAccountsEffect: Factory<LoadBudgetAccountsEffect> {
-        self { @MainActor in LoadBudgetAccountsEffect() }
-            .singleton
-    }
-    
     var loadAccountsSource: Factory<LoadBudgetAccountsSource> {
         self { LoadAccountsDataSource() }
             .singleton

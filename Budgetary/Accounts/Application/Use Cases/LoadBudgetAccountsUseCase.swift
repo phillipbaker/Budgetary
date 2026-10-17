@@ -19,10 +19,11 @@ struct LoadBudgetAccountsUseCase: Sendable {
         self.mapper = mapper
     }
     
-    func execute() async -> [BudgetAccount] {
+    func execute() async -> [AccountData] {
         let payeesPlain = await source.payees()
         let accountsPlain = await source.accounts()
         let categoryGroupsPlain = await source.categoryGroups()
-        return mapper.map(accounts: accountsPlain, payees: payeesPlain, categoryGroups: categoryGroupsPlain)
+        let accounts = mapper.map(accounts: accountsPlain, payees: payeesPlain, categoryGroups: categoryGroupsPlain)
+        return mapper.map(accounts: accounts)
     }
 }
