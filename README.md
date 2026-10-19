@@ -34,9 +34,9 @@ Budgetary started with Clean Architecture, comprising per-feature layers for fra
 ### Target
 
 ```
-View (action) → AppStore → reducer (state, action) → new state + effect closures
+View (action) → AppStore → reducer (state, action) → new state + effects (data)
      ↑                                                            ↓             
-   state      ←      success/failure action      ←     effect calls repository
+   state     ←     success/failure action     ←    effect runner calls repository
                                                                   ↓
                                                          Repository protocol
                                                                   ↓
@@ -48,19 +48,19 @@ View (action) → AppStore → reducer (state, action) → new state + effect cl
 - One store owns app state and navigation. Views read state and send actions to the store.
 - State holds domain entities that refer to each other by ID, not by nested copies, so edits change one value.
 - The monthly budget is computed from state, not stored.
-- The reducer is pure. It receives state and action and returns new state and any effects, as closures.
+- The reducer is pure. It receives state and action and returns new state and any effects, as values describing the work.
 - Domain rules are pure functions on domain types and the reducer calls them directly.
 - The reducer applies changes to entities in state and an effect saves them. The budget screen updates immediately.
 - Repositories sit behind protocols, keeping the dependency inversion from the current architecture.
-- Dependencies are injected into the store once, and the store passes them to each effect as needed.
+- Dependencies are injected into `EffectRunner`, which the store holds. The runner executes each effect and returns the resulting action.
 - Data is mapped twice. On the data side, repositories map in both directions between SwiftData models and domain types. On the presentation side, pure selector functions derive presentation models from state.
 
 ### Current State
 
 ```
-View (action) ←→ View Model → AppStore → reducer (state, action) → new state + effect structs
+View (action) ←→ View Model → AppStore → reducer (state, action) → new state + effects (data)
                       ↑                                                        ↓
-                    state     ←     success/failure action     ←     effect calls use case
+                    state     ←     success/failure action     ←  effect runner calls use case
                                                                                ↓   
                                                                             use case
                                                                                ↓   
@@ -80,7 +80,7 @@ View (action) ←→ View Model → AppStore → reducer (state, action) → new
 - An app store and reducer are in place. User actions, like assigning money to a category, currently pass through both architectures. Views send actions to view models, which forward them to the store. View models observe the store through an `AsyncStream` and map state to presentation models for the views.
 - The store holds `BudgetData`, a computed read model, not the entities it’s computed from. Building the budget means loading from every data source, and every write reloads the whole budget.
 - Transactions hold nested copies of their account, category and payee, not IDs.
-- An effect struct wraps each use case. The reducer builds effects itself, through `Container.shared`, so it isn’t pure. 
+- The reducer is a pure function returning `AppEffect` values. `EffectRunner` holds the use cases, runs each effect and returns a follow-up action for the store to dispatch.
 - Domain logic lives in use cases. Data access goes through data sources, data gateways and DAOs, with protocols inverting the dependencies between use cases and data sources, and between data sources and gateways. Data is mapped immutably across boundaries from Db ←→ Plain ←→ Domain → Budget read model → Presentation models.
 - Navigation is split. The store owns the selected tab and top-level sheet (new transaction or add account). Everything below that stays out of the store. Account detail is pushed with a `NavigationLink`. View models hold optional `Destination` enums for the month picker popover and the transaction form’s pickers. These are presented by the SwiftUINavigation framework.
 
