@@ -72,12 +72,6 @@ extension Container {
             .singleton
     }
     
-    @MainActor
-    var loadBudgetEffect: Factory<LoadBudgetEffect> {
-        self { @MainActor in LoadBudgetEffect() }
-            .singleton
-    }
-    
     var loadBudgetSource: Factory<LoadBudgetSource> {
         self { LoadBudgetDataSource() }
             .singleton
@@ -95,13 +89,25 @@ extension Container {
     
     @MainActor
     var appStore: Factory<AppStore> {
-        self { @MainActor in AppStore(reducer: appReducer) }
+        self { @MainActor in AppStore(reducer: appReducer, effectRunner: self.effectRunner()) }
             .singleton
     }
     
     @MainActor
     var effectRunner: Factory<EffectRunner> {
-        self { @MainActor in EffectRunner() }
-            .singleton
+        self { @MainActor in
+            EffectRunner(
+                loadBudget: self.loadBudgetUseCase(),
+                assignMoney: self.assignMoneyUseCase(),
+                createBudgetAccount: self.addAccountUseCase(),
+                loadBudgetAccounts: self.loadAccountsDataUseCase(),
+                saveTransaction: self.saveTransactionUseCase(),
+                createPayee: self.newPayeeUseCase(),
+                loadPayees: self.loadPayeesUseCase(),
+                createCategory: self.newCategoryUseCase(),
+                createCategoryGroup: self.newGroupUseCase()
+            )
+        }
+        .singleton
     }
 }
