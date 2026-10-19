@@ -10,7 +10,7 @@ import Foundation
 public final class BudgetRowMapper: Sendable {
     // MARK: - Budget Data
     
-    func mapBudgetData(from data: CombinedBudgetData) -> BudgetData {
+    func mapBudgetData(from data: BudgetDataPlain) -> BudgetData {
         return BudgetData(
             id: ID<BudgetData>(data.budgetPlain.id),
             readyToAssign: mapReadyToAssign(from: data),
@@ -24,7 +24,7 @@ public final class BudgetRowMapper: Sendable {
 
     // MARK: - Ready To Assign
 
-    func mapReadyToAssign(from data: CombinedBudgetData) -> [MonthYear: ReadyToAssign] {
+    func mapReadyToAssign(from data: BudgetDataPlain) -> [MonthYear: ReadyToAssign] {
         var readyToAssign: [MonthYear: ReadyToAssign] = [:]
         
         let categories = data.categoryGroupsPlain.flatMap(\.categories)
@@ -82,7 +82,7 @@ public final class BudgetRowMapper: Sendable {
         return readyToAssign
     }
 
-    func cashOverspendingLastMonth(for monthYear: MonthYear, from data: CombinedBudgetData) -> Decimal {
+    func cashOverspendingLastMonth(for monthYear: MonthYear, from data: BudgetDataPlain) -> Decimal {
         return data.categoryGroupsPlain
             .flatMap { $0.categories }
             .compactMap { mapAvailable(for: $0, from: data)[monthYear.advanced(by: -1)] }
@@ -116,7 +116,7 @@ public final class BudgetRowMapper: Sendable {
 
     // MARK: - Credit Card Payments Plain -> Rows
     
-    func mapCreditCardPaymentGroup(from data: CombinedBudgetData) -> CreditCardPaymentGroupRow {
+    func mapCreditCardPaymentGroup(from data: BudgetDataPlain) -> CreditCardPaymentGroupRow {
         let creditCardPayments = map(paymentsPlain: data.creditCardPaymentGroupPlain.cardPayments, from: data)
         return CreditCardPaymentGroupRow(
             id: ID<CreditCardPaymentGroupRow>(data.creditCardPaymentGroupPlain.id),
@@ -128,13 +128,13 @@ public final class BudgetRowMapper: Sendable {
         )
     }
     
-    func map(paymentsPlain: [CreditCardPaymentPlain], from data: CombinedBudgetData) -> [CreditCardPaymentRow] {
+    func map(paymentsPlain: [CreditCardPaymentPlain], from data: BudgetDataPlain) -> [CreditCardPaymentRow] {
         paymentsPlain.map { cardPayment in
             map(paymentPlain: cardPayment, from: data)
         }
     }
     
-    func map(paymentPlain: CreditCardPaymentPlain, from data: CombinedBudgetData) -> CreditCardPaymentRow {
+    func map(paymentPlain: CreditCardPaymentPlain, from data: BudgetDataPlain) -> CreditCardPaymentRow {
         let activity = mapActivity(for: paymentPlain, from: data)
         
         return CreditCardPaymentRow(
@@ -149,7 +149,7 @@ public final class BudgetRowMapper: Sendable {
     
     // MARK: Assigned
 
-    func mapAssigned(for cardPaymentPlain: CreditCardPaymentPlain, from data: CombinedBudgetData) -> [MonthYear: CreditCardAssigned] {
+    func mapAssigned(for cardPaymentPlain: CreditCardPaymentPlain, from data: BudgetDataPlain) -> [MonthYear: CreditCardAssigned] {
         var assigned: [MonthYear: CreditCardAssigned] = [:]
         
         var paymentHistory: [MonthYear: Decimal] = [:]
@@ -191,7 +191,7 @@ public final class BudgetRowMapper: Sendable {
     
     // MARK: Activity
     
-    func mapActivity(for creditCardPaymentPlain: CreditCardPaymentPlain, from data: CombinedBudgetData) -> [MonthYear: CreditCardActivity] {
+    func mapActivity(for creditCardPaymentPlain: CreditCardPaymentPlain, from data: BudgetDataPlain) -> [MonthYear: CreditCardActivity] {
         var activity: [MonthYear: CreditCardActivity] = [:]
         var transactions: [BudgetTransaction] = []
         
@@ -299,7 +299,7 @@ public final class BudgetRowMapper: Sendable {
     
     // MARK: Available
 
-    func mapAvailable(for cardPaymentPlain: CreditCardPaymentPlain, and activity: [MonthYear: CreditCardActivity], from data: CombinedBudgetData) -> [MonthYear: CreditCardAvailable] {
+    func mapAvailable(for cardPaymentPlain: CreditCardPaymentPlain, and activity: [MonthYear: CreditCardActivity], from data: BudgetDataPlain) -> [MonthYear: CreditCardAvailable] {
         var available: [MonthYear: CreditCardAvailable] = [:]
         
         for monthYear in budgetRange(from: data) {
@@ -326,7 +326,7 @@ public final class BudgetRowMapper: Sendable {
     }
     
     // TODO: - this is returning a stub. Identify payments from given month - how are these different? transfer from one account to another - what if paid from an account outside of budget (i..e by someone else)? Needs to exlude refunds
-    func payment(for cardPaymentPlain: CreditCardPaymentPlain, in monthYear: MonthYear, from data: CombinedBudgetData) -> Decimal {
+    func payment(for cardPaymentPlain: CreditCardPaymentPlain, in monthYear: MonthYear, from data: BudgetDataPlain) -> Decimal {
         return 99.99
     }
     
@@ -347,7 +347,7 @@ public final class BudgetRowMapper: Sendable {
 
     // MARK: - Category Groups Plain -> Rows
     
-    func map(categoryGroupPlain: CategoryGroupPlain, from data: CombinedBudgetData) -> CategoryGroupRow {
+    func map(categoryGroupPlain: CategoryGroupPlain, from data: BudgetDataPlain) -> CategoryGroupRow {
         let categories = map(categoriesPlain: categoryGroupPlain.categories, from: data)
         return CategoryGroupRow(
             id: ID<CategoryGroupRow>(categoryGroupPlain.id),
@@ -360,19 +360,19 @@ public final class BudgetRowMapper: Sendable {
         )
     }
     
-    func map(categoryGroupsPlain: [CategoryGroupPlain], from data: CombinedBudgetData) -> [CategoryGroupRow] {
+    func map(categoryGroupsPlain: [CategoryGroupPlain], from data: BudgetDataPlain) -> [CategoryGroupRow] {
         categoryGroupsPlain.map { categoryGroupPlain in
             map(categoryGroupPlain: categoryGroupPlain, from: data)
         }
     }
     
-    func map(categoriesPlain: [CategoryPlain], from data: CombinedBudgetData) -> [CategoryRow] {
+    func map(categoriesPlain: [CategoryPlain], from data: BudgetDataPlain) -> [CategoryRow] {
         categoriesPlain.map { categoryPlain in
             map(categoryPlain: categoryPlain, from: data)
         }
     }
     
-    func map(categoryPlain: CategoryPlain, from data: CombinedBudgetData) -> CategoryRow {
+    func map(categoryPlain: CategoryPlain, from data: BudgetDataPlain) -> CategoryRow {
         return CategoryRow(
             id: ID<CategoryRow>(categoryPlain.id),
             name: categoryPlain.name,
@@ -386,7 +386,7 @@ public final class BudgetRowMapper: Sendable {
     
     // MARK: Assigned
 
-    func mapAssigned(for category: CategoryPlain, from data: CombinedBudgetData) -> [MonthYear: Assigned] {
+    func mapAssigned(for category: CategoryPlain, from data: BudgetDataPlain) -> [MonthYear: Assigned] {
         var assigned: [MonthYear: Assigned] = [:]
         
         var activityHistory: [MonthYear: Decimal] = [:]
@@ -428,7 +428,7 @@ public final class BudgetRowMapper: Sendable {
 
     // MARK: Activity
 
-    func activity(for category: CategoryPlain, in monthYear: MonthYear, from data: CombinedBudgetData) -> Decimal {
+    func activity(for category: CategoryPlain, in monthYear: MonthYear, from data: BudgetDataPlain) -> Decimal {
         return data.budgetAccountsPlain
             .transactions
             .filtered(by: monthYear)
@@ -437,7 +437,7 @@ public final class BudgetRowMapper: Sendable {
             .reduced
     }
 
-    func mapActivity(for category: CategoryPlain, from data: CombinedBudgetData) -> [MonthYear: Activity] {
+    func mapActivity(for category: CategoryPlain, from data: BudgetDataPlain) -> [MonthYear: Activity] {
         var activity: [MonthYear: Activity] = [:]
         var transactions: [BudgetTransaction] = []
         
@@ -483,7 +483,7 @@ public final class BudgetRowMapper: Sendable {
 
     // MARK: Available
 
-    func mapAvailable(for category: CategoryPlain, from data: CombinedBudgetData) -> [MonthYear: Available] {
+    func mapAvailable(for category: CategoryPlain, from data: BudgetDataPlain) -> [MonthYear: Available] {
         var available: [MonthYear: Available] = [:]
         
         for monthYear in budgetRange(from: data) {
@@ -539,11 +539,11 @@ public final class BudgetRowMapper: Sendable {
 
     // MARK: - Budget Range
 
-    func budgetRange(from data: CombinedBudgetData) -> ClosedRange<MonthYear> {
+    func budgetRange(from data: BudgetDataPlain) -> ClosedRange<MonthYear> {
         return mapBudgetStart(from: data)...mapBudgetEnd(from: data)
     }
 
-    func mapBudgetStart(from data: CombinedBudgetData) -> MonthYear {
+    func mapBudgetStart(from data: BudgetDataPlain) -> MonthYear {
         let earliestActivityMonthYear = data.budgetAccountsPlain
             .transactions
             .compactMap { MonthYear(from: $0.date) } // [MonthYear]
@@ -560,7 +560,7 @@ public final class BudgetRowMapper: Sendable {
         return min(earliestActivityMonthYear, earliestAssignedMonthYear)
     }
 
-    func mapBudgetEnd(from data: CombinedBudgetData) -> MonthYear {
+    func mapBudgetEnd(from data: BudgetDataPlain) -> MonthYear {
         let latestAssignedMonthYear = data.categoryGroupsPlain
             .flatMap { $0.categories } // [Categories]
             .flatMap { $0.assigned } // [MonthYear: Decimal]

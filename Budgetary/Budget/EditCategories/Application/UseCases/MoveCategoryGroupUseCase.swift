@@ -1,5 +1,5 @@
 //
-//  ReorderGroupsUseCase.swift
+//  MoveCategoryGroupUseCase.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 31/10/2024.
@@ -12,11 +12,8 @@ final class MoveCategoryGroupUseCase {
     let source: MoveCategoryGroupSource = Container.shared.moveCategoryGroupSource()
     let mapper: BudgetMapper = Container.shared.budgetMapper()
 
-    func moveCategoryGroup(from sourceIndex: IndexSet, to destinationIndex: Int) async {
-        guard let groups = await source.allCategoryGroups() else {
-            // TODO: throw error
-            return
-        }
+    func execute(from sourceIndex: IndexSet, to destinationIndex: Int) async {
+        let groups = await source.loadCategoryGroups()
         
         let updatedCategoryGroups: [CategoryGroupPlain] = {
             guard /*sourceIndex != destinationIndex,*/

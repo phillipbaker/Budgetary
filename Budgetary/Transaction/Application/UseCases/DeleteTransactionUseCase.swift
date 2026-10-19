@@ -11,10 +11,10 @@ final class DeleteTransactionUseCase {
     let source: DeleteTransactionSource = Container.shared.deleteTransactionSource()
     let mapper: BudgetAccountsMapper = Container.shared.budgetAccountsMapper()
     
-    func deleteTransaction(id: ID<TransactionPresentation>) async {
-        let payees = await source.allPayees()
-        let accounts = await source.allAccounts()
-        let categoryGroups = await source.allCategoryGroups()
+    func execute(for id: ID<TransactionPresentation>) async {
+        let payees = await source.loadPayees()
+        let accounts = await source.loadBudgetAccounts()
+        let categoryGroups = await source.loadCategoryGroups()
 
         guard let accountPlain = accounts.first(where: { $0.transactions.contains(where: { $0.id == ID<TransactionPlain>(id) }) }) else { return }
         

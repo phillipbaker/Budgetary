@@ -28,7 +28,7 @@ class BudgetDao {
         return stream
     }
     
-    func findBudget(by id: String) -> BudgetDb {
+    func findBudget(by id: String) -> BudgetDb? {
         return mock
     }
     

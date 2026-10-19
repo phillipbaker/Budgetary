@@ -22,7 +22,7 @@ struct LoadPayeesEffect: AppEffect {
     func run() async {
         let payees = await loadPayeesUseCase.execute()
         await MainActor.run {
-            store.dispatch(.payeeDataLoaded(payees))
+            store.dispatch(.loadPayeesSucceeded(payees))
         }
     }
 }

@@ -15,12 +15,14 @@ public final class LoadBudgetDataSource: LoadBudgetSource {
     let creditCardPaymentGroupDataSourceLocal: any CreditCardPaymentGroupDataSourceLocal = Container.shared.creditCardPaymentGroupDataSourceLocal()
     let mapper: BudgetDataMapper = Container.shared.budgetDataMapper()
 
-    public func budgetData() async -> CombinedBudgetData {
-        let budget = await budgetDataSourceLocal.findBudget(by: "")
-        let payees = await payeesDataSourceLocal.payees()
-        let budgetAccounts = await budgetAccountsDataSourceLocal.accounts()
-        let categoryGroups = await categoryGroupsDataSourceLocal.categoryGroups()
-        let creditCardPaymentGroupPlain = await creditCardPaymentGroupDataSourceLocal.creditCardPaymentGroup()
+    public func loadBudgetData() async throws -> BudgetDataPlain {
+        guard let budget = await budgetDataSourceLocal.findBudget(by: "") else {
+            throw BudgetError.budgetLoadFailed
+        }
+        let payees = await payeesDataSourceLocal.loadPayees()
+        let budgetAccounts = await budgetAccountsDataSourceLocal.loadBudgetAccounts()
+        let categoryGroups = await categoryGroupsDataSourceLocal.loadCategoryGroups()
+        let creditCardPaymentGroupPlain = await creditCardPaymentGroupDataSourceLocal.loadCreditCardPaymentGroup()
 
         return mapper.map(
             budgetPlain: budget,

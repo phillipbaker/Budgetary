@@ -6,9 +6,9 @@
 //
 
 public protocol BudgetAccountsDataSourceLocal: Sendable {
-    func accounts() async -> [BudgetAccountPlain]
-    func findAccount(by id: ID<BudgetAccountPlain>) async -> BudgetAccountPlain?
-    func findAccount(containing id: ID<TransactionPlain>) async -> BudgetAccountPlain?
+    func loadBudgetAccounts() async -> [BudgetAccountPlain]
+    func findBudgetAccount(by id: ID<BudgetAccountPlain>) async -> BudgetAccountPlain?
+    func findBudgetAccount(containing id: ID<TransactionPlain>) async -> BudgetAccountPlain?
     func create(account: BudgetAccountPlain) async
     func update(account: BudgetAccountPlain) async
     func delete(account: BudgetAccountPlain) async

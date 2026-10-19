@@ -25,7 +25,7 @@ struct SaveTransactionEffect: AppEffect {
     
     func run() async {
         do {
-            try await saveTransactionUseCase.saveTransaction(request: request)
+            try await saveTransactionUseCase.execute(for: request)
             await MainActor.run {
                 store.dispatch(.saveTransactionSucceeded)
             }

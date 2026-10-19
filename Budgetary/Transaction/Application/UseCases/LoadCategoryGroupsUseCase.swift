@@ -8,11 +8,11 @@
 import Factory
 
 final class LoadCategoryGroupsUseCase: Sendable {
-    private let source: GetCategoryGroupsSource
+    private let source: LoadCategoryGroupsSource
     private let mapper: BudgetMapper
     
     init(
-        source: GetCategoryGroupsSource = Container.shared.getCategoryGroupsSource(),
+        source: LoadCategoryGroupsSource = Container.shared.loadCategoryGroupsSource(),
         mapper: BudgetMapper = Container.shared.budgetMapper()
     ) {
         self.source = source
@@ -20,7 +20,7 @@ final class LoadCategoryGroupsUseCase: Sendable {
     }
     
     func execute() async -> [CategoryGroup] {
-        let categoryGroups = await source.getCategoryGroups()
+        let categoryGroups = await source.loadCategoryGroups()
         return mapper.map(categoryGroupsPlain: categoryGroups)
     }
 }

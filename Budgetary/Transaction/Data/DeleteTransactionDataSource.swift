@@ -14,16 +14,16 @@ final class DeleteTransactionDataSource: DeleteTransactionSource {
 
     let mapper: BudgetAccountsMapper = Container.shared.budgetAccountsMapper()
 
-    func allPayees() async -> [PayeePlain] {
-        await payeesDataSourceLocal.payees()
+    func loadPayees() async -> [PayeePlain] {
+        await payeesDataSourceLocal.loadPayees()
     }
     
-    func allAccounts() async -> [BudgetAccountPlain] {
-        await budgetAccountsDataSourceLocal.accounts()
+    func loadBudgetAccounts() async -> [BudgetAccountPlain] {
+        await budgetAccountsDataSourceLocal.loadBudgetAccounts()
     }
 
-    func allCategoryGroups() async -> [CategoryGroupPlain] {
-        await categoryGroupsDataSourceLocal.categoryGroups()
+    func loadCategoryGroups() async -> [CategoryGroupPlain] {
+        await categoryGroupsDataSourceLocal.loadCategoryGroups()
     }
 
     func update(account: BudgetAccountPlain) async {

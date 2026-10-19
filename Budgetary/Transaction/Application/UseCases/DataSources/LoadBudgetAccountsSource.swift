@@ -6,7 +6,7 @@
 //
 
 public protocol LoadBudgetAccountsSource: Sendable {
-    func accounts() async -> [BudgetAccountPlain]
-    func categoryGroups() async -> [CategoryGroupPlain]
-    func payees() async -> [PayeePlain]
+    func loadBudgetAccounts() async -> [BudgetAccountPlain]
+    func loadCategoryGroups() async -> [CategoryGroupPlain]
+    func loadPayees() async -> [PayeePlain]
 }

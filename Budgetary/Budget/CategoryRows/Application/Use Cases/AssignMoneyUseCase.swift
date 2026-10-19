@@ -31,14 +31,13 @@ struct AssignMoneyUseCase: Sendable {
             }
         }
         
-        if let creditCardPaymentGroupPlain = await source.creditCardPaymentGroup() {
-            let creditCardPaymentGroup = mapper.map(creditCardPaymentGroupPlain: creditCardPaymentGroupPlain)
-            if let creditCardPayment = creditCardPaymentGroup.creditCardPayments.first(where: { $0.id == ID<CreditCardPayment>(categoryID) }) {
-                let updatedCreditCardPayment = creditCardPayment.updating(assignedAmount: assignedAmount, for: monthYear)
-                let updatedCreditCardPaymentGroup = creditCardPaymentGroup.replacing(updatedCreditCardPayment)
-                await source.update(creditCardPaymentGroup: mapper.map(creditCardPaymentGroup: updatedCreditCardPaymentGroup))
-                return
-            }
+        let creditCardPaymentGroupPlain = await source.loadCreditCardPaymentGroup()
+        let creditCardPaymentGroup = mapper.map(creditCardPaymentGroupPlain: creditCardPaymentGroupPlain)
+        if let creditCardPayment = creditCardPaymentGroup.creditCardPayments.first(where: { $0.id == ID<CreditCardPayment>(categoryID) }) {
+            let updatedCreditCardPayment = creditCardPayment.updating(assignedAmount: assignedAmount, for: monthYear)
+            let updatedCreditCardPaymentGroup = creditCardPaymentGroup.replacing(updatedCreditCardPayment)
+            await source.update(creditCardPaymentGroup: mapper.map(creditCardPaymentGroup: updatedCreditCardPaymentGroup))
+            return
         }
         
         print("Assign Money Use Case: Neither Category Not Credit Card Payment Found")

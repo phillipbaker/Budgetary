@@ -19,8 +19,8 @@ struct LoadBudgetUseCase: Sendable {
         self.mapper = mapper
     }
     
-    func execute() async -> BudgetData {
-        let combinedBudgetData = await source.budgetData()
-        return mapper.mapBudgetData(from: combinedBudgetData)
+    func execute() async throws -> BudgetData {
+        let budgetDataPlain = try await source.loadBudgetData()
+        return mapper.mapBudgetData(from: budgetDataPlain)
     }
 }

@@ -9,20 +9,22 @@ import Factory
 
 struct LoadBudgetEffect: AppEffect {
     private let store: AppStore
-    private let loadBudgetDataUseCase: LoadBudgetUseCase
+    private let loadBudgetUseCase: LoadBudgetUseCase
     
     init(
         store: AppStore = Container.shared.appStore(),
-        loadBudgetDataUseCase: LoadBudgetUseCase = Container.shared.loadBudgetUseCase()
+        loadBudgetUseCase: LoadBudgetUseCase = Container.shared.loadBudgetUseCase()
     ) {
         self.store = store
-        self.loadBudgetDataUseCase = loadBudgetDataUseCase
+        self.loadBudgetUseCase = loadBudgetUseCase
     }
     
     func run() async {
-        let budgetData = await loadBudgetDataUseCase.execute()
-        await MainActor.run {
+        do {
+            let budgetData = try await loadBudgetUseCase.execute()
             store.dispatch(.loadBudgetSucceeded(budgetData))
+        } catch {
+            store.dispatch(.loadBudgetFailed)
         }
     }
 }

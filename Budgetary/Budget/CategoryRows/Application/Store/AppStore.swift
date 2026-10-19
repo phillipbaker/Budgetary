@@ -185,12 +185,15 @@ import Factory
         state.budgetState = .loaded(budget)
         return []
         
-    case .newCategoryRequested(name: let name, groupID: let groupID):
-        return [NewCategoryEffect(name: name, groupID: groupID)]
+    case .createCategoryRequested(name: let name, groupID: let groupID):
+        return [CreateCategoryEffect(name: name, groupID: groupID)]
         
-    case .createNewCategorySucceeded:
+    case .createCategorySucceeded:
         return [Container.shared.loadBudgetEffect(), Container.shared.loadBudgetAccountsEffect()]
         
+    case .createCategoryFailed:
+        return []
+
         // MARK: - Budget - Assign Money
         
     case .assignMoneyRequested(let assignedAmount, let categoryID, let monthYear):
@@ -209,70 +212,70 @@ import Factory
         
         // MARK: Accounts - Load
         
-    case .budgetAccountsDataLoadRequested:
+    case .loadBudgetAccountsRequested:
         guard state.accountsState.isIdle else { return [] }
         state.accountsState = .loading
         return [Container.shared.loadBudgetAccountsEffect()]
         
-    case .budgetAccountsDataLoaded(let accounts):
+    case .loadBudgetAccountsSucceeded(let accounts):
         state.accountsState = .loaded(accounts)
         return []
         
-    case .budgetAccountsDataLoadFailed:
+    case .loadBudgetAccountsFailed:
         state.accountsState = .error(.accountsLoadFailed)
         return []
         
         // MARK: - Accounts - Add Account
         
-    case .addAccountRequested(name: let name, accountType: let accountType, startingBalance: let startingBalance):
+    case .createBudgetAccountRequested(name: let name, accountType: let accountType, startingBalance: let startingBalance):
         state.accountsState = .loading
         state.sheet = nil
-        return [AddBudgetAccountEffect(name: name, accountType: accountType, startingBalance: startingBalance)]
+        return [CreateBudgetAccountEffect(name: name, accountType: accountType, startingBalance: startingBalance)]
         
-    case .addAccountSucceeded:
+    case .createBudgetAccountSucceeded:
         return [Container.shared.loadBudgetAccountsEffect(), Container.shared.loadBudgetEffect()]
         
-    case .addAccountFailed:
+    case .createBudgetAccountFailed:
         state.accountsState = .error(.unknownError)
         return []
         
         // MARK: Payees - Load
         
-    case .payeeDataLoadRequested:
+    case .loadPayeesRequested:
         guard state.payeesState.isIdle else { return [] }
         state.payeesState = .loading
         return [LoadPayeesEffect()]
         
-    case .payeeDataLoaded(let payees):
+    case .loadPayeesSucceeded(let payees):
         state.payeesState = .loaded(payees)
         return []
         
-    case .payeePickerDataLoadFailed:
+    case .loadPayeesFailed:
         state.payeesState = .error(.dataError)
         return []
         
         // MARK: Payees - Add Payee
         
-    case .createNewPayeeRequested(let name):
-        return [NewPayeeEffect(name: name)]
+    case .createPayeeRequested(let name):
+        return [CreatePayeeEffect(name: name)]
         
-    case .createNewPayeeSucceeded:
+    case .createPayeeSucceeded:
         return [LoadPayeesEffect()]
         
-    case .createNewPayeeFailed:
+    case .createPayeeFailed:
         return []
         
         // MARK: - Edit Categories
         
-    case .newCategoryGroupRequested(let name):
-        return [NewGroupEffect(name: name)]
+    case .createCategoryGroupRequested(let name):
+        return [CreateCategoryGroupEffect(name: name)]
 
-    case .newCategoryGroupSucceeded:
+    case .createCategoryGroupSucceeded:
         return [Container.shared.loadBudgetEffect(), Container.shared.loadBudgetAccountsEffect()]
         
         
         
-    case .newCategoryGroupFailed:
+    case .createCategoryGroupFailed:
         return []
     case .renameCategoryGroupRequested(let groupID, let newName):
         return []
@@ -298,9 +301,17 @@ import Factory
         return []
     case .deleteCategoryFailed:
         return []
-    case .moveCategoryGroup(_, _):
+    case .moveCategoryGroupRequested(_, _):
         return []
-    case .moveCategory(_, _, _):
+    case .moveCategoryGroupSucceeded:
+        return []
+    case .moveCategoryGroupFailed:
+        return []
+    case .moveCategoryRequested(_, _, _):
+        return []
+    case .moveCategorySucceeded:
+        return []
+    case .moveCategoryFailed:
         return []
     }
 }

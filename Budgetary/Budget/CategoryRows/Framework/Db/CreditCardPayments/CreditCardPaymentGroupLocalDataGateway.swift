@@ -1,5 +1,5 @@
 //
-//  CreditCardGroupLocalDataGateway.swift
+//  CreditCardPaymentGroupLocalDataGateway.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 27/11/2025.
@@ -11,8 +11,8 @@ actor CreditCardPaymentGroupLocalDataGateway: CreditCardPaymentGroupDataSourceLo
     let dao: CreditCardPaymentGroupDao = Container.shared.creditCardPaymentGroupDao()
     let mapper: CreditCardPaymentGroupMapperPlain = Container.shared.creditCardGroupMapperPlain()
 
-    func creditCardPaymentGroup() -> CreditCardPaymentGroupPlain {
-        let creditCardPaymentGroupDb = dao.creditCardPaymentGroup()
+    func loadCreditCardPaymentGroup() -> CreditCardPaymentGroupPlain {
+        let creditCardPaymentGroupDb = dao.loadCreditCardPaymentGroup()
         return mapper.mapDbToPlain(creditCardPaymentGroupDb: creditCardPaymentGroupDb)
     }
 

@@ -89,7 +89,7 @@ final public class NewCategoryGroupViewModel {
         }
 
         pendingSaveName = trimmed
-        store.dispatch(.newCategoryGroupRequested(trimmed))
+        store.dispatch(.createCategoryGroupRequested(trimmed))
     }
     
     func confirmAlertButtonTapped() {

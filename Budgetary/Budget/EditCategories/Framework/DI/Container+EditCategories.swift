@@ -43,28 +43,23 @@ extension Container {
     
     // MARK: Use Cases & Date Sources
     
-    var loadCategoryGroupsSource: Factory<LoadCategoryGroupsSource> {
-        self { LoadCategoryGroupsDataSource() }
+    var createCategoryGroupUseCase: Factory<CreateCategoryGroupUseCase> {
+        self { CreateCategoryGroupUseCase()}
             .singleton
     }
     
-    var newGroupUseCase: Factory<NewGroupUseCase> {
-        self { NewGroupUseCase()}
+    var createCategoryGroupSource: Factory<CreateCategoryGroupSource> {
+        self { CreateCategoryGroupDataSource() }
             .singleton
     }
     
-    var newGroupSource: Factory<NewGroupSource> {
-        self { NewGroupDataSource() }
+    var createCategoryUseCase: Factory<CreateCategoryUseCase> {
+        self { CreateCategoryUseCase() }
             .singleton
     }
     
-    var newCategoryUseCase: Factory<NewCategoryUseCase> {
-        self { NewCategoryUseCase() }
-            .singleton
-    }
-    
-    public var newCategorySource: Factory<NewCategorySource> {
-        self { NewCategoryDataSource() }
+    public var createCategorySource: Factory<CreateCategorySource> {
+        self { CreateCategoryDataSource() }
             .singleton
     }
     
@@ -78,33 +73,33 @@ extension Container {
             .singleton
     }
     
-    var renameGroupUseCase: Factory<RenameGroupUseCase> {
-        self { RenameGroupUseCase() }
+    var renameCategoryGroupUseCase: Factory<RenameCategoryGroupUseCase> {
+        self { RenameCategoryGroupUseCase() }
             .singleton
     }
     
-    var renameGroupSource: Factory<RenameGroupSource> {
-        self { RenameGroupDataSource() }
+    var renameCategoryGroupSource: Factory<RenameCategoryGroupSource> {
+        self { RenameCategoryGroupDataSource() }
             .singleton
     }
     
-    var removeCategoryUseCase: Factory<RemoveCategoryUseCase> {
-        self { RemoveCategoryUseCase() }
+    var deleteCategoryUseCase: Factory<DeleteCategoryUseCase> {
+        self { DeleteCategoryUseCase() }
             .singleton
     }
     
-    var removeCategorySource: Factory<RemoveCategorySource> {
-        self { RemoveCategoryDataSource() }
+    var deleteCategorySource: Factory<DeleteCategorySource> {
+        self { DeleteCategoryDataSource() }
             .singleton
     }
     
-    var removeGroupUseCase: Factory<RemoveGroupUseCase> {
-        self { RemoveGroupUseCase() }
+    var deleteCategoryGroupUseCase: Factory<DeleteCategoryGroupUseCase> {
+        self { DeleteCategoryGroupUseCase() }
             .singleton
     }
     
-    var removeGroupSource: Factory<RemoveGroupSource> {
-        self { RemoveGroupDataSource() }
+    var deleteCategoryGroupSource: Factory<DeleteCategoryGroupSource> {
+        self { DeleteCategoryGroupDataSource() }
             .singleton
     }
     

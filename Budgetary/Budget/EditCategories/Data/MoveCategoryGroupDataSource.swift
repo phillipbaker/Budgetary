@@ -10,8 +10,8 @@ import Factory
 final class MoveCategoryGroupDataSource: MoveCategoryGroupSource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
 
-    func allCategoryGroups() async -> [CategoryGroupPlain]? {
-        await categoryGroupsDataSourceLocal.categoryGroups()
+    func loadCategoryGroups() async -> [CategoryGroupPlain] {
+        await categoryGroupsDataSourceLocal.loadCategoryGroups()
     }
     
     func update(categoryGroups: [CategoryGroupPlain]) async {

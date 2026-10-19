@@ -20,6 +20,6 @@ struct LoadTransactionAccountsUseCase: Sendable {
     }
     
     func execute() async -> [TransactionAccount] {
-        return mapper.map(accounts: await source.accounts())
+        return mapper.map(accounts: await source.loadTransactionAccounts())
     }
 }

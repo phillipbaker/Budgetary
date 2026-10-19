@@ -90,7 +90,7 @@ final class PayeePickerViewModel {
     func newPayeeFromSearchText() {
         guard canCreatePayee else { return }
         pendingSaveName = trimmedSearchText
-        store.dispatch(.createNewPayeeRequested(trimmedSearchText))
+        store.dispatch(.createPayeeRequested(trimmedSearchText))
     }
     
     // MARK: - Store Observation

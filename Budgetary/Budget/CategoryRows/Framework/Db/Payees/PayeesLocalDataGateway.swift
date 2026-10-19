@@ -11,8 +11,8 @@ actor PayeesLocalDataGateway: PayeesDataSourceLocal {
     let dao: PayeeDao = Container.shared.payeeDao()
     let mapper: PayeesMapperPlain = Container.shared.payeesMapperPlain()
 
-    func payees() async -> [PayeePlain] {
-        return mapper.map(payeesDb: dao.allPayees())
+    func loadPayees() async -> [PayeePlain] {
+        return mapper.map(payeesDb: dao.loadPayees())
     }
     
     func findPayee(by id: ID<PayeePlain>) -> PayeePlain? {

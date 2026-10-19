@@ -11,7 +11,7 @@ final class HideCategoryGroupUseCase {
     let source: HideCategoryGroupSource = Container.shared.hideCategoryGroupSource()
     let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-    func hide(categoryGroupID: ID<CategoryGroupPresentation>) async {
+    func execute(for categoryGroupID: ID<CategoryGroupPresentation>) async {
         guard let categoryGroup = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(categoryGroupID)) else {
             // TODO: throw error
             print("could not find category group matching provided id")

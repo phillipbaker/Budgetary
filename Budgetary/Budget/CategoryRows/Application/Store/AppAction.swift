@@ -22,12 +22,12 @@ enum AppAction {
     case deleteTransactionFailed
 
     // Payees
-    case payeeDataLoadRequested
-    case payeeDataLoaded([Payee])
-    case payeePickerDataLoadFailed
-    case createNewPayeeRequested(String)
-    case createNewPayeeSucceeded
-    case createNewPayeeFailed
+    case loadPayeesRequested
+    case loadPayeesSucceeded([Payee])
+    case loadPayeesFailed
+    case createPayeeRequested(String)
+    case createPayeeSucceeded
+    case createPayeeFailed
 
     // Budget - Load
     case loadBudgetRequested
@@ -46,11 +46,12 @@ enum AppAction {
     // Budget - Category Groups
     case categoryGroupUpdated(CategoryGroupRow)
     case creditCardPaymentGroupUpdated(CreditCardPaymentGroupRow)
-    case newCategoryRequested(name: String, groupID: ID<CategoryGroup>)
-    case createNewCategorySucceeded
-    case newCategoryGroupRequested(String)
-    case newCategoryGroupSucceeded
-    case newCategoryGroupFailed
+    case createCategoryRequested(name: String, groupID: ID<CategoryGroup>)
+    case createCategorySucceeded
+    case createCategoryFailed
+    case createCategoryGroupRequested(String)
+    case createCategoryGroupSucceeded
+    case createCategoryGroupFailed
     case renameCategoryGroupRequested(ID<CategoryGroup>, String)
     case renameCategoryGroupSucceeded
     case renameCategoryGroupFailed
@@ -63,18 +64,22 @@ enum AppAction {
     case deleteCategoryRequested(ID<Category>, ID<CategoryGroup>)
     case deleteCategorySucceeded
     case deleteCategoryFailed
-    case moveCategoryGroup(IndexSet, Int)
-    case moveCategory(ID<Category>, ID<CategoryGroup>, Int)
+    case moveCategoryGroupRequested(IndexSet, Int)
+    case moveCategoryGroupSucceeded
+    case moveCategoryGroupFailed
+    case moveCategoryRequested(ID<Category>, ID<CategoryGroup>, Int)
+    case moveCategorySucceeded
+    case moveCategoryFailed
     
     // Budget Accounts - Load
-    case budgetAccountsDataLoadRequested
-    case budgetAccountsDataLoaded([AccountData])
-    case budgetAccountsDataLoadFailed
-    case addAccountSheetDismissed
-    case addAccountRequested(name: String, accountType: BudgetAccountType, startingBalance: Decimal)
-    case addAccountSucceeded
-    case addAccountFailed
+    case loadBudgetAccountsRequested
+    case loadBudgetAccountsSucceeded([AccountData])
+    case loadBudgetAccountsFailed
+    case createBudgetAccountRequested(name: String, accountType: BudgetAccountType, startingBalance: Decimal)
+    case createBudgetAccountSucceeded
+    case createBudgetAccountFailed
 
     // Budget Accounts
     case addAccountSheetRequested
+    case addAccountSheetDismissed
 }

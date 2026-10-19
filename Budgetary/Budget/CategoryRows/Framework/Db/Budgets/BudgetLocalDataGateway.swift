@@ -1,5 +1,5 @@
 //
-//  BudgetsLocalDataGateway.swift
+//  BudgetLocalDataGateway.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 04/11/2024.
@@ -11,8 +11,10 @@ actor BudgetLocalDataGateway: BudgetDataSourceLocal {
     let dao: BudgetDao = Container.shared.budgetDao()
     let mapper: BudgetMapperPlain = Container.shared.budgetMapperPlain()
     
-    func findBudget(by id: String) -> BudgetPlain {
-        let budgetDb = dao.findBudget(by: id)
+    func findBudget(by id: String) -> BudgetPlain? {
+        guard let budgetDb = dao.findBudget(by: id) else {
+            return nil
+        }
         return mapper.mapDbToPlain(budgetDb: budgetDb)
     }
     

@@ -12,12 +12,12 @@ final class SaveTransactionUseCase: Sendable {
     let source: SaveTransactionSource = Container.shared.saveTransactionSource()
     let mapper: BudgetAccountsMapper = Container.shared.budgetAccountsMapper()
     
-    func saveTransaction(request: SaveTransactionRequest) async throws {
-        let payees = await source.allPayees()
-        let categoryGroups = await source.allCategoryGroups()
+    func execute(for request: SaveTransactionRequest) async throws {
+        let payees = await source.loadPayees()
+        let categoryGroups = await source.loadCategoryGroups()
         
         let existingTransaction = await source
-            .findAccount(containing: ID<TransactionPlain>(request.id))
+            .findBudgetAccount(containing: ID<TransactionPlain>(request.id))
             .map { mapper.map(account: $0, payees: payees, categoryGroups: categoryGroups) }
             .flatMap { $0.transactions.first { $0.id == request.id } }
         

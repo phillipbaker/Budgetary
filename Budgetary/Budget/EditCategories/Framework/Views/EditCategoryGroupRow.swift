@@ -25,7 +25,7 @@ struct EditCategoryGroupRow: View {
                     displayAlert = true
                     return
                 }
-                action(.renameGroup(id: id, newName: editedName))
+                action(.renameCategoryGroup(id: id, newName: editedName))
             }
             .alert(Text("Category Group name cannot be empty"), isPresented: $displayAlert) {
                 Button("OK") {

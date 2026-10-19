@@ -1,5 +1,5 @@
 //
-//  LoadAccountsEffect.swift
+//  LoadBudgetAccountsEffect.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 04/05/2025.
@@ -11,23 +11,23 @@ import Factory
 struct LoadBudgetAccountsEffect: AppEffect {
     private let store: AppStore
     private let mapper: BudgetAccountsMapper
-    private let loadAccountsUseCase: LoadBudgetAccountsUseCase
+    private let loadBudgetAccountsUseCase: LoadBudgetAccountsUseCase
     
     init(
         store: AppStore = Container.shared.appStore(),
         mapper: BudgetAccountsMapper = Container.shared.budgetAccountsMapper(),
-        loadAccountsUseCase: LoadBudgetAccountsUseCase = Container.shared.loadAccountsDataUseCase()
+        loadBudgetAccountsUseCase: LoadBudgetAccountsUseCase = Container.shared.loadBudgetAccountsUseCase()
     ) {
         self.store = store
         self.mapper = mapper
-        self.loadAccountsUseCase = loadAccountsUseCase
+        self.loadBudgetAccountsUseCase = loadBudgetAccountsUseCase
     }
     
     func run() async {
-        let accounts = await loadAccountsUseCase.execute()
+        let accounts = await loadBudgetAccountsUseCase.execute()
         let accountsData = mapper.map(accounts: accounts)
         await MainActor.run {
-            store.dispatch(.budgetAccountsDataLoaded(accountsData))
+            store.dispatch(.loadBudgetAccountsSucceeded(accountsData))
         }
     }
 }

@@ -6,5 +6,5 @@
 //
 
 public protocol LoadBudgetSource: Sendable {
-    func budgetData() async -> CombinedBudgetData
+    func loadBudgetData() async throws -> BudgetDataPlain
 }
