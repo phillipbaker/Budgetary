@@ -1,5 +1,5 @@
 //
-//  CategoryGroupsDao.swift
+//  CategoryGroupDao.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 05/11/2024.
@@ -24,7 +24,7 @@ class CategoryGroupDao {
         continuation.yield(mapper.mapDbToPlain(categoryGroupsDb: mock))
     }
     
-    func allCategoryGroups() -> [CategoryGroupDb] {
+    func loadCategoryGroups() -> [CategoryGroupDb] {
         return mock
     }
     

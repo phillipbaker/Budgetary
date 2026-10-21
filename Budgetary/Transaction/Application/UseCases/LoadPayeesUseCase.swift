@@ -8,11 +8,11 @@
 import Factory
 
 final class LoadPayeesUseCase: Sendable {
-    private let source: GetPayeesSource
+    private let source: LoadPayeesSource
     private let mapper: PayeeMapper
     
     init(
-        source: GetPayeesSource = Container.shared.getPayeesSource(),
+        source: LoadPayeesSource = Container.shared.loadPayeesSource(),
         mapper: PayeeMapper = Container.shared.payeeMapper()
     ) {
         self.source = source
@@ -20,7 +20,7 @@ final class LoadPayeesUseCase: Sendable {
     }
     
     func execute() async -> [Payee] {
-        let data = await source.getPayeeData()
+        let data = await source.loadPayeeData()
         return mapper.map(payees: data.payees, categoryGroups: data.categoryGroups)
     }
 }

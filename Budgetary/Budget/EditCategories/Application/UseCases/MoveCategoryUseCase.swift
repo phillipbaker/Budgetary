@@ -1,18 +1,17 @@
 //
-//  ReorderCategoriesUseCase.swift
+//  MoveCategoryUseCase.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 31/10/2024.
 //
 
 import Factory
-//import Foundation
 
 final class MoveCategoryUseCase {
     let source: MoveCategorySource = Container.shared.moveCategorySource()
     let mapper: BudgetMapper = Container.shared.budgetMapper()
     
-    func move(categoryID: ID<EditableCategoryPresentation>, to destinationGroupID: ID<CategoryGroupPresentation>, at index: Int) async {
+    func execute(for categoryID: ID<EditableCategoryPresentation>, to destinationGroupID: ID<CategoryGroupPresentation>, at index: Int) async {
         guard let sourceGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else { return }
         guard let category = sourceGroup.categories.first(where: { $0.id == ID<CategoryPlain>(categoryID) }) else { return }
         

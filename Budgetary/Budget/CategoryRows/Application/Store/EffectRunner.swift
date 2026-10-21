@@ -12,24 +12,28 @@ struct EffectRunner {
     let assignMoney: AssignMoneyUseCase
 
     // Accounts
-    let createBudgetAccount: AddAccountUseCase
+    let createBudgetAccount: CreateBudgetAccountUseCase
     let loadBudgetAccounts: LoadBudgetAccountsUseCase
     
     // Transactions
     let saveTransaction: SaveTransactionUseCase
 
     // Payees
-    let createPayee: NewPayeeUseCase
+    let createPayee: CreatePayeeUseCase
     let loadPayees: LoadPayeesUseCase
     
     // Category Groups
-    let createCategory: NewCategoryUseCase
-    let createCategoryGroup: NewGroupUseCase
+    let createCategory: CreateCategoryUseCase
+    let createCategoryGroup: CreateCategoryGroupUseCase
 
     func run(_ effect: AppEffect) async -> AppAction? {
         switch effect {
         case .loadBudget:
-            return .loadBudgetSucceeded(await loadBudget.execute())
+            do {
+                return .loadBudgetSucceeded(try await loadBudget.execute())
+            } catch {
+                return .loadBudgetFailed
+            }
         case .assignMoney(amount: let amount, categoryID: let categoryID, monthYear: let monthYear):
             do {
                 try await assignMoney.execute(amount, for: categoryID, in: monthYear)
@@ -39,28 +43,28 @@ struct EffectRunner {
             }
         case .createBudgetAccount(name: let name, accountType: let accountType, startingBalance: let startingBalance):
             await createBudgetAccount.execute(name: name, accountType: accountType, startingBalance: startingBalance)
-            return .addAccountSucceeded
+            return .createBudgetAccountSucceeded
         case .loadBudgetAccounts:
-            return .budgetAccountsDataLoaded(await loadBudgetAccounts.execute())
+            return .loadBudgetAccountsSucceeded(await loadBudgetAccounts.execute())
 
         case .saveTransaction(let request):
             do {
-                try await saveTransaction.saveTransaction(request: request)
+                try await saveTransaction.execute(for: request)
                 return .saveTransactionSucceeded
             } catch {
                 return .saveTransactionFailed
             }
         case .loadPayees:
-            return .payeeDataLoaded(await loadPayees.execute())
+            return .loadPayeesSucceeded(await loadPayees.execute())
         case .createPayee(name: let name):
             await createPayee.execute(for: name)
-            return .createNewPayeeSucceeded
+            return .createPayeeSucceeded
         case .createCategoryGroup(name: let name):
             await createCategoryGroup.execute(for: name)
-            return .newCategoryGroupSucceeded
+            return .createCategoryGroupSucceeded
         case .createCategory(name: let name, groupID: let groupID):
             await createCategory.execute(for: name, andGroupID: groupID)
-            return .createNewCategorySucceeded
+            return .createCategorySucceeded
         }
     }
 }

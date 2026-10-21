@@ -12,7 +12,7 @@ struct LoadBudgetAccountsUseCase: Sendable {
     let mapper: BudgetAccountsMapper
     
     init(
-        source: LoadBudgetAccountsSource = Container.shared.loadAccountsSource(),
+        source: LoadBudgetAccountsSource = Container.shared.loadBudgetAccountsSource(),
         mapper: BudgetAccountsMapper = Container.shared.budgetAccountsMapper()
     ) {
         self.source = source
@@ -20,9 +20,9 @@ struct LoadBudgetAccountsUseCase: Sendable {
     }
     
     func execute() async -> [AccountData] {
-        let payeesPlain = await source.payees()
-        let accountsPlain = await source.accounts()
-        let categoryGroupsPlain = await source.categoryGroups()
+        let payeesPlain = await source.loadPayees()
+        let accountsPlain = await source.loadBudgetAccounts()
+        let categoryGroupsPlain = await source.loadCategoryGroups()
         let accounts = mapper.map(accounts: accountsPlain, payees: payeesPlain, categoryGroups: categoryGroupsPlain)
         return mapper.map(accounts: accounts)
     }

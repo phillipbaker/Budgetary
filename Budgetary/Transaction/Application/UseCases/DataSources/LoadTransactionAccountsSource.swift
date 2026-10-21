@@ -6,5 +6,5 @@
 //
 
 public protocol LoadTransactionAccountsSource: Sendable {
-    func accounts() async -> [BudgetAccountPlain]
+    func loadTransactionAccounts() async -> [BudgetAccountPlain]
 }

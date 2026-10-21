@@ -11,7 +11,7 @@ final class RenameCategoryUseCase {
     let source: RenameCategorySource = Container.shared.renameCategorySource()
     let mapper: EditCategoriesMapper = Container.shared.editCategoriesMapper()
     
-     func rename(categoryWithID id: ID<EditableCategoryPresentation>, to newName: String) async {
+     func execute(for id: ID<EditableCategoryPresentation>, to newName: String) async {
         guard let categoryGroupPlain = await source.findCategoryGroup(containing: ID<CategoryPlain>(id)) else {
             print("no category group containing category found")
             return

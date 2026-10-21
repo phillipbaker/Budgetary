@@ -6,8 +6,8 @@
 //
 
 public protocol DeleteTransactionSource {
-    func allAccounts() async -> [BudgetAccountPlain]
-    func allPayees() async -> [PayeePlain]
-    func allCategoryGroups() async -> [CategoryGroupPlain]
+    func loadBudgetAccounts() async -> [BudgetAccountPlain]
+    func loadPayees() async -> [PayeePlain]
+    func loadCategoryGroups() async -> [CategoryGroupPlain]
     func update(account: BudgetAccountPlain) async
 }

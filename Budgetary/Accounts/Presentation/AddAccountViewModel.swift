@@ -39,7 +39,7 @@ final public class AddAccountViewModel {
                 self.viewState = .error(.invalidStartingBalance)
                 return
             }
-            store.dispatch(.addAccountRequested(name: name, accountType: mapper.map(accountType: accountType), startingBalance: startingBalance))
+            store.dispatch(.createBudgetAccountRequested(name: name, accountType: mapper.map(accountType: accountType), startingBalance: startingBalance))
         }
     }
 }

@@ -6,7 +6,7 @@
 //
 
 public protocol CategoryGroupsDataSourceLocal: Sendable {
-    func categoryGroups() async -> [CategoryGroupPlain]
+    func loadCategoryGroups() async -> [CategoryGroupPlain]
     func findCategoryGroup(by id: ID<CategoryGroupPlain>) async -> CategoryGroupPlain?
     func findCategoryGroup(containing categoryID: ID<CategoryPlain>) async -> CategoryGroupPlain?
     func create(categoryGroup: CategoryGroupPlain) async

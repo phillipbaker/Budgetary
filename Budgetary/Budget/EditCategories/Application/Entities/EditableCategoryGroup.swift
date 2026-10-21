@@ -10,7 +10,7 @@ public struct EditableCategoryGroup: Equatable, Sendable {
     let name: String
     let categories: [EditableCategory]
     
-    func renameGroup(to newName: String) -> EditableCategoryGroup {
+    func renameCategoryGroup(to newName: String) -> EditableCategoryGroup {
         return EditableCategoryGroup(id: self.id, name: newName, categories: self.categories)
     }
 }

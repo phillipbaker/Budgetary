@@ -1,5 +1,5 @@
 //
-//  CreditCardDao.swift
+//  CreditCardPaymentGroupDao.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 27/11/2025.
@@ -24,7 +24,7 @@ class CreditCardPaymentGroupDao {
         continuation.yield(mapper.mapDbToPlain(creditCardPaymentGroupDb: mock))
     }
     
-    func creditCardPaymentGroup() -> CreditCardPaymentGroupDb {
+    func loadCreditCardPaymentGroup() -> CreditCardPaymentGroupDb {
         return mock
     }
     

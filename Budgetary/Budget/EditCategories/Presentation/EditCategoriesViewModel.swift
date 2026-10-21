@@ -35,22 +35,22 @@ public final class EditCategoriesViewModel {
         case .loadCategoryGroups:
             break
 //            store.dispatch(.categoryGroupsDataLoadRequested)
-        case let .newGroup(name):
-            store.dispatch(.newCategoryGroupRequested(name))
-        case let .newCategory(name: name, groupID: groupID):
-            store.dispatch(.newCategoryRequested(name: name, groupID: ID<CategoryGroup>(groupID)))
-        case let .renameGroup(id, newName):
+        case let .createCategoryGroup(name):
+            store.dispatch(.createCategoryGroupRequested(name))
+        case let .createCategory(name: name, groupID: groupID):
+            store.dispatch(.createCategoryRequested(name: name, groupID: ID<CategoryGroup>(groupID)))
+        case let .renameCategoryGroup(id, newName):
             store.dispatch(.renameCategoryGroupRequested(ID<CategoryGroup>(id), newName))
         case let .renameCategory(id, newName):
             store.dispatch(.renameCategoryRequested(ID<Category>(id), newName))
-        case let .removeGroup(groupID):
+        case let .deleteCategoryGroup(groupID):
             store.dispatch(.deleteCategoryGroupRequested(ID<CategoryGroup>(groupID)))
-        case let .removeCategory(categoryID, groupID):
+        case let .deleteCategory(categoryID, groupID):
             store.dispatch(.deleteCategoryRequested(ID<Category>(categoryID), ID<CategoryGroup>(groupID)))
         case let .moveCategoryGroup(offsets, newOffset):
-            store.dispatch(.moveCategoryGroup(offsets, newOffset))
+            store.dispatch(.moveCategoryGroupRequested(offsets, newOffset))
         case let .moveCategory(id, destinationGroupID, index):
-            store.dispatch(.moveCategory(ID<Category>(id), ID<CategoryGroup>(destinationGroupID), index))
+            store.dispatch(.moveCategoryRequested(ID<Category>(id), ID<CategoryGroup>(destinationGroupID), index))
         }
     }
 }

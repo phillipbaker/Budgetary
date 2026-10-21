@@ -33,7 +33,7 @@ class PayeeDao {
         return stream
     }
     
-    func allPayees() -> [PayeeDb] {
+    func loadPayees() -> [PayeeDb] {
         return mock
     }
     

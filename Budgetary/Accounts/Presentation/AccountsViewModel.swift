@@ -31,7 +31,7 @@ public final class AccountsViewModel {
     func handle(action: AccountsAction) {
         switch action {
         case .accountsTabAppeared:
-            store.dispatch(.budgetAccountsDataLoadRequested)
+            store.dispatch(.loadBudgetAccountsRequested)
         case .addAccountButtonTapped:
             store.dispatch(.addAccountSheetRequested)
         }

@@ -8,6 +8,6 @@
 import Foundation
 
 public protocol CreditCardPaymentGroupDataSourceLocal: Sendable {    
-    func creditCardPaymentGroup() async -> CreditCardPaymentGroupPlain
+    func loadCreditCardPaymentGroup() async -> CreditCardPaymentGroupPlain
     func update(creditCardPaymentGroup: CreditCardPaymentGroupPlain) async
 }

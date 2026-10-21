@@ -88,7 +88,7 @@ final class TransactionViewModel {
 
         case .payeePickerButtonTapped:
             destination = .payeePicker
-            store.dispatch(.payeeDataLoadRequested)
+            store.dispatch(.loadPayeesRequested)
 
         case .categoryPickerButtonTapped:
             destination = .categoryPicker
@@ -96,7 +96,7 @@ final class TransactionViewModel {
 
         case .accountPickerButtonTapped:
             destination = .accountPicker
-            store.dispatch(.budgetAccountsDataLoadRequested)
+            store.dispatch(.loadBudgetAccountsRequested)
         }
     }
 

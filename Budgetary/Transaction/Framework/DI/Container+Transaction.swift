@@ -1,5 +1,5 @@
 //
-//  Container+NewTransaction.swift
+//  Container+Transaction.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 10/05/2025.
@@ -76,7 +76,7 @@ extension Container {
     }
     
     var saveTransactionSource: Factory<SaveTransactionSource> {
-        self { AddTransactionDataSource() }
+        self { SaveTransactionDataSource() }
             .singleton
     }
     
@@ -95,18 +95,18 @@ extension Container {
             .singleton
     }
     
-    var getPayeesSource: Factory<GetPayeesSource> {
-        self { GetPayeesDataSource() }
+    var loadPayeesSource: Factory<LoadPayeesSource> {
+        self { LoadPayeesDataSource() }
             .singleton
     }
     
-    var newPayeeUseCase: Factory<NewPayeeUseCase> {
-        self { NewPayeeUseCase() }
+    var createPayeeUseCase: Factory<CreatePayeeUseCase> {
+        self { CreatePayeeUseCase() }
             .singleton
     }
     
-    var newPayeeSource: Factory<NewPayeeSource> {
-        self { NewPayeeDataSource() }
+    var createPayeeSource: Factory<CreatePayeeSource> {
+        self { CreatePayeeDataSource() }
     }
     
     var loadCategoryGroupsUseCase: Factory<LoadCategoryGroupsUseCase> {
@@ -114,13 +114,8 @@ extension Container {
             .singleton
     }
     
-    var getCategoryGroupsSource: Factory<GetCategoryGroupsSource> {
-        self { GetCategoryGroupsDataSource() }
-            .singleton
-    }
-    
-    var getTransactionAccountsUseCase: Factory<GetTransactionAccountsUseCase> {
-        self { GetTransactionAccountsUseCase() }
+    var loadCategoryGroupsSource: Factory<LoadCategoryGroupsSource> {
+        self { LoadCategoryGroupsDataSource() }
             .singleton
     }
 }

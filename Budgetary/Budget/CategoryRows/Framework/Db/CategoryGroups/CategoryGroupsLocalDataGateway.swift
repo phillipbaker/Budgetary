@@ -11,8 +11,8 @@ actor CategoryGroupsLocalDataGateway: CategoryGroupsDataSourceLocal {
     let dao: CategoryGroupDao = Container.shared.categoryGroupDao()
     let mapper: CategoryGroupsMapperPlain = Container.shared.categoryGroupsMapperPlain()
 
-    func categoryGroups() -> [CategoryGroupPlain] {
-        let categoryGroupsDb = dao.allCategoryGroups()
+    func loadCategoryGroups() -> [CategoryGroupPlain] {
+        let categoryGroupsDb = dao.loadCategoryGroups()
         return mapper.mapDbToPlain(categoryGroupsDb: categoryGroupsDb)
     }
     

@@ -99,13 +99,13 @@ extension Container {
             EffectRunner(
                 loadBudget: self.loadBudgetUseCase(),
                 assignMoney: self.assignMoneyUseCase(),
-                createBudgetAccount: self.addAccountUseCase(),
-                loadBudgetAccounts: self.loadAccountsDataUseCase(),
+                createBudgetAccount: self.createBudgetAccountUseCase(),
+                loadBudgetAccounts: self.loadBudgetAccountsUseCase(),
                 saveTransaction: self.saveTransactionUseCase(),
-                createPayee: self.newPayeeUseCase(),
+                createPayee: self.createPayeeUseCase(),
                 loadPayees: self.loadPayeesUseCase(),
-                createCategory: self.newCategoryUseCase(),
-                createCategoryGroup: self.newGroupUseCase()
+                createCategory: self.createCategoryUseCase(),
+                createCategoryGroup: self.createCategoryGroupUseCase()
             )
         }
         .singleton

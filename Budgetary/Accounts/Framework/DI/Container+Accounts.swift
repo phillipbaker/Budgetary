@@ -36,7 +36,7 @@ extension Container {
 
     // MARK: Use Cases & Data Sources
     
-    var loadAccountsDataUseCase: Factory<LoadBudgetAccountsUseCase> {
+    var loadBudgetAccountsUseCase: Factory<LoadBudgetAccountsUseCase> {
         self { LoadBudgetAccountsUseCase() }
             .singleton
     }
@@ -46,8 +46,8 @@ extension Container {
             .singleton
     }
     
-    var loadAccountsSource: Factory<LoadBudgetAccountsSource> {
-        self { LoadAccountsDataSource() }
+    var loadBudgetAccountsSource: Factory<LoadBudgetAccountsSource> {
+        self { LoadBudgetAccountsDataSource() }
             .singleton
     }
     
@@ -56,13 +56,13 @@ extension Container {
             .singleton
     }
     
-    var addAccountUseCase: Factory<AddAccountUseCase> {
-        self { AddAccountUseCase() }
+    var createBudgetAccountUseCase: Factory<CreateBudgetAccountUseCase> {
+        self { CreateBudgetAccountUseCase() }
             .singleton
     }
     
-    var addAccountSource: Factory<AddBudgetAccountSource> {
-        self { AddAccountDataSource() }
+    var createBudgetAccountSource: Factory<CreateBudgetAccountSource> {
+        self { CreateBudgetAccountDataSource() }
     }
     
     @MainActor

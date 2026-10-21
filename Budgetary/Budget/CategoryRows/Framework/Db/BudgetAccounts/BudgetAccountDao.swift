@@ -28,7 +28,7 @@ class BudgetAccountDao {
         return stream
     }
     
-    func allBudgetAccounts() -> [BudgetAccountDb] {
+    func loadBudgetAccounts() -> [BudgetAccountDb] {
         return mock
     }
     

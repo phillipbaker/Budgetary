@@ -109,11 +109,14 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         state.budgetState = .loaded(budget)
         return []
         
-    case .newCategoryRequested(name: let name, groupID: let groupID):
+    case .createCategoryRequested(name: let name, groupID: let groupID):
         return [.createCategory(name: name, groupID: groupID)]
         
-    case .createNewCategorySucceeded:
+    case .createCategorySucceeded:
         return [.loadBudget, .loadBudgetAccounts]
+        
+    case .createCategoryFailed:
+        return []
         
         // MARK: - Budget - Assign Money
         
@@ -129,68 +132,68 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         
         // MARK: Accounts - Load
         
-    case .budgetAccountsDataLoadRequested:
+    case .loadBudgetAccountsRequested:
         guard state.accountsState.isIdle else { return [] }
         state.accountsState = .loading
         return [.loadBudgetAccounts]
         
-    case .budgetAccountsDataLoaded(let accounts):
+    case .loadBudgetAccountsSucceeded(let accounts):
         state.accountsState = .loaded(accounts)
         return []
         
-    case .budgetAccountsDataLoadFailed:
+    case .loadBudgetAccountsFailed:
         state.accountsState = .error(.accountsLoadFailed)
         return []
         
         // MARK: - Accounts - Add Account
         
-    case .addAccountRequested(name: let name, accountType: let accountType, startingBalance: let startingBalance):
+    case .createBudgetAccountRequested(name: let name, accountType: let accountType, startingBalance: let startingBalance):
         state.accountsState = .loading
         state.sheet = nil
         return [.createBudgetAccount(name: name, accountType: accountType, startingBalance: startingBalance)]
         
-    case .addAccountSucceeded:
+    case .createBudgetAccountSucceeded:
         return [.loadBudget, .loadBudgetAccounts]
         
-    case .addAccountFailed:
+    case .createBudgetAccountFailed:
         state.accountsState = .error(.unknownError)
         return []
         
         // MARK: Payees - Load
         
-    case .payeeDataLoadRequested:
+    case .loadPayeesRequested:
         guard state.payeesState.isIdle else { return [] }
         state.payeesState = .loading
         return [.loadPayees]
         
-    case .payeeDataLoaded(let payees):
+    case .loadPayeesSucceeded(let payees):
         state.payeesState = .loaded(payees)
         return []
         
-    case .payeePickerDataLoadFailed:
+    case .loadPayeesFailed:
         state.payeesState = .error(.dataError)
         return []
         
         // MARK: Payees - Add Payee
         
-    case .createNewPayeeRequested(let name):
+    case .createPayeeRequested(let name):
         return [.createPayee(name: name)]
         
-    case .createNewPayeeSucceeded:
+    case .createPayeeSucceeded:
         return [.loadPayees]
         
-    case .createNewPayeeFailed:
+    case .createPayeeFailed:
         return []
         
         // MARK: - Edit Categories
         
-    case .newCategoryGroupRequested(let name):
+    case .createCategoryGroupRequested(let name):
         return [.createCategoryGroup(name: name)]
 
-    case .newCategoryGroupSucceeded:
+    case .createCategoryGroupSucceeded:
         return [.loadBudget, .loadBudgetAccounts]
 
-    case .newCategoryGroupFailed:
+    case .createCategoryGroupFailed:
         return []
     case .renameCategoryGroupRequested(_, _):
         return []
@@ -216,9 +219,17 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         return []
     case .deleteCategoryFailed:
         return []
-    case .moveCategoryGroup(_, _):
+    case .moveCategoryGroupRequested(_, _):
         return []
-    case .moveCategory(_, _, _):
+    case .moveCategoryGroupSucceeded:
+        return []
+    case .moveCategoryGroupFailed:
+        return []
+    case .moveCategoryRequested(_, _, _):
+        return []
+    case .moveCategorySucceeded:
+        return []
+    case .moveCategoryFailed:
         return []
     }
 }

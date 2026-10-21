@@ -7,7 +7,7 @@
 
 import Factory
 
-class RenameGroupDataSource: RenameGroupSource {
+class RenameCategoryGroupDataSource: RenameCategoryGroupSource {
     let categoryGroupsDataSourceLocal: any CategoryGroupsDataSourceLocal = Container.shared.categoryGroupsDataSourceLocal()
     
     func findCategoryGroup(by id: ID<CategoryGroupPlain>) async -> CategoryGroupPlain? {

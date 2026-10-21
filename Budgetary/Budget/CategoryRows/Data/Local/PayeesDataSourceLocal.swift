@@ -6,7 +6,7 @@
 //
 
 public protocol PayeesDataSourceLocal: Sendable {
-    func payees() async -> [PayeePlain]
+    func loadPayees() async -> [PayeePlain]
     func findPayee(by id: ID<PayeePlain>) async -> PayeePlain?
     func create(payee: PayeePlain) async
     func update(payee: PayeePlain) async
