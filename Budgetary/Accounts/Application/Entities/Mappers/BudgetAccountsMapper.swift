@@ -175,7 +175,7 @@ public final class BudgetAccountsMapper: Sendable {
             type: map(payeeType: payee.type),
             aliases: payee.aliases,
             includedInPayeeList: payee.includedInPayeeList,
-            automaticallyCategorizeIsOn: payee.includedInPayeeList,
+            automaticallyCategorizeIsOn: payee.automaticallyCategorizeIsOn,
             defaultCategoryID: ID<CategoryPlain>(payee.defaultCategory?.id)
         )
     }
