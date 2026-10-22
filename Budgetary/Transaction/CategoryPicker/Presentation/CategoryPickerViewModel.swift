@@ -31,18 +31,28 @@ final class CategoryPickerViewModel {
     }
 
     var filteredCategories: [TransactionCategoryPresentation] {
-        guard !searchText.isEmpty else { return [] }
+        guard isSearching else { return [] }
+        let candidate = trimmedSearchText.normalizedForComparison()
         return categoryNames
             .flatMap(\.categories)
-            .filter { $0.name.normalizedForComparison().contains(searchText.normalizedForComparison()) }
-            .sorted { $0.name.rankedAgainst(text: searchText) < $1.name.rankedAgainst(text: searchText) }
+            .filter { $0.name.normalizedForComparison().contains(candidate) }
+            .sorted { $0.name.rankedAgainst(text: trimmedSearchText) < $1.name.rankedAgainst(text: trimmedSearchText) }
     }
 
     var isNameClash: Bool {
-        categoryNames
+        let candidate = trimmedSearchText.normalizedForComparison()
+        return categoryNames
             .flatMap(\.categories)
             .map { $0.name.normalizedForComparison() }
-            .contains(searchText.normalizedForComparison())
+            .contains(candidate)
+    }
+    
+    var trimmedSearchText: String {
+        searchText.trimmingCharacters(in: .whitespaces)
+    }
+    
+    var isSearching: Bool {
+        !trimmedSearchText.isEmpty
     }
     
     // MARK: - Init
