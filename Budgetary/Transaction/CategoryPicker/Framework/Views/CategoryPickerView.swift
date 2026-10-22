@@ -19,7 +19,7 @@ struct CategoryPickerView: View {
             .background(Color(.systemGroupedBackground))
             
             List {
-                if model.searchText.isEmpty {
+                if !model.isSearching {
                     AddItemButton("New Category") {
                         model.newCategoryButtonTapped()
                     }
@@ -38,7 +38,7 @@ struct CategoryPickerView: View {
                     }
                 } else {
                     if !model.isNameClash {
-                        AddItemButton("Create \(model.searchText) category") {
+                        AddItemButton("Create “\(model.trimmedSearchText)” Category") {
                             model.newCategoryButtonTapped()
                         }
                     }
@@ -58,7 +58,7 @@ struct CategoryPickerView: View {
         .sheet(isPresented: $model.newCategorySheetIsPresented) {
             NavigationStack {
                 NewCategoryView(
-                    newCategoryName: model.searchText,
+                    newCategoryName: model.trimmedSearchText,
                     onCategoryCreated: model.onCategoryCreated,
                     onCancel: model.cancelNewCategoryButtonTapped
                 )
