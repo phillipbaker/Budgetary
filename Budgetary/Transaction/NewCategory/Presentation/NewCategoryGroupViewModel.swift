@@ -43,13 +43,22 @@ final public class NewCategoryGroupViewModel {
     // MARK: - Derived State
 
     var canSave: Bool {
-        !newGroupName.trimmingCharacters(in: .whitespaces).isEmpty
+        !trimmedGroupName.isEmpty && pendingSaveName == nil
+    }
+    
+    var isNameClash: Bool {
+        let candidate = trimmedGroupName.normalizedForComparison()
+        return categoryGroups
+            .contains { $0.name.normalizedForComparison() == candidate }
+    }
+    
+    var trimmedGroupName: String {
+        newGroupName.trimmingCharacters(in: .whitespaces)
     }
     
     init(
         store: AppStore = Container.shared.appStore(),
         mapper: CategoriesPresentationMapper = Container.shared.categoriesPresentationMapper(),
-        observationTask: Task<Void, Never>? = nil,
         onGroupCreated: @escaping (CategoryGroupNamePresentation) -> Void,
         destination: Destination? = nil,
         onCancel: @escaping () -> Void,
@@ -57,23 +66,15 @@ final public class NewCategoryGroupViewModel {
         defer { observeStore() }
         self.store = store
         self.mapper = mapper
-        self.observationTask = observationTask
         self.onGroupCreated = onGroupCreated
         self.destination = destination
         self.onCancel = onCancel
     }
     
     func saveButtonTapped() {
-        let trimmed = newGroupName.trimmingCharacters(in: .whitespaces)
-//        guard !trimmed.isEmpty else { return } // TODO: Again alert with blank text or just dismiss?
+        guard canSave else { return }
         
-        // Check for name clash
-        let normalizedNew = trimmed.normalizedForComparison()
-        print("NormalizedNew: ", normalizedNew)
-        let clash = categoryGroups
-            .contains { $0.name.normalizedForComparison() == normalizedNew }
-        print("Clash: ", clash)
-        if clash {
+        if isNameClash {
             destination = .nameClashAlert(
                 AlertState {
                     TextState("A category group with this name already exists")
@@ -82,14 +83,14 @@ final public class NewCategoryGroupViewModel {
                         TextState("OK")
                     }
                 } message: {
-                    TextState("There is already a \(trimmed) category group. Please use a different name or pick a different group.")
+                    TextState("There is already a \(self.trimmedGroupName) category group. Please use a different name or pick a different group.")
                 }
             )
             return
         }
 
-        pendingSaveName = trimmed
-        store.dispatch(.createCategoryGroupRequested(trimmed))
+        pendingSaveName = trimmedGroupName
+        store.dispatch(.createCategoryGroupRequested(trimmedGroupName))
     }
     
     func confirmAlertButtonTapped() {

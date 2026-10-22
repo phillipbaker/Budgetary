@@ -45,7 +45,18 @@ final class NewCategoryViewModel {
     // MARK: - Derived State
 
     var canSave: Bool {
-        selectedGroup != nil && !newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty
+        selectedGroup != nil && !trimmedCategoryName.isEmpty && pendingSaveName == nil
+    }
+    
+    var isNameClash: Bool {
+        let candidate = trimmedCategoryName.normalizedForComparison()
+        return categoryNames
+            .flatMap(\.categories)
+            .contains{ $0.name.normalizedForComparison() == candidate }
+    }
+    
+    var trimmedCategoryName: String {
+        newCategoryName.trimmingCharacters(in: .whitespaces)
     }
     
     // MARK: - Init
@@ -53,7 +64,6 @@ final class NewCategoryViewModel {
     init(
         store: AppStore = Container.shared.appStore(),
         mapper: CategoriesPresentationMapper = Container.shared.categoriesPresentationMapper(),
-        observationTask: Task<Void,Never>? = nil,
         newCategoryName: String = "",
         onCategoryCreated: @escaping (TransactionCategoryPresentation) -> Void,
         selectedGroup: CategoryGroupNamePresentation? = nil,
@@ -62,7 +72,6 @@ final class NewCategoryViewModel {
     ) {
         self.store = store
         self.mapper = mapper
-        self.observationTask = observationTask
         self.newCategoryName = newCategoryName
         self.onCategoryCreated = onCategoryCreated
         self.selectedGroup = selectedGroup
@@ -84,17 +93,9 @@ final class NewCategoryViewModel {
     }
 
     func saveButtonTapped() {
-        guard let group = selectedGroup else { return } // TODO: Actually an alert here that no group selected just in ase it gets into some state where you can tap the button with no group?
-        let trimmed = newCategoryName.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty else { return } // TODO: AGain alert with blank text or just dismiss?
+        guard canSave, let group = selectedGroup else { return }
         
-        // Check for name clash
-        let normalizedNew = trimmed.normalizedForComparison()
-        let clash = categoryNames
-            .flatMap(\.categories)
-            .contains{ $0.name.normalizedForComparison() == normalizedNew }
-        
-        if clash {
+        if isNameClash {
             destination = .nameClashAlert(
                 AlertState {
                     TextState("A category with this name already exists in this group")
@@ -103,14 +104,14 @@ final class NewCategoryViewModel {
                         TextState("OK")
                     }
                 } message: {
-                    TextState("There is already a \(trimmed) category in the monthly expenses group. Please use a different name or pick a different group.")
+                    TextState("There is already a \(self.trimmedCategoryName) category in the monthly expenses group. Please use a different name or pick a different group.")
                 }
             )
             return
         }
 
-        pendingSaveName = trimmed
-        store.dispatch(.createCategoryRequested(name: trimmed, groupID: ID<CategoryGroup>(group.id)))
+        pendingSaveName = trimmedCategoryName
+        store.dispatch(.createCategoryRequested(name: trimmedCategoryName, groupID: ID<CategoryGroup>(group.id)))
     }
     
     func confirmAlertButtonTapped() {
