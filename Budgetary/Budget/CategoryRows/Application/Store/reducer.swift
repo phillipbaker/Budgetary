@@ -153,7 +153,7 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         return [.createBudgetAccount(name: name, accountType: accountType, startingBalance: startingBalance)]
         
     case .createBudgetAccountSucceeded:
-        return [.loadBudget, .loadBudgetAccounts]
+        return [.loadBudget, .loadBudgetAccounts, .loadPayees]
         
     case .createBudgetAccountFailed:
         state.accountsState = .error(.unknownError)
