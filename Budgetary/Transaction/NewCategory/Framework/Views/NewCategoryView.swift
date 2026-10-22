@@ -65,7 +65,7 @@ struct NewCategoryView: View {
                     model.saveButtonTapped()
                 }
                 .fontWeight(.semibold)
-                .disabled(model.saveIsDisabled)
+                .disabled(!model.canSave)
             }
             ToolbarItem(placement: .topBarLeading) {
                 Button(role: .cancel) {
