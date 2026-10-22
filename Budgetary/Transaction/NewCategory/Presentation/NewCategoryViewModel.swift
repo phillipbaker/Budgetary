@@ -44,8 +44,8 @@ final class NewCategoryViewModel {
     
     // MARK: - Derived State
 
-    var saveIsDisabled: Bool {
-        selectedGroup == nil || newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty
+    var canSave: Bool {
+        selectedGroup != nil && !newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty
     }
     
     // MARK: - Init

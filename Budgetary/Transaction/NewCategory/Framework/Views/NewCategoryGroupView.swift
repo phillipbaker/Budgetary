@@ -42,7 +42,7 @@ struct NewCategoryGroupView: View {
                 Button(role: .confirm) {
                     model.saveButtonTapped()
                 }
-                .disabled(model.saveIsDisabled)
+                .disabled(!model.canSave)
             }
         }
         .alert($model.destination.nameClashAlert) { _ in

@@ -42,8 +42,8 @@ final public class NewCategoryGroupViewModel {
     
     // MARK: - Derived State
 
-    var saveIsDisabled: Bool {
-        newGroupName.trimmingCharacters(in: .whitespaces).isEmpty
+    var canSave: Bool {
+        !newGroupName.trimmingCharacters(in: .whitespaces).isEmpty
     }
     
     init(
