@@ -39,11 +39,8 @@ final class PayeePickerViewModel {
     
     var filteredPayees: [PayeePresentation] {
         guard isSearching else { return [] }
-        let trimmed = trimmedSearchText
-        let candidate = trimmed.normalizedForComparison()
         return allPayees
-            .filter { $0.name.normalizedForComparison().contains(candidate) }
-            .sorted { $0.name.rankedAgainst(text: trimmed) < $1.name.rankedAgainst(text: trimmed) }
+            .matching(searchText, by: \.name)
     }
     
     var isSearching: Bool {
@@ -51,9 +48,7 @@ final class PayeePickerViewModel {
     }
     
     var isNameClash: Bool {
-        let candidate = trimmedSearchText.normalizedForComparison()
-        return allPayees
-            .contains { $0.name.normalizedForComparison() == candidate }
+        allPayees.contains(searchText, by: \.name)
     }
     
     var canCreatePayee: Bool {
@@ -113,7 +108,7 @@ final class PayeePickerViewModel {
                     if let pendingName = self.pendingSaveName {
                         let created = payeePickerData.alphabeticalPayees
                             .flatMap(\.payees)
-                            .first { $0.name.normalizedForComparison() == pendingName.normalizedForComparison() }
+                            .first(named: pendingName, by: \.name)
                         if let created {
                             withAnimation {
                                 self.pendingSaveName = nil
