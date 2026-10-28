@@ -32,19 +32,15 @@ final class CategoryPickerViewModel {
 
     var filteredCategories: [TransactionCategoryPresentation] {
         guard isSearching else { return [] }
-        let candidate = trimmedSearchText.normalizedForComparison()
         return categoryNames
             .flatMap(\.categories)
-            .filter { $0.name.normalizedForComparison().contains(candidate) }
-            .sorted { $0.name.rankedAgainst(text: trimmedSearchText) < $1.name.rankedAgainst(text: trimmedSearchText) }
+            .matching(searchText, by: \.name)
     }
 
     var isNameClash: Bool {
-        let candidate = trimmedSearchText.normalizedForComparison()
-        return categoryNames
+        categoryNames
             .flatMap(\.categories)
-            .map { $0.name.normalizedForComparison() }
-            .contains(candidate)
+            .contains(searchText, by: \.name)
     }
     
     var trimmedSearchText: String {

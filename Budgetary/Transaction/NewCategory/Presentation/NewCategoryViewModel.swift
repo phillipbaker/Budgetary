@@ -49,10 +49,9 @@ final class NewCategoryViewModel {
     }
     
     var isNameClash: Bool {
-        let candidate = trimmedCategoryName.normalizedForComparison()
-        return categoryNames
+        categoryNames
             .flatMap(\.categories)
-            .contains{ $0.name.normalizedForComparison() == candidate }
+            .contains(newCategoryName, by: \.name)
     }
     
     var trimmedCategoryName: String {
@@ -136,7 +135,7 @@ final class NewCategoryViewModel {
                 if let pendingName = self.pendingSaveName {
                     let created = names
                         .flatMap(\.categories)
-                        .first { $0.name.normalizedForComparison() == pendingName.normalizedForComparison() }
+                        .first(named: pendingName, by: \.name)
                     if let created {
                         withAnimation {
                             self.pendingSaveName = nil

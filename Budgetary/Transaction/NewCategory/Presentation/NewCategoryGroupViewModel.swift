@@ -47,9 +47,7 @@ final public class NewCategoryGroupViewModel {
     }
     
     var isNameClash: Bool {
-        let candidate = trimmedGroupName.normalizedForComparison()
-        return categoryGroups
-            .contains { $0.name.normalizedForComparison() == candidate }
+        categoryGroups.contains(newGroupName, by: \.name)
     }
     
     var trimmedGroupName: String {
@@ -111,7 +109,7 @@ final public class NewCategoryGroupViewModel {
                 // If a save is in flight, check whether the new group has landed.
                 if let pendingName = self.pendingSaveName {
                     let created = categoryGroups
-                        .first { $0.name.normalizedForComparison() == pendingName.normalizedForComparison() }
+                        .first(named: pendingName, by: \.name)
                     if let created {
                         withAnimation {
                             self.pendingSaveName = nil
