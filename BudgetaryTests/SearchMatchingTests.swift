@@ -59,9 +59,7 @@ struct SearchMatchingTests {
         @Test("Treats punctuation between words as a space and ignores accents",
               arguments: SearchMatchingTests.separatorsAndAccentQueries)
         func normalisesSeparatorsAndAccents(query: String, name: String) {
-            withKnownIssue("Punctuation is deleted, not replaced with a space; accents aren't folded") {
                 #expect([name].matching(query, by: \.self) == [name])
-            }
         }
 
         @Test func matchesOnlyTheGivenKeyPathAndReturnsElements() {
@@ -80,9 +78,7 @@ struct SearchMatchingTests {
         }
 
         @Test func ranksNormalisedExactMatchFirst() {
-            withKnownIssue("rankedAgainst doesn't apply normalizedForComparison") {
-                #expect(["BM Electrical", "B&M"].matching("bm", by: \.self) == ["B&M", "BM Electrical"])
-            }
+            #expect(["BM Electrical", "B&M"].matching("bm", by: \.self) == ["B&M", "BM Electrical"])
         }
     }
 
@@ -114,9 +110,7 @@ struct SearchMatchingTests {
         @Test("Treats punctuation between words as a space and ignores accents",
               arguments: SearchMatchingTests.separatorsAndAccentQueries)
         func normalisesSeparatorsAndAccents(query: String, name: String) {
-            withKnownIssue("Punctuation is deleted, not replaced with a space; accents aren't folded") {
-                #expect([name].first(named: query, by: \.self) == name)
-            }
+            #expect([name].first(named: query, by: \.self) == name)
         }
 
         @Test func treatsSymbolsAsSignificant() {
@@ -167,9 +161,7 @@ struct SearchMatchingTests {
         @Test("Variants that differ only by separators or accents clash",
               arguments: SearchMatchingTests.separatorsAndAccentQueries)
         func separatorAndAccentVariantsClash(query: String, name: String) {
-            withKnownIssue("Punctuation is deleted, not replaced with a space; accents aren't folded") {
-                #expect([name].contains(query, by: \.self))
-            }
+            #expect([name].contains(query, by: \.self))
         }
 
         @Test func namesDifferingBySymbolDoNotClash() {

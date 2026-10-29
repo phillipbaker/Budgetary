@@ -7,14 +7,14 @@
 
 extension String {
     func rankedAgainst(text: String) -> Int {
-        let lowerSelf = self.lowercased()
-        let lowerText = text.lowercased()
+        let normalizedSelf = self.normalizedForComparison
+        let normalizedText = text.normalizedForComparison
         
-        if lowerSelf == lowerText {
+        if normalizedSelf == normalizedText {
             return 0  // Best match
-        } else if lowerSelf.hasPrefix(lowerText) {
+        } else if normalizedSelf.hasPrefix(normalizedText) {
             return 1  // Starts with query
-        } else if lowerSelf.contains(lowerText) {
+        } else if normalizedSelf.contains(normalizedText) {
             return 2  // Contains query
         } else {
             return 3  // No match

@@ -8,10 +8,11 @@
 import Foundation
 
 extension String {
-    func normalizedForComparison() -> String {
-        return self
-            .lowercased() // remove if you want case-sensitive
-            .components(separatedBy: CharacterSet.punctuationCharacters)
-            .joined()
+    /// Lowercased, accent-free, and punctuation-insensitive form for search and duplicate checks.
+    var normalizedForComparison: String {
+        folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
+            .replacing(/['’&]/, with: "")
+            .replacing(/[\p{P}\s]+/, with: " ")
+            .trimmingCharacters(in: .whitespaces)
     }
 }
