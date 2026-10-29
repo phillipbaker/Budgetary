@@ -78,9 +78,7 @@ struct SearchMatchingTests {
         }
 
         @Test func ranksNormalisedExactMatchFirst() {
-            withKnownIssue("rankedAgainst doesn't apply normalizedForComparison") {
-                #expect(["BM Electrical", "B&M"].matching("bm", by: \.self) == ["B&M", "BM Electrical"])
-            }
+            #expect(["BM Electrical", "B&M"].matching("bm", by: \.self) == ["B&M", "BM Electrical"])
         }
     }
 
