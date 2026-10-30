@@ -53,7 +53,7 @@ struct AccountView: View {
                 (transaction.payee?.name.lowercased() ?? "").contains(searchText.lowercased())
             }
             transactionDates.append(
-                TransactionDate(id: transactionDate.id, date: transactionDate.date, transactions: matchingTransactions)
+                TransactionDate(date: transactionDate.date, transactions: matchingTransactions)
             )
         }
         return transactionDates.filter { !$0.transactions.isEmpty }
@@ -72,7 +72,6 @@ struct AccountView: View {
             balance: "£1,250.00",
             transactionsByDate: [
                 TransactionDate(
-                    id: .init(),
                     date: .now,
                     transactions: [
                         .init(

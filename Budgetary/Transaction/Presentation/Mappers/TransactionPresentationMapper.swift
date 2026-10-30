@@ -115,15 +115,18 @@ enum TransactionPresentationMapper {
     }
     
     static func map(transactions: [TransactionData]) -> [TransactionDate] {
-        let grouped = Dictionary(grouping: transactions, by: { $0.date })
-        let sorted = grouped.sorted { $0.key > $1.key }
+        let sortedTransactions = transactions.sorted { $0.date > $1.date }
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: sortedTransactions) { calendar.startOfDay(for: $0.date) }
         
-        return sorted.map { date, entities in
-            let mapped = entities.map { transaction in
-                TransactionPresentationMapper.map(transaction: transaction)
+        return grouped
+            .sorted { $0.key > $1.key }
+            .map { day, transactions in
+                TransactionDate(
+                    date: day,
+                    transactions: transactions.map { TransactionPresentationMapper.map(transaction: $0) }
+                )
             }
-            return TransactionDate(id: .init(), date: date, transactions: mapped)
-        }
     }
     
     static func map(payee: Payee?) -> PayeePresentation? {
