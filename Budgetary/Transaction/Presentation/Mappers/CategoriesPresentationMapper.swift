@@ -22,73 +22,30 @@ public final class CategoriesPresentationMapper {
     }
     
     func map(categoryGroupRows: [CategoryGroupRow]) -> [CategoryNamePresentation] {
-        var categoryNames: [CategoryNamePresentation] = []
-        
-        for group in categoryGroupRows {
-            categoryNames.append(contentsOf: map(categories: group.categories, for: group))
-        }
-        return categoryNames
-    }
+        let categories = categoryGroupRows
+            .filter { !$0.isHidden }
+            .flatMap(\.categories)
+            .filter { !$0.isHidden }
 
-    func map(categoryGroups: [CategoryGroup]) -> [CategoryNamePresentation] {
-        var categoryNames: [CategoryNamePresentation] = []
+        let grouped = Dictionary(grouping: categories, by: { $0.name.sectionLetter })
         
-        for group in categoryGroups {
-            categoryNames.append(contentsOf: map(categories: group.categories, for: group))
+        let sections = grouped.sorted { lhs, rhs in
+            switch (lhs.key, rhs.key) {
+            case ("#", _): true
+            case (_, "#"): false
+            default: lhs.key < rhs.key
+            }
         }
-        return categoryNames
-    }
-
-    // TODO: mae sure hidden categories/groups are filtered out and can prob remove isHiiden again since this is ready only nad doersnt get mapped back. can i remove nything else too?
-    func map(categories: [Category], for group: CategoryGroup) -> [CategoryNamePresentation] {
-        let grouped = Dictionary(grouping: categories, by: { $0.name.prefix(1) })
-        let sorted = grouped.sorted { $0.key < $1.key }
         
-        return sorted.map { letter, categories in
+        return sections.map { letter, categories in
             let mapped = categories.map { category in
-                map(category: category)
+                TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>(category.id), name: category.name)
             }
             return CategoryNamePresentation(
-                id: ID<CategoryNamePresentation>(UUID(uuidString: String(letter)) ?? UUID()),
-                letter: String(letter),
-                isHidden: group.isHidden,
-                group: map(categoryGroup: group),
-                categories: mapped.sorted { $0.name < $1.name }
+                id: ID<CategoryNamePresentation>(UUID(uuidString: letter) ?? UUID()),
+                letter: letter,
+                categories: mapped.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
             )
         }
-    }
-    
-    func map(categories: [CategoryRow], for group: CategoryGroupRow) -> [CategoryNamePresentation] {
-        let grouped = Dictionary(grouping: categories, by: { $0.name.prefix(1) })
-        let sorted = grouped.sorted { $0.key < $1.key }
-        
-        return sorted.map { letter, categories in
-            let mapped = categories.map { category in
-                map(category: category)
-            }
-            return CategoryNamePresentation(
-                id: ID<CategoryNamePresentation>(UUID(uuidString: String(letter)) ?? UUID()),
-                letter: String(letter),
-                isHidden: group.isHidden,
-                group: map(categoryGroup: group),
-                categories: mapped.sorted { $0.name < $1.name }
-            )
-        }
-    }
-    
-    func map(categoryGroup: CategoryGroup) -> CategoryGroupNamePresentation {
-        return CategoryGroupNamePresentation(id: ID<CategoryGroupNamePresentation>(categoryGroup.id), name: categoryGroup.name)
-    }
-    
-    func map(categoryGroup: CategoryGroupRow) -> CategoryGroupNamePresentation {
-        return CategoryGroupNamePresentation(id: ID<CategoryGroupNamePresentation>(categoryGroup.id), name: categoryGroup.name)
-    }
-    
-    func map(category: Category) -> TransactionCategoryPresentation {
-        return TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>(category.id), name: category.name)
-    }
-    
-    func map(category: CategoryRow) -> TransactionCategoryPresentation {
-        return TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>(category.id), name: category.name)
     }
 }
