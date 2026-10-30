@@ -6,7 +6,7 @@
 //
 
 public struct CategoryNamePresentation: Equatable, Hashable, Identifiable, Sendable {
-    public let id: ID<CategoryNamePresentation>
+    public var id: String { letter }
     let letter: String
     let categories: [TransactionCategoryPresentation]
 }

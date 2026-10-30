@@ -42,7 +42,6 @@ public final class CategoriesPresentationMapper {
                 TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>(category.id), name: category.name)
             }
             return CategoryNamePresentation(
-                id: ID<CategoryNamePresentation>(UUID(uuidString: letter) ?? UUID()),
                 letter: letter,
                 categories: mapped.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
             )

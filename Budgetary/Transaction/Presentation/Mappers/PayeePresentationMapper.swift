@@ -15,7 +15,6 @@ public final class PayeePresentationMapper {
         }
         
         return PayeePickerDataPresentation(
-            id: .init(),
             alphabeticalPayees: map(payees: payees),
             transferPayees: transferPayees.map { map(payee: $0) }
         )
@@ -45,7 +44,6 @@ public final class PayeePresentationMapper {
                 map(payee: payee)
             }
             return PayeeName(
-                id: .init(),
                 letter: letter,
                 payees: mapped.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
             )
