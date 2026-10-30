@@ -8,8 +8,6 @@
 public struct CategoryNamePresentation: Equatable, Hashable, Identifiable, Sendable {
     public let id: ID<CategoryNamePresentation>
     let letter: String
-    let isHidden: Bool
-    let group: CategoryGroupNamePresentation
     let categories: [TransactionCategoryPresentation]
 }
 

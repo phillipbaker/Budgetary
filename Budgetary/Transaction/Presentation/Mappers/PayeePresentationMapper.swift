@@ -30,17 +30,24 @@ public final class PayeePresentationMapper {
             payee.includedInPayeeList == true
         }
         
-        let grouped = Dictionary(grouping: includedRegularPayees, by: { $0.name.prefix(1) })
-        let sorted = grouped.sorted { $0.key < $1.key }
+        let grouped = Dictionary(grouping: includedRegularPayees, by: { $0.name.sectionLetter })
+        
+        let sections = grouped.sorted { lhs, rhs in
+            switch (lhs.key, rhs.key) {
+            case ("#", _): true
+            case (_, "#"): false
+            default: lhs.key < rhs.key
+            }
+        }
 
-        return sorted.map { letter, payees in
+        return sections.map { letter, payees in
             let mapped = payees.map { payee in
                 map(payee: payee)
             }
             return PayeeName(
                 id: .init(),
-                letter: String(letter),
-                payees: mapped.sorted { $0.name < $1.name } // Sorts payees alphabetically within letter sections
+                letter: letter,
+                payees: mapped.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
             )
         }
     }
