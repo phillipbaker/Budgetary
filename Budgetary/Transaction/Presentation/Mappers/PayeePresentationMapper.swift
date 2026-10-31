@@ -21,33 +21,19 @@ public final class PayeePresentationMapper {
     }
     
     func map(payees: [Payee]) -> [PayeeName] {
-        let regularPayees = payees.filter { payee in
-            if case .regular = payee.type { return true }
-            return false
-        }
-        let includedRegularPayees = regularPayees.filter { payee in
-            payee.includedInPayeeList == true
-        }
-        
-        let grouped = Dictionary(grouping: includedRegularPayees, by: { $0.name.sectionLetter })
-        
-        let sections = grouped.sorted { lhs, rhs in
-            switch (lhs.key, rhs.key) {
-            case ("#", _): true
-            case (_, "#"): false
-            default: lhs.key < rhs.key
+        payees
+            .filter {
+                if case .regular = $0.type { return true }
+                return false
             }
-        }
-
-        return sections.map { letter, payees in
-            let mapped = payees.map { payee in
-                map(payee: payee)
+            .filter { $0.includedInPayeeList }
+            .alphabeticalSections(by: \.name)
+            .map { section in
+                PayeeName(
+                    letter: section.letter,
+                    payees: section.elements.map { map(payee: $0) }
+                )
             }
-            return PayeeName(
-                letter: letter,
-                payees: mapped.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
-            )
-        }
     }
     
     func map(payee: Payee) -> PayeePresentation {

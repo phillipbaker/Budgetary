@@ -22,29 +22,18 @@ public final class CategoriesPresentationMapper {
     }
     
     func map(categoryGroupRows: [CategoryGroupRow]) -> [CategoryNamePresentation] {
-        let categories = categoryGroupRows
+        categoryGroupRows
             .filter { !$0.isHidden }
             .flatMap(\.categories)
             .filter { !$0.isHidden }
-
-        let grouped = Dictionary(grouping: categories, by: { $0.name.sectionLetter })
-        
-        let sections = grouped.sorted { lhs, rhs in
-            switch (lhs.key, rhs.key) {
-            case ("#", _): true
-            case (_, "#"): false
-            default: lhs.key < rhs.key
+            .alphabeticalSections(by: \.name)
+            .map { section in
+                CategoryNamePresentation(
+                    letter: section.letter,
+                    categories: section.elements.map {
+                        TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>($0.id), name: $0.name)
+                    }
+                )
             }
-        }
-        
-        return sections.map { letter, categories in
-            let mapped = categories.map { category in
-                TransactionCategoryPresentation(id: ID<TransactionCategoryPresentation>(category.id), name: category.name)
-            }
-            return CategoryNamePresentation(
-                letter: letter,
-                categories: mapped.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
-            )
-        }
     }
 }
