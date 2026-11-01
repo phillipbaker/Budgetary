@@ -77,8 +77,8 @@ public class BudgetAccountsMapperPlain {
             memo: transactionDb.memo,
             amount: transactionDb.amount,
             isCleared: transactionDb.isCleared,
-            payeeID: transactionDb.payeeID.map(ID<PayeePlain>.init),
-            categoryID: transactionDb.categoryID.map(ID<CategoryPlain>.init)
+            payeeID: ID<PayeePlain>(transactionDb.payeeID),
+            categoryID: ID<CategoryPlain>(transactionDb.categoryID)
         )
     }
     
@@ -95,8 +95,8 @@ public class BudgetAccountsMapperPlain {
             memo: transactionPlain.memo,
             amount: transactionPlain.amount,
             isCleared: transactionPlain.isCleared,
-            payeeID: ID<PayeeDb>(transactionPlain.payeeID),
-            categoryID: ID<CategoryDb>(transactionPlain.categoryID)
+            payeeID: transactionPlain.payeeID?.rawValue,
+            categoryID: transactionPlain.categoryID?.rawValue
         )
     }
 }
