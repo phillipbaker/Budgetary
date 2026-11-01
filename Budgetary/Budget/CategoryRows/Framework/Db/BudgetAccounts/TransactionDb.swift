@@ -15,8 +15,8 @@ final class TransactionDb: Equatable {
     var memo: String
     var amount: Amount
     var isCleared: Bool
-    var payeeID: ID<PayeeDb>?
-    var categoryID: ID<CategoryDb>?
+    var payeeID: UUID?
+    var categoryID: UUID?
 
     init(
         externalID: UUID,
@@ -24,8 +24,8 @@ final class TransactionDb: Equatable {
         memo: String,
         amount: Amount,
         isCleared: Bool,
-        payeeID: ID<PayeeDb>?,
-        categoryID: ID<CategoryDb>?
+        payeeID: UUID?,
+        categoryID: UUID?
     ) {
         self.externalID = externalID
         self.date = date
