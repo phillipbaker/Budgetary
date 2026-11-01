@@ -151,25 +151,17 @@ enum TransactionPresentationMapper {
     static func map(amount: Amount) -> AmountDraft {
         switch amount {
         case .inflow(let value):
-            return AmountDraft(type: .inflow, value: value.formatted(.currency(code: "GBP")))
+            AmountDraft(type: .inflow, value: value)
         case .outflow(let value):
-            return AmountDraft(type: .outflow, value: "-" + value.formatted(.currency(code: "GBP")))
+            AmountDraft(type: .outflow, value: value)
         }
     }
     
-    // TODO: Check this correct with positive, negative values, errors go somewhere
     static func map(amountRequest: AmountDraft) -> Amount {
         switch amountRequest.type {
-        case .inflow:
-            if let value = amountRequest.value.decimalValue {
-                return .inflow(value)
-            }
-        case .outflow:
-            if let value = amountRequest.value.decimalValue  {
-                return .outflow(value)
-            }
+        case .inflow: .inflow(amountRequest.value)
+        case .outflow: .outflow(amountRequest.value)
         }
-        return .outflow(0.00) // TODO: Deal with this, should not be here
     }
     
     static func map(payeeType: PayeeType) -> PayeeTypePresentation {
@@ -178,9 +170,4 @@ enum TransactionPresentationMapper {
         case .transfer(let accountID): .transfer(ID<BudgetAccountPresentation>(accountID))
         }
     }
-}
-
-
-enum DecimalError: Error {
-    case failedToMakeDecimal
 }

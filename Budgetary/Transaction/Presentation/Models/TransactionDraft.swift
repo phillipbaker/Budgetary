@@ -22,7 +22,7 @@ public struct TransactionDraft: Equatable, Hashable, Identifiable, Sendable {
         id: Self.ID = .init(),
         date: Date = .now,
         memo: String = "",
-        amount: AmountDraft = AmountDraft(type: .outflow, value: "0.00"),
+        amount: AmountDraft = AmountDraft(type: .outflow, value: 0.00),
         isCleared: Bool = false,
         payee: PayeePresentation? = nil,
         account: TransactionAccountPresentation? = nil, // TODO: I think I want a default value here i.e. always pass one in based on call site
@@ -38,25 +38,5 @@ public struct TransactionDraft: Equatable, Hashable, Identifiable, Sendable {
         self.account = account
         self.category = category
         self.linkedTransactionID = linkedTransactionID
-    }
-    
-    init(from transaction: TransactionPresentation) {
-        self.id = ID(transaction.id)
-        self.date = transaction.date
-        self.memo = transaction.memo
-        self.amount = AmountDraft(type: transaction.amount.type, value: transaction.amount.value)
-        self.isCleared = transaction.isCleared
-        self.payee = transaction.payee
-        self.account = transaction.account
-        self.category = transaction.category
-        self.linkedTransactionID = transaction.linkedTransactionID
-    }
-    
-    init(from transaction: TransactionPresentation?) {
-        if let transaction {
-            self.init(from: transaction)
-        } else {
-            self.init()
-        }
     }
 }
