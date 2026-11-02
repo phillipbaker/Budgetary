@@ -170,7 +170,7 @@ struct TransactionView: View {
                             model.handle(action: .setDraftAmount(
                                 AmountDraft(
                                     type: amountModel.transactionType,       // sign lives in the type
-                                    value: "\(abs(amountModel.result))"      // value is the magnitude
+                                    value: abs(amountModel.result)           // value is the magnitude
                                 )
                             ))
                             model.handle(action: .saveTransactionButtonTapped)

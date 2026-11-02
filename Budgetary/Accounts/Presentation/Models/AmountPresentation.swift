@@ -13,7 +13,7 @@ public struct AmountPresentation: Equatable, Hashable, Sendable {
 }
 public struct AmountDraft: Equatable, Hashable, Sendable {
     var type: TransactionTypePresentation
-    var value: String
+    var value: Decimal
 }
 
 public enum TransactionType: String, CaseIterable, Equatable, Hashable, Identifiable, Sendable {
