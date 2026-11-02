@@ -41,8 +41,8 @@ final class BudgetMapperPlain {
         return BudgetDb(
             externalID: budgetPlain.id.rawValue,
             settings: mapPlainToDb(budgetSettingsPlain: budgetPlain.settings),
-            budgetAccountIDs: budgetPlain.budgetAccountIDs.map { ID<BudgetAccountDb>($0) },
-            categoryGroupIDs: budgetPlain.categoryGroupIDs.map { ID<CategoryGroupDb>($0) }
+            budgetAccountIDs: budgetPlain.budgetAccountIDs.map { $0.rawValue },
+            categoryGroupIDs: budgetPlain.categoryGroupIDs.map { $0.rawValue }
         )
     }
 }

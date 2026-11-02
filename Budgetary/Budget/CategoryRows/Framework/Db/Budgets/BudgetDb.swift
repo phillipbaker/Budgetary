@@ -12,14 +12,14 @@ import SwiftData
 final class BudgetDb: Equatable {
     @Attribute(.unique) var externalID: UUID
     var settings: BudgetSettingsDb
-    var budgetAccountIDs: [ID<BudgetAccountDb>]
-    var categoryGroupIDs: [ID<CategoryGroupDb>]
+    var budgetAccountIDs: [UUID]
+    var categoryGroupIDs: [UUID]
     
     init(
         externalID: UUID,
         settings: BudgetSettingsDb,
-        budgetAccountIDs: [ID<BudgetAccountDb>],
-        categoryGroupIDs: [ID<CategoryGroupDb>]
+        budgetAccountIDs: [UUID],
+        categoryGroupIDs: [UUID]
     ) {
         self.externalID = externalID
         self.settings = settings
