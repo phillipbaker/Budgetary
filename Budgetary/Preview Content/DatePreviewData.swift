@@ -10,7 +10,7 @@ import Foundation
 extension Date {
     // August 2024
     
-    static let augEigth2024 = Calendar.current.date(
+    static let augEighth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 8,
@@ -22,7 +22,7 @@ extension Date {
         from: DateComponents(
             year: 2024,
             month: 8,
-            day: 8
+            day: 9
         )
     ) ?? .now
     
@@ -42,7 +42,7 @@ extension Date {
         )
     ) ?? .now
     
-    static let augSevenTeenth2024 = Calendar.current.date(
+    static let augSeventeenth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 8,
@@ -60,7 +60,7 @@ extension Date {
     
     // September 2024
     
-    static let sepEigth2024 = Calendar.current.date(
+    static let sepEighth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 9,
@@ -92,7 +92,7 @@ extension Date {
         )
     ) ?? .now
     
-    static let sepSevenTeenth2024 = Calendar.current.date(
+    static let sepSeventeenth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 9,
@@ -110,7 +110,7 @@ extension Date {
     
     // October 2024
     
-    static let octEigth2024 = Calendar.current.date(
+    static let octEighth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 10,
@@ -142,7 +142,7 @@ extension Date {
         )
     ) ?? .now
     
-    static let octSevenTeenth2024 = Calendar.current.date(
+    static let octSeventeenth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 10,
@@ -160,7 +160,7 @@ extension Date {
     
     // November
     
-    static let novEigth2024 = Calendar.current.date(
+    static let novEighth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 11,
@@ -170,7 +170,7 @@ extension Date {
     
     // December
     
-    static let decEigth2024 = Calendar.current.date(
+    static let decEighth2024 = Calendar.current.date(
         from: DateComponents(
             year: 2024,
             month: 12,

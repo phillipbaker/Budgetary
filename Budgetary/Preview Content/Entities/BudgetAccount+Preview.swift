@@ -1,5 +1,5 @@
 //
-//  BudgetAccountPreviewData.swift
+//  BudgetAccount+Preview.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 20/09/2024.
@@ -9,7 +9,7 @@ import Foundation
 
 extension BudgetAccount {
     static let hsbcChecking = BudgetAccount(
-        id: ID<BudgetAccount>(.hsbcChecking),
+        id: ID<BudgetAccount>(.mock(.hsbcChecking)),
         name: "HSBC Checking",
         type: .cash(.checking),
         startingBalance: 0.0,

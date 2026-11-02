@@ -44,16 +44,5 @@ class BudgetDao {
         
     }
     
-    private var mock: BudgetDb = BudgetDb(
-        externalID: .init(),
-        settings: BudgetSettingsDb(
-            name: "UK Budget",
-            curreny: "GBR",
-            currencyFormet: "",
-            numberFormat: "",
-            dateFormat: ""
-        ),
-        budgetAccountIDs: [.init(), .init(), .init()],
-        categoryGroupIDs: [.init(), .init(), .init()]
-    )
+    private var mock: BudgetDb = .mock
 }
