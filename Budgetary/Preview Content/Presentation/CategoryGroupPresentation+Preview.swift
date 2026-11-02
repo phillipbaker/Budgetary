@@ -34,7 +34,6 @@ extension CategoryGroupPresentation: @unchecked Sendable {
         activityTotal: [:],
         availableTotal: [:],
         categories: [
-            .ynab,
             .birthdays,
             .christmas,
             .lifeInsurance,
