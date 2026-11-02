@@ -14,20 +14,23 @@ extension UUID {
 }
 
 enum MockID: Int {
+    // Budget
+    case ukBudget = 1
+
     // Budget Accounts
-    case hsbcChecking = 1
+    case hsbcChecking = 100
     case barclays
     case hsbcSavings
     case capitalOneCard
     
     // Transfer Payees
-    case barclaysTransfer = 100
+    case barclaysTransfer = 200
     case capitalOneCardTransfer
     case hsbcCheckingTransfer
     case hsbcSavingsTransfer
     
     // Regular Payees
-    case landlord = 200
+    case landlord = 300
     case countyCouncil
     case amazon
     case bigCorporation
@@ -64,13 +67,13 @@ enum MockID: Int {
     case cineworld
     
     // Category Groups
-    case obligations = 300
+    case obligations = 400
     case trueExpenses
     case monthlyExpenses
     case fun
 
     // Categories
-    case inflow = 400
+    case inflow = 500
     case rent
     case councilTax
     case utilities
@@ -106,7 +109,7 @@ enum MockID: Int {
     case takeout
     
     // Transactions
-    case sepInflow = 500
+    case sepInflow = 600
     case octInflow
     case octAA
     case novInflow

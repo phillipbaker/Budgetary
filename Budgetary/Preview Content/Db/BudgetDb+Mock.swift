@@ -10,16 +10,16 @@ import Foundation
 extension BudgetDb {
     static var mock: BudgetDb {
         BudgetDb(
-            externalID: .init(),
+            externalID: .mock(.ukBudget),
             settings: BudgetSettingsDb(
                 name: "UK Budget",
-                curreny: "GBR",
+                curreny: "GBP",
                 currencyFormet: "",
                 numberFormat: "",
                 dateFormat: ""
             ),
-            budgetAccountIDs: [.init(), .init(), .init()],
-            categoryGroupIDs: [.init(), .init(), .init()]
+            budgetAccountIDs: [BudgetAccountDb].mock.map(\.externalID),
+            categoryGroupIDs: [CategoryGroupDb].mock.map(\.externalID)
         )
     }
 }
