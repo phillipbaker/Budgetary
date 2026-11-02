@@ -1,5 +1,5 @@
 //
-//  CategoryGroupRowPreviewData.swift
+//  CategoryGroupRow+Preview.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 01/11/2024.
@@ -44,7 +44,6 @@ extension CategoryGroupRow {
         activityTotal: [:],
         availableTotal: [:],
         categories: [
-            .ynab,
             .birthdays,
             .christmas,
             .lifeInsurance,

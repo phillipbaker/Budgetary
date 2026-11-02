@@ -1,5 +1,5 @@
 //
-//  TransactionPreviews.swift
+//  BudgetTransaction+Preview.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 19/09/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array where Element == BudgetTransaction {
+extension [BudgetTransaction] {
     static let preview: [BudgetTransaction] = [
         .augSalary,
         .augRent,
@@ -47,11 +47,12 @@ extension TransactionAccount {
 }
 
 extension BudgetTransaction {
-    // August 2024
+    
+    // MARK: - August 2024
     
     static let augSalary = BudgetTransaction(
         id: .init(),
-        date: .augEigth2024,
+        date: .augEighth2024,
         memo: "",
         amount: .inflow(1000),
         isCleared: true,
@@ -63,7 +64,7 @@ extension BudgetTransaction {
     
     static let augRent = BudgetTransaction(
         id: .init(),
-        date: .augEigth2024,
+        date: .augEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -148,7 +149,7 @@ extension BudgetTransaction {
     
     static let augGroceries1 = BudgetTransaction(
         id: .init(),
-        date: .augEigth2024,
+        date: .augEighth2024,
         memo: "",
         amount: .outflow(300),
         isCleared: true,
@@ -160,7 +161,7 @@ extension BudgetTransaction {
     
     static let augGroceries2 = BudgetTransaction(
         id: .init(),
-        date: .augEigth2024,
+        date: .augEighth2024,
         memo: "",
         amount: .outflow(200),
         isCleared: true,
@@ -196,7 +197,7 @@ extension BudgetTransaction {
     
     static let augGroceries5 = BudgetTransaction(
         id: .init(),
-        date: .augEigth2024,
+        date: .augEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -206,11 +207,11 @@ extension BudgetTransaction {
         linkedTransactionID: nil
     )
     
-    // September 2024
+    // MARK: - September 2024
     
     static let sepSalary = BudgetTransaction(
         id: .init(),
-        date: .sepEigth2024,
+        date: .sepEighth2024,
         memo: "",
         amount: .inflow(1000),
         isCleared: true,
@@ -222,7 +223,7 @@ extension BudgetTransaction {
     
     static let sepRent = BudgetTransaction(
         id: .init(),
-        date: .sepEigth2024,
+        date: .sepEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -306,7 +307,7 @@ extension BudgetTransaction {
     
     static let sepGroceries1 = BudgetTransaction(
         id: .init(),
-        date: .sepEigth2024,
+        date: .sepEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -318,7 +319,7 @@ extension BudgetTransaction {
     
     static let sepGroceries2 = BudgetTransaction(
         id: .init(),
-        date: .sepEigth2024,
+        date: .sepEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -354,7 +355,7 @@ extension BudgetTransaction {
     
     static let sepGroceries5 = BudgetTransaction(
         id: .init(),
-        date: .sepEigth2024,
+        date: .sepEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -364,11 +365,11 @@ extension BudgetTransaction {
         linkedTransactionID: nil
     )
     
-    // October 2024
+    // MARK: - October 2024
     
     static let octSalary = BudgetTransaction(
         id: .init(),
-        date: .octEigth2024,
+        date: .octEighth2024,
         memo: "",
         amount: .inflow(1000),
         isCleared: true,
@@ -380,7 +381,7 @@ extension BudgetTransaction {
     
     static let octRent = BudgetTransaction(
         id: .init(),
-        date: .octEigth2024,
+        date: .octEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -464,7 +465,7 @@ extension BudgetTransaction {
     
     static let octGroceries1 = BudgetTransaction(
         id: .init(),
-        date: .octEigth2024,
+        date: .octEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -476,7 +477,7 @@ extension BudgetTransaction {
     
     static let octGroceries2 = BudgetTransaction(
         id: .init(),
-        date: .octEigth2024,
+        date: .octEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -512,7 +513,7 @@ extension BudgetTransaction {
     
     static let octGroceries5 = BudgetTransaction(
         id: .init(),
-        date: .octEigth2024,
+        date: .octEighth2024,
         memo: "",
         amount: .outflow(100),
         isCleared: true,
@@ -524,8 +525,6 @@ extension BudgetTransaction {
 }
 
 extension TransactionCategory {
-    // August 2024
-    
     static let readyToAssign = TransactionCategory(
         id: .init(),
         name: "Ready to Assign"

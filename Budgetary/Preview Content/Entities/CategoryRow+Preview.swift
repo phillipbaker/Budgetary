@@ -1,58 +1,39 @@
 //
-//  CategoryRowPresentation+Preview.swift
+//  CategoryRow+Preview.swift
 //  Budgetary
 //
-//  Created by Phillip Baker on 01/11/2024.
+//  Created by Phillip Baker on 19/09/2024.
 //
 
-import Foundation
+extension CategoryRow {
 
-typealias CategoryPreview = CategoryRowPresentation<CategoryAssignedPresentation, CategoryActivityPresentation, CategoryAvailablePresentation>
-
-extension CategoryPreview: @unchecked Sendable {
-    // MARK: - Immediate Obligations
+    // MARK: - Ready to Assign
     
-    static let readyToAssign = CategoryPreview(
+    static let readyToAssign = CategoryRow(
         id: .init(),
-        name: "Ready to Assign",
+        name: "Ready To Assign",
         notes: "",
         isHidden: false,
-        assigned: [.sep2024: CategoryAssignedPresentation(
-            assignedThisMonth: "£90[:]",
-            assignedLastMonth: "",
-            averageAssigned: "",
-            spentLastMonth: "",
-            averageSpent: ""
+        assigned: [.sep2024: Assigned(
+            assignedThisMonth: 1_000.00,
+            assignedLastMonth: 900.00,
+            spentLastMonth: 800.00,
+            averageAssigned: 900.00,
+            averageSpent: 850.00
         )],
-        activity: [.sep2024: CategoryActivityPresentation(
-            activityTotal: "",
-            transactions: [TransactionPresentation(
-                id: .init(),
-                date: .now,
-                memo: "",
-                amount: AmountPresentation(type: .inflow, value: "120.00"),
-                isCleared: true,
-                payee: PayeePresentation(id: .init(), name: "Sainsbury’s", type: .regular),
-                category: TransactionCategoryPresentation(id: .init(), name: "Groceries"),
-                account: TransactionAccountPresentation(id: .init(), name: "HSBC - Joint"),
-                linkedTransactionID: nil
-            )]
-        )],
-        available: [.sep2024: CategoryAvailablePresentation(
-            total: "",
-            cashFromLastMonth: "",
-            assignedThisMonth: "",
-            cashSpendingThisMonth: "",
-            message: "",
-            lightModeForegroundColor: .accentColor,
-            lightModeBackgroundColor: .accentColor,
-            darkModeForegroundColor: .accentColor,
-            darkModeBackgroundColor: .accentColor,
-            maxAvailableForReassignment: 100.00
+        activity: [.sep2024: Activity(total: 900.00, transactions: [])],
+        available: [.sep2024: Available(
+            total: 0.00,
+            cashFromLastMonth: 0.00,
+            assignedThisMonth: 0.00,
+            cashSpendingThisMonth: 0.00,
+            message: ""
         )]
     )
     
-    static let rent = CategoryPreview(
+    // MARK: - Immediate Obligations
+    
+    static let rent = CategoryRow(
         id: .init(),
         name: "Rent",
         notes: "",
@@ -62,7 +43,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let councilTax = CategoryPreview(
+    static let councilTax = CategoryRow(
         id: .init(),
         name: "Council Tax",
         notes: "",
@@ -72,7 +53,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let utilities = CategoryPreview(
+    static let utilities = CategoryRow(
         id: .init(),
         name: "Utilities",
         notes: "",
@@ -82,7 +63,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let water = CategoryPreview(
+    static let water = CategoryRow(
         id: .init(),
         name: "Water",
         notes: "",
@@ -92,7 +73,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let internet = CategoryPreview(
+    static let internet = CategoryRow(
         id: .init(),
         name: "Internet",
         notes: "",
@@ -102,7 +83,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let tvLicense = CategoryPreview(
+    static let tvLicense = CategoryRow(
         id: .init(),
         name: "TV License",
         notes: "",
@@ -112,7 +93,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let cellPhones = CategoryPreview(
+    static let cellPhones = CategoryRow(
         id: .init(),
         name: "Cell Phones",
         notes: "",
@@ -122,20 +103,10 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-
-    // MARK: - CategoryPreview: True Expenses
     
-    static let ynab = CategoryPreview(
-        id: .init(),
-        name: "YNAB",
-        notes: "",
-        isHidden: false,
-        assigned: [:],
-        activity: [:],
-        available: [:]
-    )
+    // MARK: - True Expenses
     
-    static let birthdays = CategoryPreview(
+    static let birthdays = CategoryRow(
         id: .init(),
         name: "Birthdays",
         notes: "",
@@ -145,7 +116,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let christmas = CategoryPreview(
+    static let christmas = CategoryRow(
         id: .init(),
         name: "Christmas",
         notes: "",
@@ -154,8 +125,8 @@ extension CategoryPreview: @unchecked Sendable {
         activity: [:],
         available: [:]
     )
-
-    static let lifeInsurance = CategoryPreview(
+    
+    static let lifeInsurance = CategoryRow(
         id: .init(),
         name: "Life Insurance",
         notes: "",
@@ -165,7 +136,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let roadTax = CategoryPreview(
+    static let roadTax = CategoryRow(
         id: .init(),
         name: "Road Tax",
         notes: "",
@@ -175,7 +146,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let carInsurance = CategoryPreview(
+    static let carInsurance = CategoryRow(
         id: .init(),
         name: "Car Insurance",
         notes: "",
@@ -185,7 +156,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let homeInsurance = CategoryPreview(
+    static let homeInsurance = CategoryRow(
         id: .init(),
         name: "Home Insurance",
         notes: "",
@@ -195,7 +166,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let carServiceRepairs = CategoryPreview(
+    static let carServiceRepairs = CategoryRow(
         id: .init(),
         name: "Car Service/Repairs",
         notes: "",
@@ -206,9 +177,9 @@ extension CategoryPreview: @unchecked Sendable {
     )
     
     
-    // MARK: - CategoryPreview: Monthly Expenses
+    // MARK: - Monthly Expenses
     
-    static let groceries = CategoryPreview(
+    static let groceries = CategoryRow(
         id: .init(),
         name: "Groceries",
         notes: "",
@@ -218,7 +189,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let commuting = CategoryPreview(
+    static let commuting = CategoryRow(
         id: .init(),
         name: "Commuting",
         notes: "",
@@ -228,7 +199,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let classesCamps = CategoryPreview(
+    static let classesCamps = CategoryRow(
         id: .init(),
         name: "Classes/Camps",
         notes: "",
@@ -238,7 +209,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let petrolTolls = CategoryPreview(
+    static let petrolTolls = CategoryRow(
         id: .init(),
         name: "Gasoline/Tolls",
         notes: "",
@@ -248,7 +219,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let homeSupplies = CategoryPreview(
+    static let homeSupplies = CategoryRow(
         id: .init(),
         name: "Home Supplies",
         notes: "",
@@ -258,7 +229,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let homeImprovement = CategoryPreview(
+    static let homeImprovement = CategoryRow(
         id: .init(),
         name: "Home Improvement",
         notes: "",
@@ -268,7 +239,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let kidsClothes = CategoryPreview(
+    static let kidsClothes = CategoryRow(
         id: .init(),
         name: "Kids’ Clothes",
         notes: "",
@@ -278,7 +249,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let gifts = CategoryPreview(
+    static let gifts = CategoryRow(
         id: .init(),
         name: "Gifts",
         notes: "",
@@ -288,7 +259,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let doctors = CategoryPreview(
+    static let doctors = CategoryRow(
         id: .init(),
         name: "Doctors",
         notes: "",
@@ -298,7 +269,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let amazonPrime = CategoryPreview(
+    static let amazonPrime = CategoryRow(
         id: .init(),
         name: "Amazon Prime",
         notes: "",
@@ -308,7 +279,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let prescriptions = CategoryPreview(
+    static let prescriptions = CategoryRow(
         id: .init(),
         name: "Prescriptions",
         notes: "",
@@ -318,7 +289,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let atmBankFees = CategoryPreview(
+    static let atmBankFees = CategoryRow(
         id: .init(),
         name: "ATM/Bank Fees",
         notes: "",
@@ -328,7 +299,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let miscellaneous = CategoryPreview(
+    static let miscellaneous = CategoryRow(
         id: .init(),
         name: "Miscellaneous",
         notes: "",
@@ -339,9 +310,9 @@ extension CategoryPreview: @unchecked Sendable {
     )
     
     
-    // MARK: - CategoryPreview: Fun
+    // MARK: - Fun
     
-    static let phil = CategoryPreview(
+    static let phil = CategoryRow(
         id: .init(),
         name: "Phil",
         notes: "",
@@ -351,7 +322,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let kids = CategoryPreview(
+    static let kids = CategoryRow(
         id: .init(),
         name: "Kids",
         notes: "",
@@ -361,7 +332,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let school = CategoryPreview(
+    static let school = CategoryRow(
         id: .init(),
         name: "School",
         notes: "",
@@ -371,7 +342,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let streaming = CategoryPreview(
+    static let streaming = CategoryRow(
         id: .init(),
         name: "Streaming",
         notes: "",
@@ -380,8 +351,8 @@ extension CategoryPreview: @unchecked Sendable {
         activity: [:],
         available: [:]
     )
-        
-    static let familyActivities = CategoryPreview(
+    
+    static let familyActivities = CategoryRow(
         id: .init(),
         name: "Family Activities",
         notes: "",
@@ -391,7 +362,7 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
     
-    static let takeout = CategoryPreview(
+    static let takeout = CategoryRow(
         id: .init(),
         name: "Eating Out/Takeout",
         notes: "",
@@ -401,4 +372,3 @@ extension CategoryPreview: @unchecked Sendable {
         available: [:]
     )
 }
-
