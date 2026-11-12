@@ -65,4 +65,6 @@ extension Array where Element == BudgetTransaction {
     var mappedToMagnitudes: [Decimal] {
         self.map { $0.amount.magnitude }
     }
+    
+    var netAmount: Decimal { reduce(0) { $0 + $1.amount.signedValue } }
 }
