@@ -11,6 +11,5 @@ public struct BudgetData: Equatable, Identifiable, Sendable {
     var categoryGroups: [CategoryGroupRow]
     var creditCardPaymentGroup: CreditCardPaymentGroupRow
     var settings: BudgetSettings
-    var start: MonthYear
-    var end: MonthYear
+    var range: ClosedRange<MonthYear>
 }

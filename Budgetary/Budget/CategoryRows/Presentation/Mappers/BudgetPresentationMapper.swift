@@ -14,8 +14,8 @@ public final class BudgetPresentationMapper {
             budget: try mapBudgetPresentation(from: budgetData, for: monthYear),
             monthYear: monthYear,
             filter: map(categoryFilter: filter),
-            canGoToPreviousMonth: mapCanGoToPreviousMonth(from: monthYear, budgetStart: budgetData.start),
-            canGoToNextMonth: mapCanGoToNextMonth(from: monthYear, budgetEnd: budgetData.end)
+            canGoToPreviousMonth: mapCanGoToPreviousMonth(from: monthYear, budgetStart: budgetData.range.lowerBound),
+            canGoToNextMonth: mapCanGoToNextMonth(from: monthYear, budgetEnd: budgetData.range.upperBound)
         )
     }
 
@@ -23,7 +23,7 @@ public final class BudgetPresentationMapper {
         return BudgetPresentation(
             id: ID<BudgetPresentation>(budgetData.id),
             monthYear: monthYear,
-            months: mapMonths(from: budgetData.start, to: budgetData.end, for: monthYear),
+            months: mapMonths(from: budgetData.range.lowerBound, to: budgetData.range.upperBound, for: monthYear),
             readyToAssign: try mapReadyToAssign(for: monthYear, from: budgetData),
             categoryGroups: map(categoryGroups: budgetData.categoryGroups),
             creditCardPaymentGroup: map(creditCardPaymentGroup: budgetData.creditCardPaymentGroup)

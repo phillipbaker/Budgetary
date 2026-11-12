@@ -37,8 +37,4 @@ extension Array where Element == TransactionPlain {
             }
         }
     }
-    
-    var mappedToAmounts: [Decimal] {
-        self.compactMap { $0.amount.value }
-    }
 }

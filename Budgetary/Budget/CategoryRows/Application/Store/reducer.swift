@@ -88,7 +88,7 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         
     case .monthYearUpdated(let monthYear):
         if case .loaded(let budget) = state.budgetState,
-           !(budget.start...budget.end).contains(monthYear) {
+           !budget.range.contains(monthYear) {
             return []
         }
         state.monthYear = monthYear
