@@ -27,7 +27,12 @@ public final class BudgetRowMapper: Sendable {
     func mapReadyToAssign(from data: BudgetDataPlain) -> [MonthYear: ReadyToAssign] {
         var readyToAssign: [MonthYear: ReadyToAssign] = [:]
         
-        let categories = data.categoryGroupsPlain.flatMap(\.categories)
+        let readyToAssignID = data.categoryGroupsPlain.readyToAssignCategoryID
+        
+        let categories = data.categoryGroupsPlain
+            .filter { $0.kind != .inflow }
+            .flatMap(\.categories)
+
         let transactions = data.budgetAccountsPlain.flatMap(\.transactions)
         
         for monthYear in budgetRange(from: data) {
@@ -40,7 +45,7 @@ public final class BudgetRowMapper: Sendable {
                 readyToAssignFromLastMonth = lastMonth.availableToAssignFromLastMonth + lastMonth.inflowThisMonth - lastMonth.assignedThisMonth - lastMonth.cashOverspendingLastMonth
             }
             
-            let inflowThisMonth = inflow(for: monthYear, from: transactions)
+            let inflowThisMonth = inflow(for: monthYear, from: transactions, with: readyToAssignID)
             let totalInflowsThisMonth = readyToAssignFromLastMonth + inflowThisMonth
             
             // Outflows for monthYear
@@ -91,9 +96,11 @@ public final class BudgetRowMapper: Sendable {
             .reduced
     }
 
-    func inflow(for monthYear: MonthYear, from transactions: [TransactionPlain]) -> Decimal {
+    func inflow(for monthYear: MonthYear, from transactions: [TransactionPlain], with readyToAssignID: ID<CategoryPlain>?) -> Decimal {
+        guard let readyToAssignID else { return 0 }
+        
         return transactions
-            .filter { $0.categoryID == .init() } // inflow TODO: Figure out how Inflow category works/maps
+            .filtered(by: readyToAssignID)
             .filtered(by: monthYear)
             .mappedToAmounts
             .reduced
@@ -352,12 +359,20 @@ public final class BudgetRowMapper: Sendable {
         return CategoryGroupRow(
             id: ID<CategoryGroupRow>(categoryGroupPlain.id),
             name: categoryGroupPlain.name,
+            kind: map(categoryGroupKindPlain: categoryGroupPlain.kind),
             isHidden: categoryGroupPlain.isHidden,
             assignedTotal: mapGroupAssignedTotal(for: categories),
             activityTotal: mapGroupActivityTotal(for: categories),
             availableTotal: mapGroupAvailableTotal(for: categories),
             categories: categories
         )
+    }
+    
+    func map(categoryGroupKindPlain: CategoryGroupKindPlain) -> CategoryGroupKind {
+        switch categoryGroupKindPlain {
+        case .inflow: .inflow
+        case .regular: .regular
+        }
     }
     
     func map(categoryGroupsPlain: [CategoryGroupPlain], from data: BudgetDataPlain) -> [CategoryGroupRow] {

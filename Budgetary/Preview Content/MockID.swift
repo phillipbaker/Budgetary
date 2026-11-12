@@ -67,13 +67,14 @@ enum MockID: Int {
     case cineworld
     
     // Category Groups
-    case obligations = 400
+    case inflow = 400
+    case obligations
     case trueExpenses
     case monthlyExpenses
     case fun
 
     // Categories
-    case inflow = 500
+    case readyToAssign = 500
     case rent
     case councilTax
     case utilities

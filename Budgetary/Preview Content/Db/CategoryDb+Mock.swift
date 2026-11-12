@@ -11,10 +11,10 @@ extension CategoryDb {
     
     // MARK: - Inflow
 
-    static var inflow: CategoryDb {
+    static var readyToAssign: CategoryDb {
         CategoryDb(
-            externalID: .mock(.inflow),
-            name: "Inflow: Ready to Assign",
+            externalID: .mock(.readyToAssign),
+            name: "Ready to Assign",
             notes: "",
             isHidden: false,
             assigned: [:]

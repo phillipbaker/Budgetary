@@ -7,9 +7,9 @@
 
 public final class EditCategoriesMapper: Sendable {
     func map(categoryGroupsPlain: [CategoryGroupPlain]) -> [EditableCategoryGroup] {
-        return categoryGroupsPlain.map { categoryGroupPlain in
-            map(categoryGroupPlain: categoryGroupPlain)
-        }
+        return categoryGroupsPlain
+            .filter { $0.kind != .inflow }
+            .map { map(categoryGroupPlain: $0) }
     }
     
     func map(categoryGroupPlain: CategoryGroupPlain) -> EditableCategoryGroup {

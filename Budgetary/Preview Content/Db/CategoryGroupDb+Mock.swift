@@ -9,17 +9,28 @@
 
 extension [CategoryGroupDb] {
     static var mock: [CategoryGroupDb] {
-        [.obligations, .trueExpenses, .monthlyExpenses, .fun]
+        [.inflow, .obligations, .trueExpenses, .monthlyExpenses, .fun]
     }
 }
 
 // MARK: - Fixtures
 
 extension CategoryGroupDb {
+    static var inflow: CategoryGroupDb {
+        CategoryGroupDb(
+            externalID: .mock(.inflow),
+            name: "Inflow",
+            kind: .inflow,
+            isHidden: false,
+            categories: [.readyToAssign]
+        )
+    }
+
     static var obligations: CategoryGroupDb {
         CategoryGroupDb(
             externalID: .mock(.obligations),
             name: "Immediate Obligations",
+            kind: .regular,
             isHidden: false,
             categories: [
                 .rent,
@@ -37,6 +48,7 @@ extension CategoryGroupDb {
         CategoryGroupDb(
             externalID: .mock(.trueExpenses),
             name: "True Expenses",
+            kind: .regular,
             isHidden: false,
             categories: [
                 .christmas,
@@ -54,6 +66,7 @@ extension CategoryGroupDb {
         CategoryGroupDb(
             externalID: .mock(.monthlyExpenses),
             name: "Monthly Expenses",
+            kind: .regular,
             isHidden: false,
             categories: [
                 .groceries,
@@ -78,6 +91,7 @@ extension CategoryGroupDb {
         CategoryGroupDb(
             externalID: .mock(.fun),
             name: "Fun",
+            kind: .regular,
             isHidden: false,
             categories: [
                 .streaming,

@@ -44,9 +44,17 @@ public final class BudgetMapper: Sendable {
         return CategoryGroup(
             id: ID<CategoryGroup>(categoryGroupPlain.id),
             name: categoryGroupPlain.name,
+            kind: map(categoryGroupKind: categoryGroupPlain.kind),
             isHidden: categoryGroupPlain.isHidden,
             categories: map(categoriesPlain: categoryGroupPlain.categories)
         )
+    }
+    
+    func map(categoryGroupKind: CategoryGroupKindPlain) -> CategoryGroupKind {
+        switch categoryGroupKind {
+        case .inflow: .inflow
+        case .regular: .regular
+        }
     }
     
     func map(categoriesPlain: [CategoryPlain]) -> [Category] {
@@ -77,9 +85,17 @@ public final class BudgetMapper: Sendable {
         return CategoryGroupPlain(
             id: ID<CategoryGroupPlain>(categoryGroup.id),
             name: categoryGroup.name,
+            kind: map(categoryGroupKind: categoryGroup.kind),
             isHidden: categoryGroup.isHidden,
             categories: map(categoryEntities: categoryGroup.categories)
         )
+    }
+    
+    func map(categoryGroupKind: CategoryGroupKind) -> CategoryGroupKindPlain {
+        switch categoryGroupKind {
+        case .inflow: .inflow
+        case .regular: .regular
+        }
     }
     
     func map(categoryEntities: [Category]) -> [CategoryPlain] {

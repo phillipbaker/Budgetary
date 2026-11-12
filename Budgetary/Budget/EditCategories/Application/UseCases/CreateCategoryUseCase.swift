@@ -20,16 +20,19 @@ final class CreateCategoryUseCase: Sendable {
             isHidden: false,
             assigned: [:]
         )
-        print("CreateCategoryUseCase - new category created for: ", newCategory.name)
         
-        // TODO: Handle errors here not just return or that in Effect?
         guard let categoryGroupPlain = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(id)) else {
-            print("CreateCategoryUseCase - no category group found")
+            // TODO: throw error
             return
         }
         
         let categoryGroup = mapper.map(categoryGroupPlain: categoryGroupPlain)
-        print("CreateCategoryUseCase - updated group count before: ", categoryGroup.categories.count)
+        
+        guard categoryGroup.kind != .inflow else {
+            // TODO: throw error
+            return
+        }
+ 
         let updatedGroup = categoryGroup.adding(newCategory)
         
         await source.update(categoryGroup: mapper.map(categoryGroup: updatedGroup))

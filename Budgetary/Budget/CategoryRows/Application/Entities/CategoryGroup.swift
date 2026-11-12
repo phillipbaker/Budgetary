@@ -10,6 +10,7 @@ import Foundation
 public struct CategoryGroup: Equatable, Hashable, Identifiable, Sendable {
     public let id: ID<CategoryGroup>
     let name: String
+    let kind: CategoryGroupKind
     let isHidden: Bool
     let categories: [Category]
     
@@ -17,6 +18,7 @@ public struct CategoryGroup: Equatable, Hashable, Identifiable, Sendable {
         return CategoryGroup(
             id: self.id,
             name: self.name,
+            kind: self.kind,
             isHidden: self.isHidden,
             categories: self.categories.map { $0.id == category.id ? category : $0 }
         )
@@ -26,6 +28,7 @@ public struct CategoryGroup: Equatable, Hashable, Identifiable, Sendable {
         return CategoryGroup(
             id: self.id,
             name: self.name,
+            kind: self.kind,
             isHidden: self.isHidden,
             categories: self.categories + [category]
         )

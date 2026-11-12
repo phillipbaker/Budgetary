@@ -14,13 +14,16 @@ final class HideCategoryUseCase {
     func execute(for categoryID: ID<CategoryRow>) async {
         guard let categoryGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else {
             // TODO: throw error
-            print("could not find category group matching provided id")
+            return
+        }
+        
+        guard categoryGroup.kind != .inflow else {
+            // TODO: throw error
             return
         }
         
         guard let category = categoryGroup.categories.first(where: { $0.id == ID<CategoryPlain>(categoryID) }) else {
             // TODO: throw error
-            print("could not find category matching provided id")
             return
         }
         
@@ -35,6 +38,7 @@ final class HideCategoryUseCase {
         let updatedCategoryGroup = CategoryGroupPlain(
             id: categoryGroup.id,
             name: categoryGroup.name,
+            kind: categoryGroup.kind,
             isHidden: categoryGroup.isHidden,
             categories: categoryGroup.categories.map {
                 $0.id == updatedCategory.id ? updatedCategory : $0
