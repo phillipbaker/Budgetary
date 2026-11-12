@@ -30,6 +30,15 @@ struct BudgetView: View {
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             
+            if let uncategorized = state.budget.uncategorized {
+                BudgetRowView(
+                    monthYear: state.monthYear,
+                    budgetRow: uncategorized,
+                    localValues: .constant(AssignedValues(primary: 0, secondary: 0, lastCommitted: 0, primaryIsNegative: false)),
+                    action: { _ in }
+                )
+            }
+            
             if !state.budget.creditCardPaymentGroup.categories.isEmpty {
                 Section {
                     ForEach(state.budget.creditCardPaymentGroup.categories) { cardPayment in
@@ -173,6 +182,27 @@ struct BudgetView: View {
                 monthYear: .currentMonthYear,
                 months: [],
                 readyToAssign: .mock,
+                uncategorized: .uncategorized,
+                categoryGroups: [.obligations, .monthlyExpenses, .fun],
+                creditCardPaymentGroup: .mock
+            ),
+            monthYear: .currentMonthYear,
+            filter: .allCategories,
+            canGoToPreviousMonth: true,
+            canGoToNextMonth: true
+        ),
+        destination: .constant(nil)
+    )
+    
+    BudgetView(
+        action: { _ in },
+        state: BudgetPresentationState(
+            budget: BudgetPresentation(
+                id: ID<BudgetPresentation>.init(),
+                monthYear: .currentMonthYear,
+                months: [],
+                readyToAssign: .mock,
+                uncategorized: nil,
                 categoryGroups: [.obligations, .monthlyExpenses, .fun],
                 creditCardPaymentGroup: .mock
             ),

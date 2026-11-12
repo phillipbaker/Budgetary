@@ -25,6 +25,7 @@ public final class BudgetPresentationMapper {
             monthYear: monthYear,
             months: mapMonths(from: budgetData.range.lowerBound, to: budgetData.range.upperBound, for: monthYear),
             readyToAssign: try mapReadyToAssign(for: monthYear, from: budgetData),
+            uncategorized: map(uncategorized: budgetData.uncategorized, for: monthYear),
             categoryGroups: map(categoryGroups: budgetData.categoryGroups),
             creditCardPaymentGroup: map(creditCardPaymentGroup: budgetData.creditCardPaymentGroup)
         )
@@ -128,6 +129,19 @@ public final class BudgetPresentationMapper {
             lightModeBackgroundColor: mapLightModeBackgroundColor(for: readyToAssign.readyToAssignThisMonth),
             darkModeBackgroundColor: mapDarkModeBackgroundColor(for: readyToAssign.readyToAssignThisMonth),
             message: mapReadyToAssignMessage(for: readyToAssign.readyToAssignThisMonth)
+        )
+    }
+    
+    func map(uncategorized: CategoryRow, for monthYear: MonthYear) -> CategoryRowPresentation<CategoryAssignedPresentation, CategoryActivityPresentation, CategoryAvailablePresentation>? {
+        guard let activity = uncategorized.activity[monthYear], !activity.transactions.isEmpty else { return nil }
+        return CategoryRowPresentation(
+            id: ID<BudgetRowTag>(uncategorized.id),
+            name: uncategorized.name,
+            notes: "",
+            isHidden: false,
+            assigned: mapAssigned(for: uncategorized),
+            activity: mapActivity(for: uncategorized),
+            available: mapAvailable(for: uncategorized)
         )
     }
     

@@ -8,6 +8,7 @@
 public struct BudgetData: Equatable, Identifiable, Sendable {
     public let id: ID<BudgetData>
     var readyToAssign: [MonthYear: ReadyToAssign]
+    var uncategorized: CategoryRow
     var categoryGroups: [CategoryGroupRow]
     var creditCardPaymentGroup: CreditCardPaymentGroupRow
     var settings: BudgetSettings

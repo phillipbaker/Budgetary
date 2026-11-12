@@ -13,6 +13,7 @@ extension BudgetPresentation {
         monthYear: .currentMonthYear,
         months: [.mock],
         readyToAssign: .mock,
+        uncategorized: .uncategorized,
         categoryGroups: [.obligations, .trueExpenses, .monthlyExpenses, .fun],
         creditCardPaymentGroup: CreditCardPaymentGroupPresentation(
             id: .init(),

@@ -38,7 +38,23 @@ public final class BudgetRowMapper: Sendable {
         )
         
         let categoryGroupRows = map(categoryGroupsPlain: data.categoryGroupsPlain, using: transactionsByCategory, in: budgetRange)
-        
+
+        let uncategorizedTransactions = transactions
+            .filter { $0.category == nil }
+            .filteredBySpending // exclude transfers
+
+        let uncategorizedActivity = activity(from: uncategorizedTransactions, in: budgetRange)
+
+        let uncategorizedRow = CategoryRow(
+            id: .uncategorized,
+            name: "Uncategorized Transactions",
+            notes: "",
+            isHidden: false,
+            assigned: [:],
+            activity: uncategorizedActivity,
+            available: available(assigned: [:], using: uncategorizedActivity, in: budgetRange)
+        )
+
         let assignedByCategory: AssignedByCategory = Dictionary(
             data.categoryGroupsPlain
                 .flatMap(\.categories)
@@ -61,6 +77,7 @@ public final class BudgetRowMapper: Sendable {
         let readyToAssign = readyToAssign(
             inflows: readyToAssignActivity,
             categoryGroupRows: categoryGroupRows,
+            uncategorizedRow: uncategorizedRow,
             in: budgetRange
         )
 
@@ -69,6 +86,7 @@ public final class BudgetRowMapper: Sendable {
         return BudgetData(
             id: ID<BudgetData>(data.budgetPlain.id),
             readyToAssign: readyToAssign,
+            uncategorized: uncategorizedRow,
             categoryGroups: categoryGroupRows,
             creditCardPaymentGroup: creditCardPaymentGroup,
             settings: settings,
@@ -81,11 +99,12 @@ public final class BudgetRowMapper: Sendable {
     func readyToAssign(
         inflows: [MonthYear: Activity],
         categoryGroupRows: [CategoryGroupRow],
+        uncategorizedRow: CategoryRow,
         in budgetRange: ClosedRange<MonthYear>
     ) -> [MonthYear: ReadyToAssign] {
         var readyToAssign: [MonthYear: ReadyToAssign] = [:]
-        
-        let spendingRows = categoryGroupRows
+
+        let spendingRows = [uncategorizedRow] + categoryGroupRows
             .filter { $0.kind != .inflow }
             .flatMap(\.categories)
         
@@ -534,4 +553,8 @@ public final class BudgetRowMapper: Sendable {
         
         return start...end
     }
+}
+
+extension ID where Value == CategoryRow {
+    static let uncategorized = ID(UUID(uuidString: "00000000-0000-0000-0000-000000000001")!)
 }
