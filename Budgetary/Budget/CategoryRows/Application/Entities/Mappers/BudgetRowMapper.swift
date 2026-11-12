@@ -535,7 +535,3 @@ public final class BudgetRowMapper: Sendable {
         return start...end
     }
 }
-
-extension [BudgetTransaction] {
-    var netAmount: Decimal { reduce(0) { $0 + $1.amount.signedValue } }
-}
