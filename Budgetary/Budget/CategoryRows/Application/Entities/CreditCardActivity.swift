@@ -8,11 +8,16 @@
 import Foundation
 
 public struct CreditCardActivity: Equatable, Hashable, Sendable {
-    let spending: Decimal
-    let returns: Decimal
-    let totalSpending: Decimal
-    let fundedSpending: Decimal
-    let paymentsAndReturns: Decimal
-    let totalActivity: Decimal
+    // Stored
+    let spending: Decimal        // regular payees, outflows (magnitude)
+    let returns: Decimal         // regular payees, inflows (magnitude)
+    let fundedSpending: Decimal  // spending covered by category budgets
+    let payments: Decimal        // transfer payees, inflows (magnitude)
+    let transfersOut: Decimal    // transfer payees, outflows (magnitude)
     let transactions: [BudgetTransaction]
+    
+    // Derived
+    var totalSpending: Decimal { returns - spending }
+    var paymentsAndReturns: Decimal { payments - transfersOut }
+    var totalActivity: Decimal { fundedSpending - paymentsAndReturns }
 }
