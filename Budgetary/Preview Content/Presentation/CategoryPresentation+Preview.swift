@@ -11,6 +11,18 @@ typealias CategoryPreview = CategoryRowPresentation<CategoryAssignedPresentation
 
 extension CategoryPreview: @unchecked Sendable {
     
+    // MARK: - Uncategorized
+    
+    static let uncategorized = CategoryPreview(
+        id: .init(),
+        name: "Uncategorized Transactions",
+        notes: "",
+        isHidden: false,
+        assigned: [:],
+        activity: [:],
+        available: [:]
+    )
+    
     // MARK: - Immediate Obligations
     
     static let readyToAssign = CategoryPreview(

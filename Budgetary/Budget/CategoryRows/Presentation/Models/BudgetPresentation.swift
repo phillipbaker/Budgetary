@@ -12,6 +12,7 @@ public struct BudgetPresentation: Equatable, Identifiable, Sendable {
     let monthYear: MonthYear
     let months: [MonthPresentation]
     let readyToAssign: ReadyToAssignPresentation
+    let uncategorized: CategoryRowPresentation<CategoryAssignedPresentation, CategoryActivityPresentation, CategoryAvailablePresentation>?
     let categoryGroups: [CategoryGroupPresentation]
     let creditCardPaymentGroup: CreditCardPaymentGroupPresentation
 }
