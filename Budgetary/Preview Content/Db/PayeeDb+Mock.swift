@@ -238,7 +238,7 @@ extension PayeeDb {
             aliases: [],
             includedInPayeeList: true,
             automaticallyCategorizeIsOn: true,
-            defaultCategoryID: .mock(.inflow),
+            defaultCategoryID: .mock(.readyToAssign),
             accountID: nil
         )
     }

@@ -13,7 +13,9 @@ final class MoveCategoryGroupUseCase {
     let mapper: BudgetMapper = Container.shared.budgetMapper()
 
     func execute(from sourceIndex: IndexSet, to destinationIndex: Int) async {
-        let groups = await source.loadCategoryGroups()
+        let allGroups = await source.loadCategoryGroups()
+        let inflowGroups = allGroups.filter { $0.kind == .inflow }
+        let groups = allGroups.filter { $0.kind != .inflow }
         
         let updatedCategoryGroups: [CategoryGroupPlain] = {
             guard /*sourceIndex != destinationIndex,*/
@@ -40,6 +42,6 @@ final class MoveCategoryGroupUseCase {
                 .flatMap { $0 }
         }()
 
-        await source.update(categoryGroups: updatedCategoryGroups)
+        await source.update(categoryGroups: inflowGroups + updatedCategoryGroups)
     }
 }

@@ -16,6 +16,11 @@ final class RenameCategoryUseCase {
             print("no category group containing category found")
             return
         }
+         
+         guard categoryGroupPlain.kind != .inflow else {
+             // TODO: throw error
+             return
+         }
         
         guard let categoryPlain = categoryGroupPlain.categories.first(where: { $0.id == ID<CategoryPlain>(id) }) else {
             print("no category in returned group with id")
@@ -33,6 +38,7 @@ final class RenameCategoryUseCase {
         let updatedGroup = CategoryGroupPlain(
             id: categoryGroupPlain.id,
             name: categoryGroupPlain.name,
+            kind: categoryGroupPlain.kind,
             isHidden: categoryGroupPlain.isHidden,
             categories: categoryGroupPlain.categories.map {
                 $0.id == renamedCategory.id ? renamedCategory : $0

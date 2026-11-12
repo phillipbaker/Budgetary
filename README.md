@@ -13,6 +13,7 @@ An envelope budgeting app for iOS, built with SwiftUI. Money in your budget is a
 ## Working Now
 
 - **Envelope budgeting** — Assign money to categories by group with a custom number pad that can add and subtract. The amount left to assign updates as you go.
+- **Inflow category** - Categorise money coming into the budget as *Ready to Assign* to add it to the amount available to assign. The Inflow group is hidden from the budget and can’t be edited.
 - **Monthly navigation** — Jump to a specific month with a custom month picker. Swipe the budget screen left or right to move backwards and forwards a month at a time. Tap a *Today* button to jump back to the current month.
 - **Accounts** — Add bank and credit card accounts with a starting balance, and view each account’s transactions grouped by date.
 - **Transactions** — Record transactions with a payee, category, account, date, memo and cleared status. Search payees and categories with ranked matching. Create new payees, categories and category groups inline without leaving the transaction.
@@ -23,7 +24,6 @@ An envelope budgeting app for iOS, built with SwiftUI. Money in your budget is a
 
 - Reassigning money directly from one category to another.
 - Importing transactions. They can only be added one at a time.
-- A special inflow category that adds to the total available to budget.
 - Editing or deleting transactions, payees and categories. Editing, closing or deleting accounts.
 - Persistence via SwiftData. The app currently uses preview data held in-memory for development.
 

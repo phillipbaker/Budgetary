@@ -10,6 +10,7 @@ import Foundation
 public struct CategoryGroupRow: Equatable, Hashable, Identifiable, Sendable {
     public let id: ID<CategoryGroupRow>
     let name: String
+    let kind: CategoryGroupKind
     let isHidden: Bool
     let assignedTotal: [MonthYear: Decimal]
     let activityTotal: [MonthYear: Decimal]

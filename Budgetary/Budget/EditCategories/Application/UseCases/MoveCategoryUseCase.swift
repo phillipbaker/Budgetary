@@ -13,6 +13,12 @@ final class MoveCategoryUseCase {
     
     func execute(for categoryID: ID<EditableCategoryPresentation>, to destinationGroupID: ID<CategoryGroupPresentation>, at index: Int) async {
         guard let sourceGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else { return }
+        
+        guard sourceGroup.kind != .inflow else {
+            // TODO: throw error
+            return
+        }
+
         guard let category = sourceGroup.categories.first(where: { $0.id == ID<CategoryPlain>(categoryID) }) else { return }
         
         if sourceGroup.id == ID<CategoryGroupPlain>(destinationGroupID) {
@@ -22,6 +28,7 @@ final class MoveCategoryUseCase {
             let updatedSourceGroup = CategoryGroupPlain(
                 id: sourceGroup.id,
                 name: sourceGroup.name,
+                kind: sourceGroup.kind,
                 isHidden: sourceGroup.isHidden,
                 categories: head + [category] + tail
             )
@@ -31,11 +38,17 @@ final class MoveCategoryUseCase {
             let updatedSourceGroup = CategoryGroupPlain(
                 id: sourceGroup.id,
                 name: sourceGroup.name,
+                kind: sourceGroup.kind,
                 isHidden: sourceGroup.isHidden,
                 categories: sourceGroup.categories.filter { $0.id != ID<CategoryPlain>(categoryID) }
             )
             
             guard let destinationGroup = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(destinationGroupID)) else { return }
+            
+            guard destinationGroup.kind != .inflow else {
+                // TODO: throw error
+                return
+            }
             
             let head = destinationGroup.categories.prefix(index)
             let tail = destinationGroup.categories.dropFirst(index)
@@ -43,6 +56,7 @@ final class MoveCategoryUseCase {
             let updatedDestinationGroup = CategoryGroupPlain(
                 id: destinationGroup.id,
                 name: destinationGroup.name,
+                kind: destinationGroup.kind,
                 isHidden: destinationGroup.isHidden,
                 categories: head + [category] + tail
             )

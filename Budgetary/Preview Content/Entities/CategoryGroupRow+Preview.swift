@@ -11,6 +11,7 @@ extension CategoryGroupRow {
     static let inflow = CategoryGroupRow(
         id: .init(),
         name: "Inflow",
+        kind: .inflow,
         isHidden: false,
         assignedTotal: [:],
         activityTotal: [:],
@@ -21,6 +22,7 @@ extension CategoryGroupRow {
     static let obligations = CategoryGroupRow(
         id: .init(),
         name: "Immediate Obligations",
+        kind: .regular,
         isHidden: false,
         assignedTotal: [:],
         activityTotal: [:],
@@ -39,6 +41,7 @@ extension CategoryGroupRow {
     static let trueExpenses = CategoryGroupRow(
         id: .init(),
         name: "True Expenses",
+        kind: .regular,
         isHidden: false,
         assignedTotal: [:],
         activityTotal: [:],
@@ -57,6 +60,7 @@ extension CategoryGroupRow {
     static let monthlyExpenses = CategoryGroupRow(
         id: .init(),
         name: "Monthly Expenses",
+        kind: .regular,
         isHidden: false,
         assignedTotal: [:],
         activityTotal: [:],
@@ -81,6 +85,7 @@ extension CategoryGroupRow {
     static let fun = CategoryGroupRow(
         id: .init(),
         name: "Fun",
+        kind: .regular,
         isHidden: false,
         assignedTotal: [:],
         activityTotal: [:],

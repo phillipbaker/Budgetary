@@ -16,9 +16,17 @@ final class CategoryGroupsMapperPlain {
         return CategoryGroupPlain(
             id: ID<CategoryGroupPlain>(categoryGroupDb.externalID),
             name: categoryGroupDb.name,
+            kind: map(categoryGroupKindDb: categoryGroupDb.kind),
             isHidden: categoryGroupDb.isHidden,
             categories: mapDbToPlain(categoriesDb: categoryGroupDb.categories)
         )
+    }
+    
+    func map(categoryGroupKindDb: CategoryGroupKindDb) -> CategoryGroupKindPlain {
+        switch categoryGroupKindDb {
+        case .inflow:  .inflow
+        case .regular: .regular
+        }
     }
     
     func mapDbToPlain(categoriesDb: [CategoryDb]) -> [CategoryPlain] {
@@ -47,9 +55,17 @@ final class CategoryGroupsMapperPlain {
         return CategoryGroupDb(
             externalID: categoryGroupPlain.id.rawValue,
             name: categoryGroupPlain.name,
+            kind: map(categoryGroupKindPlain: categoryGroupPlain.kind),
             isHidden: categoryGroupPlain.isHidden,
             categories: mapPlainToDb(categoriesPlain: categoryGroupPlain.categories)
         )
+    }
+    
+    func map(categoryGroupKindPlain: CategoryGroupKindPlain) -> CategoryGroupKindDb {
+        switch categoryGroupKindPlain {
+        case .inflow:  .inflow
+        case .regular: .regular
+        }
     }
     
     func mapPlainToDb(categoriesPlain: [CategoryPlain]) -> [CategoryDb] {

@@ -16,6 +16,7 @@ final class CreateCategoryGroupUseCase: Sendable {
         let newGroup = CategoryGroup(
             id: .init(),
             name: name,
+            kind: .regular,
             isHidden: false,
             categories: []
         )

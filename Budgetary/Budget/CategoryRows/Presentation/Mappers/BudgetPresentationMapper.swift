@@ -132,9 +132,9 @@ public final class BudgetPresentationMapper {
     }
     
     func map(categoryGroups: [CategoryGroupRow]) -> [CategoryGroupPresentation] {
-        return categoryGroups.map { categoryGroup in
-            map(categoryGroup: categoryGroup)
-        }
+        categoryGroups
+            .filter { $0.kind != .inflow }
+            .map { map(categoryGroup: $0) }
     }
     
     func map(categoryGroup: CategoryGroupRow) -> CategoryGroupPresentation {

@@ -18,9 +18,15 @@ final class RenameCategoryGroupUseCase {
             return
         }
         
+        guard categoryGroupPlain.kind != .inflow else {
+            // throw error here
+            return
+        }
+        
         let renamedGroup = CategoryGroupPlain(
             id: categoryGroupPlain.id,
             name: newName,
+            kind: categoryGroupPlain.kind,
             isHidden: categoryGroupPlain.isHidden,
             categories: categoryGroupPlain.categories
         )

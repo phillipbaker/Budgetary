@@ -14,7 +14,7 @@ extension TransactionDb {
             amount: .inflow(100),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.inflow)
+            categoryID: .mock(.readyToAssign)
         )
     }
     
@@ -26,7 +26,7 @@ extension TransactionDb {
             amount: .inflow(100),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.inflow)
+            categoryID: .mock(.readyToAssign)
         )
     }
     
@@ -50,7 +50,7 @@ extension TransactionDb {
             amount: .inflow(1000),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.inflow)
+            categoryID: .mock(.readyToAssign)
         )
     }
     
@@ -74,7 +74,7 @@ extension TransactionDb {
             amount: .inflow(100),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.inflow)
+            categoryID: .mock(.readyToAssign)
         )
     }
 }

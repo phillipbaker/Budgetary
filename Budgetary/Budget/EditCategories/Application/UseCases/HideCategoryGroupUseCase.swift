@@ -18,9 +18,15 @@ final class HideCategoryGroupUseCase {
             return
         }
         
+        guard categoryGroup.kind != .inflow else {
+            // TODO: throw error
+            return
+        }
+        
         let updatedCategoryGroup = CategoryGroupPlain(
             id: categoryGroup.id,
             name: categoryGroup.name,
+            kind: categoryGroup.kind,
             isHidden: true,
             categories: categoryGroup.categories
         )

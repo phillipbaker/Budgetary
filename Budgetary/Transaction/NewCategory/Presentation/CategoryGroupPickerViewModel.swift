@@ -90,9 +90,9 @@ final class CategoryGroupPickerViewModel {
     }
     
     private func map(categoryGroups: [CategoryGroupRow]) -> [CategoryGroupNamePresentation] {
-        return categoryGroups.map { group in
-            map(categoryGroup: group)
-        }
+        return categoryGroups
+            .filter { $0.kind != .inflow }
+            .map { map(categoryGroup: $0) }
     }
     
     private func map(categoryGroup: CategoryGroupRow) -> CategoryGroupNamePresentation {

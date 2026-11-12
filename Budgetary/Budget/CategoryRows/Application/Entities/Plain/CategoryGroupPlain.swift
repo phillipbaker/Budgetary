@@ -10,6 +10,7 @@ import Foundation
 public struct CategoryGroupPlain: Equatable, Sendable {
     let id: ID<CategoryGroupPlain>
     let name: String
+    let kind: CategoryGroupKindPlain
     let isHidden: Bool
     let categories: [CategoryPlain]
 }
