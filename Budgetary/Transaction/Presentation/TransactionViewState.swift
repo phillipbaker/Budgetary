@@ -1,5 +1,5 @@
 //
-//  TransactionState.swift
+//  TransactionViewState.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 27/01/2026.

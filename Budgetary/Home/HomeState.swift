@@ -1,5 +1,5 @@
 //
-//  HomeViewState.swift
+//  HomeState.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 21/01/2026.

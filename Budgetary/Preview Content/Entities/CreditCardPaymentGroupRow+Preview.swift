@@ -1,5 +1,5 @@
 //
-//  CreditCardGroupPreviewData.swift
+//  CreditCardPaymentGroupRow+Preview.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 08/12/2025.
