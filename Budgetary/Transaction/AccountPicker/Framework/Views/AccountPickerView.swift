@@ -12,19 +12,20 @@ struct AccountPickerView: View {
     
     var body: some View {
         List {
-            ForEach(model.accounts) { account in
+            ForEach(model.accountRows) { row in
                 Button {
-                    model.selectAccountButtonTapped(account)
+                    model.selectAccountButtonTapped(row.account)
                 } label: {
                     HStack {
                         Image(systemName: "checkmark" )
-                            .opacity(account == model.selectedAccount ? 1 : 0)
-                        Text(account.name)
+                            .opacity(row.account == model.selectedAccount ? 1 : 0)
+                        Text(row.account.name)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .tint(.primary)
-                        Text("£999.99")
-                            .foregroundStyle(model.foregroundStyle(for: account))
+                        Text(row.balance)
+                            .foregroundStyle(row.balanceStyle.color)
+                            .fontWeight(.semibold)
                     }
+                    .font(.subheadline)
                 }
             }
         }

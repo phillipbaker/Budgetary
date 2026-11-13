@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 public final class AccountsPresentationMapper {
     func mapViewState(from accountData: [AccountData], and sheet: Sheet?) -> AccountsPresentationState {
@@ -17,12 +16,28 @@ public final class AccountsPresentationMapper {
         return AccountsPresentationState(accounts: groupedAccounts, sheet: sheet)
     }
     
-    func map(accounts: [AccountData]) -> [TransactionAccountPresentation] {
-        return accounts.map { account in
-            map(account: account)
+    func mapRows(accounts: [AccountData]) -> [AccountPickerRowPresentation] {
+        accounts.map { account in
+            mapRow(account: account)
         }
     }
     
+    func mapRow(account: AccountData) -> AccountPickerRowPresentation {
+        let balance = account.balance.rounded(scale: 2)
+        return AccountPickerRowPresentation(
+            account: map(account: account),
+            balance: balance.formatted(.currency(code: "GBP")),
+            balanceStyle: map(styleFrom: balance)
+        )
+    }
+
+    func map(styleFrom balance: Decimal) -> BalanceStyle {
+        let rounded = balance.rounded(scale: 2)
+        if rounded < 0 { return .negative }
+        if rounded > 0 { return .positive }
+        return .zero
+    }
+
     func map(account: AccountData) -> TransactionAccountPresentation {
         return TransactionAccountPresentation(
             id: ID<TransactionAccountPresentation>(account.id),
@@ -54,4 +69,3 @@ public struct AccountsPresentationState: Sendable {
     let accounts: [BudgetAccountGroupPresentation: [BudgetAccountPresentation]]
     let sheet: Sheet?
 }
-

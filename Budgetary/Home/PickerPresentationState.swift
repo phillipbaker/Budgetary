@@ -30,5 +30,5 @@ public enum AccountPickerStatePresentation: Equatable, Hashable, Sendable {
     case notLoaded
     case loading
     case error
-    case loaded([TransactionAccountPresentation])
+    case loaded([AccountPickerRowPresentation])
 }
