@@ -47,6 +47,7 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         
     case .saveTransactionSucceeded:
         state.sheet = nil
+        state.transactionState = .notLoaded
         return [.loadBudget, .loadBudgetAccounts]
         
     case .saveTransactionFailed:

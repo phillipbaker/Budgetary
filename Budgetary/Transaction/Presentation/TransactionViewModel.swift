@@ -78,7 +78,7 @@ final class TransactionViewModel {
             draft.amount.type = type
 
         case .cancelButtonTapped:
-            store.dispatch(.sheetDismissed) // TODO: This I think duplicates system but still need a cancel button so figure out
+            store.dispatch(.sheetDismissed)
 
         case .saveTransactionButtonTapped:
             saveDraft()

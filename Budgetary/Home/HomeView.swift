@@ -38,10 +38,10 @@ struct HomeView: View {
                 .contentShape(.capsule)
             }
         }
-        .sheet(
-            item: $viewModel.viewState.sheet,
-            onDismiss: { viewModel.handle(action: .sheetDismissed) }
-        ) { sheet in
+        .sheet(item: Binding(
+            get: { viewModel.viewState.sheet },
+            set: { if $0 == nil { viewModel.handle(action: .sheetDismissed) } }
+        )) { sheet in
             SheetView(sheet: sheet)
         }
         .onChange(of: viewModel.viewState.selectedTab) { _, newValue in
