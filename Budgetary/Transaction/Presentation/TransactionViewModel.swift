@@ -207,7 +207,7 @@ final class TransactionViewModel {
         case .loading:
             return .loading
         case .loaded(let accounts):
-            return .loaded(accountsMapper.map(accounts: accounts))
+            return .loaded(accountsMapper.mapRows(accounts: accounts))
         case .notLoaded:
             return .notLoaded
         }

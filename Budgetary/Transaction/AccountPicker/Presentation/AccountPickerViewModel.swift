@@ -24,18 +24,9 @@ final class AccountPickerViewModel {
     
     // MARK: - Derived State
     
-    var accounts: [TransactionAccountPresentation] {
-        guard case .loaded(let accounts) = viewState else { return [] }
-        return accounts
-    }
-    
-    func foregroundStyle(for account: TransactionAccountPresentation) -> Color {
-        return .primary
-        // TODO: Add balacne to TransactionAccountPresentation and use that to format the balacen in currnecy code. OR even better put this color in the presentation model and shift logic to the mapper
-        // tint and/or foregroundColor...
-        // gray for zero balance
-        // black with minus sign for negative balance
-        // green for positive balance...
+    var accountRows: [AccountPickerRowPresentation] {
+        guard case .loaded(let accountRows) = viewState else { return [] }
+        return accountRows
     }
     
     // MARK: - Init
@@ -71,7 +62,7 @@ final class AccountPickerViewModel {
                 case .error:
                     viewState = .error
                 case .loaded(let accounts):
-                    viewState = .loaded(mapper.map(accounts: accounts))
+                    viewState = .loaded(mapper.mapRows(accounts: accounts))
                 }
             }
         }
