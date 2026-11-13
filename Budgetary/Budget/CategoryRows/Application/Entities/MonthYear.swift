@@ -33,22 +33,6 @@ public struct MonthYear: Codable, Identifiable, Sendable {
         self.month = month
         self.year = year
     }
-    
-    mutating func increment() {
-        if self.month == 12 {
-            self = MonthYear(month: 1, year: self.year.advanced(by: 1))
-        } else {
-            self = MonthYear(month: self.month.advanced(by: 1), year: self.year)
-        }
-    }
-    
-    mutating func decrement() {
-        if self.month == 1 {
-            self = MonthYear(month: 12, year: self.year.advanced(by: -1))
-        } else {
-            self = MonthYear(month: self.month.advanced(by: -1), year: self.year)
-        }
-    }
 }
 
 extension MonthYear {
