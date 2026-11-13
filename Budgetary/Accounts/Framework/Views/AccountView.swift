@@ -1,5 +1,5 @@
 //
-//  TransactionsListView.swift
+//  AccountView.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 02/05/2025.

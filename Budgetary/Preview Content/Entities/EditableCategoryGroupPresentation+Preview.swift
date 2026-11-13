@@ -1,5 +1,5 @@
 //
-//  EditCategoriesPreviewData.swift
+//  EditableCategoryGroupPresentation+Preview.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 01/04/2025.

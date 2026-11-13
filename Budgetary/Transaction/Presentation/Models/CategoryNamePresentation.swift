@@ -1,5 +1,5 @@
 //
-//  CategoryName.swift
+//  CategoryNamePresentation.swift
 //  Budgetary
 //
 //  Created by Phillip Baker on 11/05/2025.

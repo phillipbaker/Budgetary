@@ -1,3 +1,10 @@
+//
+//  BudgetAccountPresentation.swift
+//  Budgetary
+//
+//  Created by Phillip Baker on 21/05/2025.
+//
+
 public struct BudgetAccountPresentation: Equatable, Hashable, Identifiable, Sendable {
     public let id: ID<BudgetAccountPresentation>
     let name: String
