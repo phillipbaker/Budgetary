@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 public final class BudgetPresentationMapper {
-    func mapViewState(from budgetData: BudgetData, for monthYear: MonthYear, and filter: CategoryFilter) throws -> BudgetPresentationState {
+    func mapViewState(from budgetData: BudgetData, for monthYear: MonthYear, and filter: CategoryFilter) -> BudgetPresentationState {
         return BudgetPresentationState(
-            budget: try mapBudgetPresentation(from: budgetData, for: monthYear),
+            budget: mapBudgetPresentation(from: budgetData, for: monthYear),
             monthYear: monthYear,
             filter: map(categoryFilter: filter),
             canGoToPreviousMonth: mapCanGoToPreviousMonth(from: monthYear, budgetStart: budgetData.range.lowerBound),
@@ -19,12 +19,12 @@ public final class BudgetPresentationMapper {
         )
     }
 
-    func mapBudgetPresentation(from budgetData: BudgetData, for monthYear: MonthYear) throws -> BudgetPresentation {
+    func mapBudgetPresentation(from budgetData: BudgetData, for monthYear: MonthYear) -> BudgetPresentation {
         return BudgetPresentation(
             id: ID<BudgetPresentation>(budgetData.id),
             monthYear: monthYear,
             months: mapMonths(from: budgetData.range.lowerBound, to: budgetData.range.upperBound, for: monthYear),
-            readyToAssign: try mapReadyToAssign(for: monthYear, from: budgetData),
+            readyToAssign: mapReadyToAssign(for: monthYear, from: budgetData),
             uncategorized: map(uncategorized: budgetData.uncategorized, for: monthYear),
             categoryGroups: map(categoryGroups: budgetData.categoryGroups),
             creditCardPaymentGroup: map(creditCardPaymentGroup: budgetData.creditCardPaymentGroup)
@@ -112,10 +112,8 @@ public final class BudgetPresentationMapper {
     // TODO: Pass currency/formatting settings in here and incorpoate into formatting logic
     // Find the formatted() paramaters for currency and decimal point style and placement  or is this handled by the framwork for location? Way to override? If yes to all, set defaults in settings based on locale etc but override here...
 
-    func mapReadyToAssign(for monthYear: MonthYear, from budgetData: BudgetData) throws -> ReadyToAssignPresentation {
-        guard let readyToAssign = budgetData.readyToAssign[monthYear] else {
-            throw BudgetError.dataError
-        }
+    func mapReadyToAssign(for monthYear: MonthYear, from budgetData: BudgetData) -> ReadyToAssignPresentation {
+        guard let readyToAssign = budgetData.readyToAssign[monthYear] else { return mapUnavailableReadyToAssign() }
         
         return ReadyToAssignPresentation(
             readyToAssignFromLastMonth: readyToAssign.availableToAssignFromLastMonth.formatted(.currency(code: "GBP")),
@@ -129,6 +127,22 @@ public final class BudgetPresentationMapper {
             lightModeBackgroundColor: mapLightModeBackgroundColor(for: readyToAssign.readyToAssignThisMonth),
             darkModeBackgroundColor: mapDarkModeBackgroundColor(for: readyToAssign.readyToAssignThisMonth),
             message: mapReadyToAssignMessage(for: readyToAssign.readyToAssignThisMonth)
+        )
+    }
+    
+    func mapUnavailableReadyToAssign() -> ReadyToAssignPresentation {
+        ReadyToAssignPresentation(
+            readyToAssignFromLastMonth: "–",
+            cashOverspendingFromLastMonth: "–",
+            inflowThisMonth: "–",
+            assignedThisMonth: "–",
+            assignedInFuture: "–",
+            readyToAssignThisMonth: "–",
+            lightModeForegroundColor: mapLightModeForegroundColor(for: 0),
+            darkModeForegroundColor: mapDarkModeForegroundColor(for: 0),
+            lightModeBackgroundColor: mapLightModeBackgroundColor(for: 0),
+            darkModeBackgroundColor: mapDarkModeBackgroundColor(for: 0),
+            message: "Ready to Assign unavailable"
         )
     }
     

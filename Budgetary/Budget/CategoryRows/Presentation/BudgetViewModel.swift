@@ -61,12 +61,7 @@ public final class BudgetViewModel {
     private func observeStore() {
         observationTask = Task {
             for await state in store.observe() {
-                // TODO: See if I can get this try out of here by reshaoing the readytoasign or otherwise testing for the optionsl. I can do it her by saying if case let .loaded(budgetData) - and test for a blaue for appState/monthYer otherwise viewState = specific error. Still would have an if/else block here but would remove do/catch and remove try all the way down the call tree.....
-                do {
-                    self.viewState = try stateMapper.map(appState: state)
-                } catch {
-                    self.viewState = .error(.failedToMapViewState)
-                }
+                self.viewState = stateMapper.map(appState: state)
             }
         }
     }

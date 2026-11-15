@@ -7,6 +7,5 @@
 
 public enum BudgetViewStateError: Error {
     case invalidAmountString
-    case failedToMapViewState
     case unknownError
 }

@@ -10,7 +10,7 @@ import Factory
 public final class BudgetStateMapper {
     let mapper: BudgetPresentationMapper = Container.shared.budgetPresentationMapper()
     
-    func map(appState: AppState) throws -> BudgetViewState {
+    func map(appState: AppState) -> BudgetViewState {
         switch appState.budgetState {
         case .notLoaded:
             return .notLoaded
@@ -20,7 +20,7 @@ public final class BudgetStateMapper {
             print(error)
             return .error(.unknownError) // TODO: Map together BudgetError and BudgetViewStateError
         case .loaded(let budgetData):
-            return (.budget(try mapper.mapViewState(from: budgetData, for: appState.monthYear, and: appState.filter)))
+            return (.budget(mapper.mapViewState(from: budgetData, for: appState.monthYear, and: appState.filter)))
         }
     }
 }
