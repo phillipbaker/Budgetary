@@ -18,7 +18,7 @@ public final class AccountsStateMapper {
             return .loading
         case .error(let accountsError):
             print(accountsError)
-            return .error(.unknownError) // TODO: Map AccountsError to AccountsViewStateError
+            return .error(.unknownError)
         case .loaded(let accounts):
             return .loaded(mapper.mapViewState(from: accounts, and: appState.sheet))
         }

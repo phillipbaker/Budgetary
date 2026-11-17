@@ -15,7 +15,7 @@ final class MoveCategoryUseCase {
         guard let sourceGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else { return }
         
         guard sourceGroup.kind != .inflow else {
-            // TODO: throw error
+            // Throw error
             return
         }
 
@@ -46,7 +46,7 @@ final class MoveCategoryUseCase {
             guard let destinationGroup = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(destinationGroupID)) else { return }
             
             guard destinationGroup.kind != .inflow else {
-                // TODO: throw error
+                // Throw error
                 return
             }
             

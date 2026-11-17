@@ -79,7 +79,7 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         
         // MARK: - Budget - Filters
         
-    case .budgetRowsFiltered(let filterID): // TODO: This should be local in view model?
+    case .budgetRowsFiltered(let filterID):
         let filter = CategoryFilter(rawValue: filterID) ?? .allCategories
         state.filter = filter
         if filter == .allCategories && filterID != CategoryFilter.allCategories.rawValue {
@@ -214,7 +214,7 @@ func appReducer(state: inout AppState, action: AppAction) -> [AppEffect] {
         return []
     case .deleteCategoryGroupFailed:
         return []
-    case .deleteCategoryRequested(_, _):
+    case .deleteCategoryRequested(_):
         return []
     case .deleteCategorySucceeded:
         return []

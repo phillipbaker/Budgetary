@@ -14,7 +14,7 @@ public enum EditCategoriesAction {
     case renameCategoryGroup(id: ID<CategoryGroupPresentation>, newName: String)
     case renameCategory(id: ID<EditableCategoryPresentation>, newName: String)
     case deleteCategoryGroup(id: ID<CategoryGroupPresentation>)
-    case deleteCategory(id: ID<EditableCategoryPresentation> , groupID: ID<CategoryGroupPresentation>)
+    case deleteCategory(id: ID<EditableCategoryPresentation>)
     case moveCategoryGroup(from: IndexSet, to: Int)
     case moveCategory(id: ID<EditableCategoryPresentation> , toDestinationGroupID: ID<CategoryGroupPresentation>, atIndex: Int)
 }

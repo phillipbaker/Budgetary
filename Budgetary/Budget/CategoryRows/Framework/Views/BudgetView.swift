@@ -112,7 +112,7 @@ struct BudgetView: View {
         }
         .contentMargins(.top, 12)
         .listSectionSpacing(8)
-        .safeAreaPadding(.bottom, 24) // TODO: causing a jolt on keyboard dismiss
+        .safeAreaPadding(.bottom, 24)
         .gesture(
             DragGesture()
                 .onEnded { value in
@@ -166,7 +166,7 @@ struct BudgetView: View {
                 secondary: 0,
                 operation: nil,
                 lastCommitted: 0,
-                primaryIsNegative: false // TODO: Is this default a problem?
+                primaryIsNegative: false
             )]},
             set: { assignedValues[key] = $0 }
         )

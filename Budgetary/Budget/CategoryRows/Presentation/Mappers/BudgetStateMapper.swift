@@ -18,7 +18,7 @@ public final class BudgetStateMapper {
             return .loading
         case .error(let error):
             print(error)
-            return .error(.unknownError) // TODO: Map together BudgetError and BudgetViewStateError
+            return .error(.unknownError)
         case .loaded(let budgetData):
             return (.budget(mapper.mapViewState(from: budgetData, for: appState.monthYear, and: appState.filter)))
         }

@@ -20,18 +20,24 @@ struct CategoryListEmptyView: View {
                 .font(.largeTitle)
                 .imageScale(.large)
             
-            // TODO: Fix with grammar agreement?
-            // TODO: Put current month year and/or monthYear into Environemnt for global use?
             if monthYear == .currentMonthYear {
+                // Current Month
                 Text("You have no \(filter.rawValue) categories this month.")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
-            } else if monthYear.year == .currentYear && monthYear.month != .currentMonth {
+            } else if monthYear.year == .currentYear && monthYear.month < .currentMonth {
+                // Past months this year
                 Text("You had no \(filter.rawValue) categories in \(monthYear.monthWide).")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
+            } else if monthYear.year < .currentYear {
+                // Past months in previous years
+                Text("You had no \(filter.rawValue) categories in \(monthYear.description).")
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
             } else {
-                Text("You had no \(filter.rawValue) categories in \(monthYear.description)")
+                // Future months
+                Text("You have no \(filter.rawValue) categories in \(monthYear.description).")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
             }
