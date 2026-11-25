@@ -117,11 +117,9 @@ struct BudgetView: View {
             DragGesture()
                 .onEnded { value in
                     if value.translation.width > 50 {
-                        guard state.canGoToPreviousMonth else { return }
-                        action(.budgetSwipedLeftGesture(monthYear: state.monthYear))
+                        action(.budgetSwipedRight(monthYear: state.monthYear))
                     } else if value.translation.width < -50 {
-                        guard state.canGoToNextMonth else { return }
-                        action(.budgetSwipedRightGesture(monthYear: state.monthYear))
+                        action(.budgetSwipedLeft(monthYear: state.monthYear))
                     }
                 }
         )
@@ -187,9 +185,7 @@ struct BudgetView: View {
                 creditCardPaymentGroup: .mock
             ),
             monthYear: .currentMonthYear,
-            filter: .allCategories,
-            canGoToPreviousMonth: true,
-            canGoToNextMonth: true
+            filter: .allCategories
         ),
         destination: .constant(nil)
     )
@@ -207,9 +203,7 @@ struct BudgetView: View {
                 creditCardPaymentGroup: .mock
             ),
             monthYear: .currentMonthYear,
-            filter: .allCategories,
-            canGoToPreviousMonth: true,
-            canGoToNextMonth: true
+            filter: .allCategories
         ),
         destination: .constant(nil)
     )

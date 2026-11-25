@@ -42,9 +42,9 @@ public final class BudgetViewModel {
             store.dispatch(.loadBudgetRequested)
         case .monthPickerButtonTapped:
             destination = .monthPicker
-        case let .budgetSwipedLeftGesture(monthYear):
+        case let .budgetSwipedRight(monthYear):
             store.dispatch(.monthYearUpdated(monthYear.advanced(by: -1)))
-        case let .budgetSwipedRightGesture(monthYear):
+        case let .budgetSwipedLeft(monthYear):
             store.dispatch(.monthYearUpdated(monthYear.advanced(by: 1)))
         case let .monthPickerMonthSelected(monthYear):
             destination = nil

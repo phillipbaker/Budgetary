@@ -12,8 +12,8 @@ public enum BudgetAction: Sendable {
     case filterButtonTapped(filterID: String)
     case clearFilterButtonTapped(filterID: String)
     case monthPickerButtonTapped
-    case budgetSwipedLeftGesture(monthYear: MonthYear)
-    case budgetSwipedRightGesture(monthYear: MonthYear)
+    case budgetSwipedRight(monthYear: MonthYear)
+    case budgetSwipedLeft(monthYear: MonthYear)
     case monthPickerMonthSelected(monthYear: MonthYear)
     case updateAssignedAmount(assignedAmount: Decimal, categoryID: BudgetRowID, monthYear: MonthYear)
 }

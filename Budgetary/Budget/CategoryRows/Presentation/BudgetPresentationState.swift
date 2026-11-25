@@ -9,6 +9,4 @@ struct BudgetPresentationState {
     let budget: BudgetPresentation
     let monthYear: MonthYear
     let filter: CategoryFilterPresentation
-    let canGoToPreviousMonth: Bool
-    let canGoToNextMonth: Bool
 }

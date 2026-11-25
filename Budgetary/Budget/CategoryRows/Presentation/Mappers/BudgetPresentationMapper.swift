@@ -13,9 +13,7 @@ public final class BudgetPresentationMapper {
         return BudgetPresentationState(
             budget: mapBudgetPresentation(from: budgetData, for: monthYear),
             monthYear: monthYear,
-            filter: map(categoryFilter: filter),
-            canGoToPreviousMonth: mapCanGoToPreviousMonth(from: monthYear, budgetStart: budgetData.range.lowerBound),
-            canGoToNextMonth: mapCanGoToNextMonth(from: monthYear, budgetEnd: budgetData.range.upperBound)
+            filter: map(categoryFilter: filter)
         )
     }
 
@@ -99,14 +97,6 @@ public final class BudgetPresentationMapper {
         case .moneyAvailable:
             return .moneyAvailable
         }
-    }
-    
-    func mapCanGoToPreviousMonth(from monthYear: MonthYear, budgetStart: MonthYear) -> Bool {
-        monthYear > budgetStart
-    }
-
-    func mapCanGoToNextMonth(from monthYear: MonthYear, budgetEnd: MonthYear) -> Bool {
-        monthYear < budgetEnd
     }
 
     func mapReadyToAssign(for monthYear: MonthYear, from budgetData: BudgetData) -> ReadyToAssignPresentation {
