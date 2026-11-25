@@ -78,7 +78,8 @@ public class BudgetAccountsMapperPlain {
             amount: transactionDb.amount,
             isCleared: transactionDb.isCleared,
             payeeID: ID<PayeePlain>(transactionDb.payeeID),
-            categoryID: ID<CategoryPlain>(transactionDb.categoryID)
+            categoryID: ID<CategoryPlain>(transactionDb.categoryID),
+            linkedTransactionID: ID<TransactionPlain>(transactionDb.linkedTransactionID)
         )
     }
     
@@ -96,7 +97,8 @@ public class BudgetAccountsMapperPlain {
             amount: transactionPlain.amount,
             isCleared: transactionPlain.isCleared,
             payeeID: transactionPlain.payeeID?.rawValue,
-            categoryID: transactionPlain.categoryID?.rawValue
+            categoryID: transactionPlain.categoryID?.rawValue,
+            linkedTransactionID: transactionPlain.linkedTransactionID?.rawValue
         )
     }
 }

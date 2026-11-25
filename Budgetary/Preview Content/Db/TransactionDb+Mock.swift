@@ -14,7 +14,8 @@ extension TransactionDb {
             amount: .inflow(100),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.readyToAssign)
+            categoryID: .mock(.readyToAssign),
+            linkedTransactionID: nil
         )
     }
     
@@ -26,7 +27,8 @@ extension TransactionDb {
             amount: .inflow(100),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.readyToAssign)
+            categoryID: .mock(.readyToAssign),
+            linkedTransactionID: nil
         )
     }
     
@@ -38,7 +40,8 @@ extension TransactionDb {
             amount: .outflow(40),
             isCleared: true,
             payeeID: .mock(.aa),
-            categoryID: .mock(.carServiceRepairs)
+            categoryID: .mock(.carServiceRepairs),
+            linkedTransactionID: nil
         )
     }
     
@@ -50,7 +53,8 @@ extension TransactionDb {
             amount: .inflow(1000),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.readyToAssign)
+            categoryID: .mock(.readyToAssign),
+            linkedTransactionID: nil
         )
     }
     
@@ -62,7 +66,8 @@ extension TransactionDb {
             amount: .outflow(500),
             isCleared: true,
             payeeID: .mock(.landlord),
-            categoryID: .mock(.rent)
+            categoryID: .mock(.rent),
+            linkedTransactionID: nil
         )
     }
     
@@ -74,7 +79,8 @@ extension TransactionDb {
             amount: .inflow(100),
             isCleared: true,
             payeeID: .mock(.bigCorporation),
-            categoryID: .mock(.readyToAssign)
+            categoryID: .mock(.readyToAssign),
+            linkedTransactionID: nil
         )
     }
 }

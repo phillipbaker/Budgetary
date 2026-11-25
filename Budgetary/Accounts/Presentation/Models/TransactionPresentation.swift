@@ -16,5 +16,5 @@ public struct TransactionPresentation: Equatable, Hashable, Identifiable, Sendab
     let payee: PayeePresentation?
     let category: TransactionCategoryPresentation? 
     let account: TransactionAccountPresentation
-    let linkedTransactionID: UUID?
+    let linkedTransactionID: ID<TransactionPresentation>?
 }

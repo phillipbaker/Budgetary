@@ -15,4 +15,5 @@ public struct TransactionPlain: Equatable, Sendable {
     let isCleared: Bool
     let payeeID: ID<PayeePlain>?
     let categoryID: ID<CategoryPlain>?
+    let linkedTransactionID: ID<TransactionPlain>?
 }

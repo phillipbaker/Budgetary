@@ -18,7 +18,7 @@ enum TransactionPresentationMapper {
             payee: map(payee: transaction.payee),
             category: map(category: transaction.category),
             account: map(transactionAccount: transaction.account),
-            linkedTransactionID: transaction.id.rawValue
+            linkedTransactionID: ID<TransactionPresentation>(transaction.linkedTransactionID)
         )
     }
     
@@ -32,7 +32,7 @@ enum TransactionPresentationMapper {
             payee: map(payee: transaction.payee),
             category: map(category: transaction.category),
             account: map(transactionAccount: transaction.account),
-            linkedTransactionID: transaction.id.rawValue
+            linkedTransactionID: ID<TransactionPresentation>(transaction.linkedTransactionID)
         )
     }
     
@@ -47,7 +47,7 @@ enum TransactionPresentationMapper {
             payee: map(payee: transaction.payee),
             category: map(category: transaction.category),
             account: map(transactionAccount: transaction.account),
-            linkedTransactionID: transaction.id.rawValue
+            linkedTransactionID: ID<TransactionPresentation>(transaction.linkedTransactionID)
         )
     }
     
@@ -62,7 +62,7 @@ enum TransactionPresentationMapper {
             payee: map(payee: transaction.payee),
             account: map(transactionAccount: transaction.account),
             category: map(category: transaction.category),
-            linkedTransactionID: transaction.linkedTransactionID?.rawValue
+            linkedTransactionID: ID<TransactionDraft>(transaction.linkedTransactionID)
         )
     }
     

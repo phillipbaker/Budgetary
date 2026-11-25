@@ -18,7 +18,7 @@ enum TransactionMapper {
             payee: map(payeeID: transactionPlain.payeeID, payeesPlain: payees, categoryGroups: categoryGroups),
             category: mapCategory(categoryID: transactionPlain.categoryID, categoryGroups: categoryGroups),
             account: TransactionAccount(id: ID<TransactionAccount>(account.id), name: account.name),
-            linkedTransactionID: nil
+            linkedTransactionID: ID<BudgetTransaction>(transactionPlain.linkedTransactionID)
         )
     }
 
