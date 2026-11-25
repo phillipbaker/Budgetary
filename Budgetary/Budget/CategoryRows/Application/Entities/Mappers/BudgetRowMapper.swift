@@ -8,7 +8,7 @@
 import Foundation
 
 public final class BudgetRowMapper: Sendable {
-    typealias AssignedByCategory = [ID<TransactionCategory>: [MonthYear: Decimal]]
+    typealias AvailableByCategory = [ID<TransactionCategory>: [MonthYear: Decimal]]
     typealias TransactionsByCategory = [ID<TransactionCategory>: [BudgetTransaction]]
     
     // MARK: - Budget Data
@@ -55,16 +55,22 @@ public final class BudgetRowMapper: Sendable {
             available: available(assigned: [:], using: uncategorizedActivity, in: budgetRange)
         )
 
-        let assignedByCategory: AssignedByCategory = Dictionary(
-            data.categoryGroupsPlain
+        let availableByCategory: AvailableByCategory = Dictionary(
+            categoryGroupRows
                 .flatMap(\.categories)
-                .map { (ID<TransactionCategory>($0.id), $0.assigned) }, uniquingKeysWith: { first, _ in first }
+                .map { (ID<TransactionCategory>($0.id), $0.available.mapValues(\.total)) }, uniquingKeysWith: { first, _ in first }
+        )
+        
+        let startingBalanceByAccount: [UUID: Decimal] = Dictionary(
+            data.budgetAccountsPlain.map { ($0.id.rawValue, $0.startingBalance) },
+            uniquingKeysWith: { first, _ in first }
         )
 
         let creditCardPaymentRows = map(
             paymentsPlain: data.creditCardPaymentGroupPlain.cardPayments,
             using: transactions,
-            assignedByCategory: assignedByCategory,
+            startingBalanceByAccount: startingBalanceByAccount,
+            availableByCategory: availableByCategory,
             in: budgetRange
         )
         
@@ -198,14 +204,20 @@ public final class BudgetRowMapper: Sendable {
         )
     }
     
-    func map(paymentsPlain: [CreditCardPaymentPlain], using transactions: [BudgetTransaction], assignedByCategory: AssignedByCategory, in budgetRange: ClosedRange<MonthYear>) -> [CreditCardPaymentRow] {
+    func map(paymentsPlain: [CreditCardPaymentPlain], using transactions: [BudgetTransaction], startingBalanceByAccount: [UUID: Decimal], availableByCategory: AvailableByCategory, in budgetRange: ClosedRange<MonthYear>) -> [CreditCardPaymentRow] {
         paymentsPlain.map { cardPayment in
-            map(paymentPlain: cardPayment, using: transactions, assignedByCategory: assignedByCategory, in: budgetRange)
+            map(paymentPlain: cardPayment, using: transactions, startingBalance: startingBalanceByAccount[cardPayment.accountID] ?? 0, availableByCategory: availableByCategory, in: budgetRange)
         }
     }
     
-    func map(paymentPlain: CreditCardPaymentPlain, using transactions: [BudgetTransaction], assignedByCategory: AssignedByCategory, in budgetRange: ClosedRange<MonthYear>) -> CreditCardPaymentRow {
-        let activity = activity(for: paymentPlain, using: transactions, assignedByCategory: assignedByCategory, in: budgetRange)
+    func map(paymentPlain: CreditCardPaymentPlain, using transactions: [BudgetTransaction], startingBalance: Decimal, availableByCategory: AvailableByCategory, in budgetRange: ClosedRange<MonthYear>) -> CreditCardPaymentRow {
+        let activity = activity(
+            for: paymentPlain,
+            using: transactions,
+            startingBalance: startingBalance,
+            availableByCategory: availableByCategory,
+            in: budgetRange
+        )
         
         return CreditCardPaymentRow(
             id: ID<CreditCardPaymentRow>(paymentPlain.id),
@@ -260,13 +272,16 @@ public final class BudgetRowMapper: Sendable {
     func activity(
         for creditCardPaymentPlain: CreditCardPaymentPlain,
         using transactions: [BudgetTransaction],
-        assignedByCategory: AssignedByCategory,
+        startingBalance: Decimal,
+        availableByCategory: AvailableByCategory,
         in budgetRange: ClosedRange<MonthYear>
     ) -> [MonthYear: CreditCardActivity] {
         
         let cardTransactions = transactions.filtered(byAccount: creditCardPaymentPlain.accountID)
         let byMonth = Dictionary(grouping: cardTransactions) { MonthYear(from: $0.date) }
         var activity: [MonthYear: CreditCardActivity] = [:]
+        
+        var balance = startingBalance  // negative while the card owes money
         
         for monthYear in budgetRange {
             let monthlyCardTransactions = byMonth[monthYear] ?? []
@@ -290,17 +305,25 @@ public final class BudgetRowMapper: Sendable {
                 by: { $0.category }
             ).mapValues { -$0.netAmount }
             
-            // TODO: Funding is capped by this month's `assigned`, not the category's
-            // available (which includes rollover), so spending covered by earlier
-            // months looks unfunded. Likewise a refund of an unfunded purchase still
-            // reduces fundedSpending, pulling the payment set-aside below the card debt.
-            // Fixing both needs category available carried across months.
             var fundedSpending: Decimal = 0.00
+            var netRefunds: Decimal = 0.00
             
-            for (category, spending) in spendingByCategory {
+            for (category, netSpending) in spendingByCategory {
                 guard let categoryID = category?.id else { continue }
-                let assigned = assignedByCategory[categoryID]?[monthYear] ?? 0
-                fundedSpending += min(assigned, spending)
+                guard netSpending > 0 else {
+                    netRefunds += -netSpending
+                    continue
+                }
+                
+                // If no available value for a category, skip funding and count its spending as unfunded
+                guard let available = availableByCategory[categoryID]?[monthYear] else {
+                    assertionFailure("No available for \(categoryID) in \(monthYear)")
+                    continue
+                }
+                
+                // Fund from what the category had before this card's spending; cash spending is funded first.
+                let availableBeforeCard = max(available + netSpending, 0)
+                fundedSpending += min(availableBeforeCard, netSpending)
             }
             
             // Transfer inflows from other accounts
@@ -314,15 +337,22 @@ public final class BudgetRowMapper: Sendable {
                 .filteredByOutflows
                 .mappedToMagnitudes
                 .reduced
-
+            
+            let monthNet = monthlyCardTransactions.netAmount
+            let balanceBeforeRefunds = balance + monthNet - netRefunds
+            let returnsApplied = min(netRefunds, max(-balanceBeforeRefunds, 0))
+            
             activity[monthYear] = CreditCardActivity(
                 spending: spending,
                 returns: returns,
+                returnsApplied: returnsApplied,
                 fundedSpending: fundedSpending,
                 payments: payments,
                 transfersOut: transfersOut,
                 transactions: monthlyCardTransactions
             )
+            
+            balance += monthNet
         }
         
         return activity
