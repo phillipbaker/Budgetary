@@ -61,7 +61,7 @@ enum AppAction {
     case deleteCategoryGroupRequested(ID<CategoryGroup>)
     case deleteCategoryGroupSucceeded
     case deleteCategoryGroupFailed
-    case deleteCategoryRequested(ID<Category>, ID<CategoryGroup>)
+    case deleteCategoryRequested(ID<Category>)
     case deleteCategorySucceeded
     case deleteCategoryFailed
     case moveCategoryGroupRequested(IndexSet, Int)

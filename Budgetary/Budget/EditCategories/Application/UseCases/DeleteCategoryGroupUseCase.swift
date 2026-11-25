@@ -13,12 +13,12 @@ final class DeleteCategoryGroupUseCase {
 
     func execute(for id: ID<CategoryGroupPresentation>) async {
         guard let group = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(id)) else {
-            // TODO: throw error
+            // Throw error
             return
         }
 
         guard group.kind != .inflow else {
-            // TODO: throw error
+            // Throw error
             return
         }
 

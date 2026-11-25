@@ -12,7 +12,7 @@ import SwiftUI
 @Observable
 public final class EditCategoriesViewModel {
     @ObservationIgnored private let store: AppStore
-    @ObservationIgnored let stateMapper: EditCategoriesStateMapper = Container.shared.editCategoriesStateMapper() // TODO: Not used right now
+    @ObservationIgnored let stateMapper: EditCategoriesStateMapper = Container.shared.editCategoriesStateMapper()
 
     var state: EditCategoriesState
     var destination: Destination?
@@ -45,8 +45,8 @@ public final class EditCategoriesViewModel {
             store.dispatch(.renameCategoryRequested(ID<Category>(id), newName))
         case let .deleteCategoryGroup(groupID):
             store.dispatch(.deleteCategoryGroupRequested(ID<CategoryGroup>(groupID)))
-        case let .deleteCategory(categoryID, groupID):
-            store.dispatch(.deleteCategoryRequested(ID<Category>(categoryID), ID<CategoryGroup>(groupID)))
+        case let .deleteCategory(categoryID):
+            store.dispatch(.deleteCategoryRequested(ID<Category>(categoryID)))
         case let .moveCategoryGroup(offsets, newOffset):
             store.dispatch(.moveCategoryGroupRequested(offsets, newOffset))
         case let .moveCategory(id, destinationGroupID, index):

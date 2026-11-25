@@ -11,15 +11,14 @@ final class DeleteCategoryUseCase {
     var source: DeleteCategorySource = Container.shared.deleteCategorySource()
     var mapper: BudgetMapper = Container.shared.budgetMapper()
 
-    // TODO: not using groupID here?
-    func execute(for categoryID: ID<EditableCategoryPresentation>, from groupID: ID<CategoryGroupPresentation>) async {
+    func execute(for categoryID: ID<EditableCategoryPresentation>) async {
         guard let containingGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else {
-            // TODO: throw error
+            // Throw error
             return
         }
         
         guard containingGroup.kind != .inflow else {
-            // TODO: throw error
+            // Throw error
             return
         }
         

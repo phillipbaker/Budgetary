@@ -44,7 +44,7 @@ final class TransactionViewModel {
     
     var destination: Destination? = nil
 
-    // MARK: - Convenience
+    // MARK: - Derived State
 
     /// Non-nil only while `viewState == .loaded`.
     /// Safe to force-unwrap from `TransactionView` because `TransactionRootView` only
@@ -52,6 +52,10 @@ final class TransactionViewModel {
     var loadedState: TransactionPresentationState? {
         guard case .loaded(let state) = viewState else { return nil }
         return state
+    }
+    
+    var canSave: Bool {
+        draft.account != nil
     }
 
     // MARK: - Init
@@ -66,8 +70,6 @@ final class TransactionViewModel {
     }
 
     // MARK: - Handle
-
-    // TODO: TransactionAction.saveTransactionButtonTapped should be updated to carry no associated value — the draft is now owned by this view model. TransactionAction no longer needs selectCategoryButtonTapped,selectPayeeButtonTapped, or selectAccountButtonTapped. Use the direct selectCategory / selectPayee / selectAccount methods below.
 
     func handle(action: TransactionAction) {
         switch action {

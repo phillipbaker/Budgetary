@@ -20,21 +20,9 @@ struct CategoryListEmptyView: View {
                 .font(.largeTitle)
                 .imageScale(.large)
             
-            // TODO: Fix with grammar agreement?
-            // TODO: Put current month year and/or monthYear into Environemnt for global use?
-            if monthYear == .currentMonthYear {
-                Text("You have no \(filter.rawValue) categories this month.")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-            } else if monthYear.year == .currentYear && monthYear.month != .currentMonth {
-                Text("You had no \(filter.rawValue) categories in \(monthYear.monthWide).")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-            } else {
-                Text("You had no \(filter.rawValue) categories in \(monthYear.description)")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-            }
+            Text(message)
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
             
             Button {
                 action(.clearFilterButtonTapped(filterID: filter.rawValue))
@@ -47,6 +35,16 @@ struct CategoryListEmptyView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
+    }
+    
+    private var message: String {
+        let categories = "\(filter.rawValue) categories"
+        guard monthYear != .currentMonthYear else {
+            return "You have no \(categories) this month."
+        }
+        let verb = monthYear < .currentMonthYear ? "had" : "have"
+        let month = monthYear.year == .currentYear ? monthYear.monthWide : monthYear.description
+        return "You \(verb) no \(categories) in \(month)."
     }
 }
 

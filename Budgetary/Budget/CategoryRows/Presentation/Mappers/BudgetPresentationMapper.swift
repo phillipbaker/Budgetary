@@ -108,9 +108,6 @@ public final class BudgetPresentationMapper {
     func mapCanGoToNextMonth(from monthYear: MonthYear, budgetEnd: MonthYear) -> Bool {
         monthYear < budgetEnd
     }
-    
-    // TODO: Pass currency/formatting settings in here and incorpoate into formatting logic
-    // Find the formatted() paramaters for currency and decimal point style and placement  or is this handled by the framwork for location? Way to override? If yes to all, set defaults in settings based on locale etc but override here...
 
     func mapReadyToAssign(for monthYear: MonthYear, from budgetData: BudgetData) -> ReadyToAssignPresentation {
         guard let readyToAssign = budgetData.readyToAssign[monthYear] else { return mapUnavailableReadyToAssign() }

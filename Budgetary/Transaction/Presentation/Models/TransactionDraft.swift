@@ -25,7 +25,7 @@ public struct TransactionDraft: Equatable, Hashable, Identifiable, Sendable {
         amount: AmountDraft = AmountDraft(type: .outflow, value: 0.00),
         isCleared: Bool = false,
         payee: PayeePresentation? = nil,
-        account: TransactionAccountPresentation? = nil, // TODO: I think I want a default value here i.e. always pass one in based on call site
+        account: TransactionAccountPresentation? = nil,
         category: TransactionCategoryPresentation? = nil,
         linkedTransactionID: UUID? = nil // only when payee type is .transfer
     ) {

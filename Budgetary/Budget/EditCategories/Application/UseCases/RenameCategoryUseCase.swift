@@ -18,7 +18,7 @@ final class RenameCategoryUseCase {
         }
          
          guard categoryGroupPlain.kind != .inflow else {
-             // TODO: throw error
+             // Throw error
              return
          }
         

@@ -22,14 +22,14 @@ final class CreateCategoryUseCase: Sendable {
         )
         
         guard let categoryGroupPlain = await source.findCategoryGroup(by: ID<CategoryGroupPlain>(id)) else {
-            // TODO: throw error
+            // Throw error
             return
         }
         
         let categoryGroup = mapper.map(categoryGroupPlain: categoryGroupPlain)
         
         guard categoryGroup.kind != .inflow else {
-            // TODO: throw error
+            // Throw error
             return
         }
  

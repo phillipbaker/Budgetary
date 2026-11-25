@@ -15,7 +15,7 @@ struct DatePickerView: View {
 
     var body: some View {
         Button {
-            withAnimation { // TODO: Is animation closure still needed?
+            withAnimation {
                 action()
             }
         } label: {

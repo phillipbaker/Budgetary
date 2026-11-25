@@ -42,7 +42,7 @@ public final class BudgetAccountsMapper: Sendable {
             isCleared: transaction.isCleared,
             payee: transaction.payee,
             category: transaction.category,
-            account: transaction.account // TODO: This needs ot be a var TransactionAccountData so it’s mutable...
+            account: transaction.account
         )
     }
 
@@ -87,8 +87,6 @@ public final class BudgetAccountsMapper: Sendable {
     }
     
     // MARK: - Entity to Plain
-    
-    // TODO: This seems like an infinite loop
     
     func map(account: BudgetAccount) -> BudgetAccountPlain {
         return BudgetAccountPlain(

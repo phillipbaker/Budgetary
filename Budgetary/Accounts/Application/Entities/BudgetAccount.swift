@@ -19,7 +19,6 @@ public struct BudgetAccount: Equatable, Hashable, Sendable {
     let notes: String?
     
     /// Boolean value for whether or not an account has been “closed” and no longer appears in the budget calculation
-    // TODO: Need to know what calculations to perform when closing an account...
     let isClosed: Bool
     
     /// All transactions that belong to the account. Non-optional, defaults to empty.

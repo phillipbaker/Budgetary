@@ -176,8 +176,7 @@ struct TransactionView: View {
                             model.handle(action: .saveTransactionButtonTapped)
                         }
                         .fontWeight(.semibold)
-                        // TODO: Figure out disable button logic for real. When should it be possible to save?
-                        .disabled(model.draft.account == nil)
+                        .disabled(!model.canSave)
                     }
                 }
             }

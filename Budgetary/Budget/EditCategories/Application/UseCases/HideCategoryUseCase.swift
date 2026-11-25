@@ -13,17 +13,17 @@ final class HideCategoryUseCase {
     
     func execute(for categoryID: ID<CategoryRow>) async {
         guard let categoryGroup = await source.findCategoryGroup(containing: ID<CategoryPlain>(categoryID)) else {
-            // TODO: throw error
+            // Throw error
             return
         }
         
         guard categoryGroup.kind != .inflow else {
-            // TODO: throw error
+            // Throw error
             return
         }
         
         guard let category = categoryGroup.categories.first(where: { $0.id == ID<CategoryPlain>(categoryID) }) else {
-            // TODO: throw error
+            // Throw error
             return
         }
         

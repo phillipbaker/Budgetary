@@ -43,8 +43,6 @@ struct AddAccountView: View {
                     Text("What type of account are you adding?")
                 }
                 
-                // TODO: Make this field currency specific based on currency setting
-                // TODO: Use custom keyboardand right align. Use CurrencyText Field here...
                 Section {
                     TextField("0.00", text: $startingBalance)
                         .focused($focusedField, equals: .startingBalance)
