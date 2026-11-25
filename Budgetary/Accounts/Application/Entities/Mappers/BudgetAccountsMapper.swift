@@ -42,7 +42,8 @@ public final class BudgetAccountsMapper: Sendable {
             isCleared: transaction.isCleared,
             payee: transaction.payee,
             category: transaction.category,
-            account: transaction.account
+            account: transaction.account,
+            linkedTransactionID: ID<TransactionData>(transaction.linkedTransactionID)
         )
     }
 
@@ -141,7 +142,8 @@ public final class BudgetAccountsMapper: Sendable {
             amount: transaction.amount,
             isCleared: transaction.isCleared,
             payeeID: ID<PayeePlain>(transaction.payee?.id),
-            categoryID: ID<CategoryPlain>(transaction.category?.id)
+            categoryID: ID<CategoryPlain>(transaction.category?.id),
+            linkedTransactionID: ID<TransactionPlain>(transaction.linkedTransactionID)
         )
     }
     

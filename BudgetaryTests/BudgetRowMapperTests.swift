@@ -120,7 +120,8 @@ struct BudgetRowMapperTests {
                 amount: amount,
                 isCleared: false,
                 payeeID: payee.id,
-                categoryID: category?.id
+                categoryID: category?.id,
+                linkedTransactionID: nil
             )
         }
     }

@@ -16,5 +16,5 @@ public struct TransactionData: Equatable, Hashable, Sendable {
     var payee: Payee? = nil
     var category: TransactionCategory? = nil
     var account: TransactionAccount
-    var linkedTransactionID: ID<TransactionData>? = nil // only when payee type is .transfer
+    var linkedTransactionID: ID<TransactionData>? // only when payee type is .transfer
 }

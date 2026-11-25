@@ -17,6 +17,7 @@ final class TransactionDb: Equatable {
     var isCleared: Bool
     var payeeID: UUID?
     var categoryID: UUID?
+    var linkedTransactionID: UUID?
 
     init(
         externalID: UUID,
@@ -25,7 +26,8 @@ final class TransactionDb: Equatable {
         amount: Amount,
         isCleared: Bool,
         payeeID: UUID?,
-        categoryID: UUID?
+        categoryID: UUID?,
+        linkedTransactionID: UUID?
     ) {
         self.externalID = externalID
         self.date = date
@@ -34,5 +36,6 @@ final class TransactionDb: Equatable {
         self.isCleared = isCleared
         self.categoryID = categoryID
         self.payeeID = payeeID
+        self.linkedTransactionID = linkedTransactionID
     }
 }

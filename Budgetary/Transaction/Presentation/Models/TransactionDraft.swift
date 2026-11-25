@@ -16,7 +16,7 @@ public struct TransactionDraft: Equatable, Hashable, Identifiable, Sendable {
     var payee: PayeePresentation?
     var account: TransactionAccountPresentation?
     var category: TransactionCategoryPresentation?
-    var linkedTransactionID: UUID? // only when payee type is .transfer
+    let linkedTransactionID: Self.ID? // only when payee type is .transfer
 
     init(
         id: Self.ID = .init(),
@@ -27,7 +27,7 @@ public struct TransactionDraft: Equatable, Hashable, Identifiable, Sendable {
         payee: PayeePresentation? = nil,
         account: TransactionAccountPresentation? = nil,
         category: TransactionCategoryPresentation? = nil,
-        linkedTransactionID: UUID? = nil // only when payee type is .transfer
+        linkedTransactionID: Self.ID? = nil // only when payee type is .transfer
     ) {
         self.id = id
         self.date = date
