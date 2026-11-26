@@ -82,6 +82,7 @@ public final class BudgetRowMapper: Sendable {
         
         let readyToAssign = readyToAssign(
             inflows: readyToAssignActivity,
+            creditCardPaymentRows: creditCardPaymentRows,
             categoryGroupRows: categoryGroupRows,
             uncategorizedRow: uncategorizedRow,
             in: budgetRange
@@ -104,6 +105,7 @@ public final class BudgetRowMapper: Sendable {
 
     func readyToAssign(
         inflows: [MonthYear: Activity],
+        creditCardPaymentRows: [CreditCardPaymentRow],
         categoryGroupRows: [CategoryGroupRow],
         uncategorizedRow: CategoryRow,
         in budgetRange: ClosedRange<MonthYear>
@@ -113,6 +115,9 @@ public final class BudgetRowMapper: Sendable {
         let spendingRows = [uncategorizedRow] + categoryGroupRows
             .filter { $0.kind != .inflow }
             .flatMap(\.categories)
+        
+        let assignedByMonth = totalsByMonth(spendingRows) { $0.assigned.mapValues(\.assignedThisMonth) }
+            .merging(totalsByMonth(creditCardPaymentRows) { $0.assigned.mapValues(\.assignedThisMonth) }, uniquingKeysWith: +)
         
         for monthYear in budgetRange {
             // Inflows for monthYear
@@ -127,7 +132,7 @@ public final class BudgetRowMapper: Sendable {
             
             // Outflows for monthYear
             let cashOverspendingLastMonth = cashOverspendingLastMonth(for: monthYear, in: spendingRows)
-            let assignedThisMonth = assignedThisMonth(for: monthYear, in: spendingRows)
+            let assignedThisMonth = assignedByMonth[monthYear] ?? 0
             let assignedInFuture: Decimal = {
                 // Calculate inflow/outflow balance for current month excluding assignedInFuture
                 let currentMonthReadyToAssignBalance = (readyToAssignFromLastMonth + inflowThisMonth) - (cashOverspendingLastMonth + assignedThisMonth)
@@ -138,8 +143,10 @@ public final class BudgetRowMapper: Sendable {
                 }
                 
                 // If here, current month has positive inflow/outflow balance
-                // Calculate total actually assigned in future months
-                let assignedInFutureTotal = self.assignedInFuture(for: monthYear, in: spendingRows)
+                let assignedInFutureTotal = assignedByMonth
+                    .filter { $0.key > monthYear }
+                    .map(\.value)
+                    .reduced
                 
                 // Set assignedInFuture be the actual value up to the point it zeros out current month inflow/outflow
                 let assignedInFuture = min(currentMonthReadyToAssignBalance, assignedInFutureTotal)
@@ -169,21 +176,6 @@ public final class BudgetRowMapper: Sendable {
             .compactMap { $0.available[monthYear.advanced(by: -1)]?.total }
             .filter { $0 < 0 }
             .map { abs($0) } // sum of negative ammounts converted to +ve total to add to other outflows
-            .reduced
-    }
-
-    func assignedThisMonth(for monthYear: MonthYear, in categories: [CategoryRow]) -> Decimal {
-        return categories
-            .mappedToAssignedAmounts(for: monthYear)
-            .reduced
-    }
-
-    // Calculated the actual value of future assignments
-    func assignedInFuture(for monthYear: MonthYear, in categories: [CategoryRow]) -> Decimal {
-        return categories
-            .flatMap { $0.assigned }// [(MonthYear, Decimal)] Flattens to tuples
-            .filter { $0.key > monthYear } // [(MonthYear, Decimal)] Filtered
-            .map { $0.value.assignedThisMonth } // [Decimal]
             .reduced
     }
 

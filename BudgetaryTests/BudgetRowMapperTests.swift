@@ -24,45 +24,31 @@ struct BudgetRowMapperTests {
             let cardID = ID<BudgetAccountPlain>()
             let checkingID = ID<BudgetAccountPlain>()
 
-            let shop = payee("Shop", type: .regular)
-            let toChecking = payee("Checking", type: .transfer(checkingID))
-            let toCard = payee("Credit Card", type: .transfer(cardID))
+            let shop = Plain.payee("Shop", type: .regular)
+            let toChecking = Plain.payee("Checking", type: .transfer(checkingID))
+            let toCard = Plain.payee("Credit Card", type: .transfer(cardID))
 
             // £150 assigned in October and not spent, so it rolls over into November.
             // Funding from November's assigned amount alone would fund nothing.
-            let groceries = category("Groceries", assigned: [october: 150])
-            let kidsClothes = category("Kids Clothes")
+            let groceries = Plain.category("Groceries", assigned: [october: 150])
+            let kidsClothes = Plain.category("Kids Clothes")
 
             // The card owed £100 when it was added. The £100 payment only covers
             // November's charge, so the refund can only pay down the starting balance.
-            let card = account(cardID, "Credit Card", type: .creditCard, startingBalance: -100, transactions: [
-                transaction(.outflow(100), payee: shop, category: groceries),
-                transaction(.inflow(40), payee: shop, category: kidsClothes),
-                transaction(.inflow(100), payee: toChecking)
+            let card = Plain.account(cardID, "Credit Card", type: .creditCard, startingBalance: -100, transactions: [
+                Plain.transaction(.outflow(100), payee: shop, category: groceries, in: november),
+                Plain.transaction(.inflow(40), payee: shop, category: kidsClothes, in: november),
+                Plain.transaction(.inflow(100), payee: toChecking, in: november)
             ])
-            let checking = account(checkingID, "Checking", type: .checking, transactions: [
-                transaction(.outflow(100), payee: toCard)
+            let checking = Plain.account(checkingID, "Checking", type: .checking, transactions: [
+                Plain.transaction(.outflow(100), payee: toCard, in: november)
             ])
 
-            let data = BudgetDataPlain(
-                budgetPlain: BudgetPlain(
-                    id: ID<BudgetPlain>(),
-                    settings: BudgetSettingsPlain(name: "Budget", curreny: "GBP", currencyFormet: "", numberFormat: "", dateFormat: ""),
-                    budgetAccountIDs: [cardID, checkingID],
-                    categoryGroupIDs: []
-                ),
-                payeesPlain: [shop, toChecking, toCard],
-                budgetAccountsPlain: [card, checking],
-                categoryGroupsPlain: [
-                    CategoryGroupPlain(id: ID<CategoryGroupPlain>(), name: "Spending", kind: .regular, isHidden: false, categories: [groceries, kidsClothes])
-                ],
-                creditCardPaymentGroupPlain: CreditCardPaymentGroupPlain(
-                    id: ID<CreditCardPaymentGroupPlain>(),
-                    name: "Credit Card Payments",
-                    cardPayments: [
-                        CreditCardPaymentPlain(id: ID<CreditCardPaymentPlain>(), name: "Credit Card", isHidden: false, assigned: [:], accountID: cardID.rawValue)
-                    ]
-                )
+            let data = Plain.budgetData(
+                payees: [shop, toChecking, toCard],
+                accounts: [card, checking],
+                categoryGroups: [Plain.categoryGroup("Spending", categories: [groceries, kidsClothes])],
+                cardPayments: [Plain.cardPayment("Credit Card", accountID: cardID)]
             )
 
             let budget = mapper.mapBudgetData(from: data)
@@ -74,55 +60,75 @@ struct BudgetRowMapperTests {
             #expect(activity.paymentsAndReturns == 140)
             #expect(activity.totalActivity == -40)
         }
+    }
+
+    @Suite("Ready to Assign")
+    struct ReadyToAssignTests {
+        let mapper = BudgetRowMapper()
+
+        let november = MonthYear(month: 11, year: 2026)
+        let december = MonthYear(month: 12, year: 2026)
+
+        @Test("Money assigned to a card is taken from Ready to Assign")
+        func cardAssignmentReducesReadyToAssign() throws {
+            let budget = budget(cardAssigned: [november: 50])
+            let readyToAssign = try #require(budget.readyToAssign[november])
+
+            #expect(readyToAssign.assignedThisMonth == 50)
+            #expect(readyToAssign.readyToAssignThisMonth == 150)
+        }
+
+        @Test("Category and card assignments are both taken from Ready to Assign")
+        func categoryAndCardAssignmentsReduceReadyToAssign() throws {
+            let budget = budget(categoryAssigned: [november: 30], cardAssigned: [november: 50])
+            let readyToAssign = try #require(budget.readyToAssign[november])
+
+            #expect(readyToAssign.assignedThisMonth == 80)
+            #expect(readyToAssign.readyToAssignThisMonth == 120)
+        }
+
+        @Test("Money assigned to a card in a later month is held back now")
+        func futureCardAssignmentIsHeldBack() throws {
+            let budget = budget(cardAssigned: [december: 50])
+            let thisMonth = try #require(budget.readyToAssign[november])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(thisMonth.assignedInFuture == 50)
+            #expect(thisMonth.readyToAssignThisMonth == 150)
+            #expect(nextMonth.assignedThisMonth == 50)
+            #expect(nextMonth.readyToAssignThisMonth == 150)
+        }
 
         // MARK: - Helpers
 
-        func payee(_ name: String, type: PayeeTypePlain) -> PayeePlain {
-            PayeePlain(
-                id: ID<PayeePlain>(),
-                name: name,
-                type: type,
-                aliases: [],
-                includedInPayeeList: true,
-                automaticallyCategorizeIsOn: false,
-                defaultCategoryID: nil
-            )
-        }
+        /// A budget with £200 of income in November, one spending category and one card.
+        func budget(
+            categoryAssigned: [MonthYear: Decimal] = [:],
+            cardAssigned: [MonthYear: Decimal] = [:]
+        ) -> BudgetData {
+            let cardID = ID<BudgetAccountPlain>()
+            let checkingID = ID<BudgetAccountPlain>()
 
-        func category(_ name: String, assigned: [MonthYear: Decimal] = [:]) -> CategoryPlain {
-            CategoryPlain(id: ID<CategoryPlain>(), name: name, notes: "", isHidden: false, assigned: assigned)
-        }
+            let employer = Plain.payee("Employer", type: .regular)
+            let readyToAssign = Plain.category("Ready to Assign")
+            let groceries = Plain.category("Groceries", assigned: categoryAssigned)
 
-        func account(
-            _ id: ID<BudgetAccountPlain>,
-            _ name: String,
-            type: BudgetAccountTypePlain,
-            startingBalance: Decimal = 0,
-            transactions: [TransactionPlain]
-        ) -> BudgetAccountPlain {
-            BudgetAccountPlain(
-                id: id,
-                name: name,
-                accountType: type,
-                startingBalance: startingBalance,
-                notes: nil,
-                isClosed: false,
-                transactions: transactions
-            )
-        }
+            let checking = Plain.account(checkingID, "Checking", type: .checking, transactions: [
+                Plain.transaction(.inflow(200), payee: employer, category: readyToAssign, in: november)
+            ])
+            let card = Plain.account(cardID, "Credit Card", type: .creditCard, transactions: [])
 
-        /// A transaction on 15 November 2026.
-        func transaction(_ amount: Amount, payee: PayeePlain, category: CategoryPlain? = nil) -> TransactionPlain {
-            TransactionPlain(
-                id: ID<TransactionPlain>(),
-                date: Calendar.current.date(from: DateComponents(year: november.year, month: november.month, day: 15))!,
-                memo: "",
-                amount: amount,
-                isCleared: false,
-                payeeID: payee.id,
-                categoryID: category?.id,
-                linkedTransactionID: nil
+            let data = Plain.budgetData(
+                payees: [employer],
+                accounts: [checking, card],
+                categoryGroups: [
+                    Plain.categoryGroup("Inflow", kind: .inflow, categories: [readyToAssign]),
+                    Plain.categoryGroup("Spending", categories: [groceries])
+                ],
+                cardPayments: [Plain.cardPayment("Credit Card", accountID: cardID, assigned: cardAssigned)]
             )
+
+            return mapper.mapBudgetData(from: data)
         }
     }
 
@@ -545,5 +551,101 @@ struct BudgetRowMapperTests {
                 linkedTransactionID: nil
             )
         }
+    }
+}
+
+/// Builds the plain models `mapBudgetData(from:)` takes, for tests that run a whole budget.
+private enum Plain {
+    static func budgetData(
+        payees: [PayeePlain],
+        accounts: [BudgetAccountPlain],
+        categoryGroups: [CategoryGroupPlain],
+        cardPayments: [CreditCardPaymentPlain]
+    ) -> BudgetDataPlain {
+        BudgetDataPlain(
+            budgetPlain: BudgetPlain(
+                id: ID<BudgetPlain>(),
+                settings: BudgetSettingsPlain(name: "Budget", curreny: "GBP", currencyFormet: "", numberFormat: "", dateFormat: ""),
+                budgetAccountIDs: accounts.map(\.id),
+                categoryGroupIDs: categoryGroups.map(\.id)
+            ),
+            payeesPlain: payees,
+            budgetAccountsPlain: accounts,
+            categoryGroupsPlain: categoryGroups,
+            creditCardPaymentGroupPlain: CreditCardPaymentGroupPlain(
+                id: ID<CreditCardPaymentGroupPlain>(),
+                name: "Credit Card Payments",
+                cardPayments: cardPayments
+            )
+        )
+    }
+
+    static func payee(_ name: String, type: PayeeTypePlain) -> PayeePlain {
+        PayeePlain(
+            id: ID<PayeePlain>(),
+            name: name,
+            type: type,
+            aliases: [],
+            includedInPayeeList: true,
+            automaticallyCategorizeIsOn: false,
+            defaultCategoryID: nil
+        )
+    }
+
+    static func categoryGroup(
+        _ name: String,
+        kind: CategoryGroupKindPlain = .regular,
+        categories: [CategoryPlain]
+    ) -> CategoryGroupPlain {
+        CategoryGroupPlain(id: ID<CategoryGroupPlain>(), name: name, kind: kind, isHidden: false, categories: categories)
+    }
+
+    static func category(_ name: String, assigned: [MonthYear: Decimal] = [:]) -> CategoryPlain {
+        CategoryPlain(id: ID<CategoryPlain>(), name: name, notes: "", isHidden: false, assigned: assigned)
+    }
+
+    static func cardPayment(
+        _ name: String,
+        accountID: ID<BudgetAccountPlain>,
+        assigned: [MonthYear: Decimal] = [:]
+    ) -> CreditCardPaymentPlain {
+        CreditCardPaymentPlain(id: ID<CreditCardPaymentPlain>(), name: name, isHidden: false, assigned: assigned, accountID: accountID.rawValue)
+    }
+
+    static func account(
+        _ id: ID<BudgetAccountPlain>,
+        _ name: String,
+        type: BudgetAccountTypePlain,
+        startingBalance: Decimal = 0,
+        transactions: [TransactionPlain]
+    ) -> BudgetAccountPlain {
+        BudgetAccountPlain(
+            id: id,
+            name: name,
+            accountType: type,
+            startingBalance: startingBalance,
+            notes: nil,
+            isClosed: false,
+            transactions: transactions
+        )
+    }
+
+    /// A transaction on the 15th of `monthYear`.
+    static func transaction(
+        _ amount: Amount,
+        payee: PayeePlain,
+        category: CategoryPlain? = nil,
+        in monthYear: MonthYear
+    ) -> TransactionPlain {
+        TransactionPlain(
+            id: ID<TransactionPlain>(),
+            date: Calendar.current.date(from: DateComponents(year: monthYear.year, month: monthYear.month, day: 15))!,
+            memo: "",
+            amount: amount,
+            isCleared: false,
+            payeeID: payee.id,
+            categoryID: category?.id,
+            linkedTransactionID: nil
+        )
     }
 }
