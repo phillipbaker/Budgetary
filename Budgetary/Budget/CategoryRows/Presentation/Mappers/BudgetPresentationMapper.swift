@@ -215,7 +215,7 @@ public final class BudgetPresentationMapper {
                 total: available.total.formatted(.currency(code: "GBP")),
                 cashFromLastMonth: available.cashFromLastMonth.formatted(.currency(code: "GBP")),
                 assignedThisMonth: available.assignedThisMonth.formatted(.currency(code: "GBP")),
-                cashSpendingThisMonth: available.cashSpendingThisMonth.formatted(.currency(code: "GBP")),
+                cashSpendingThisMonth: available.cashActivityThisMonth.formatted(.currency(code: "GBP")),
                 message: available.message,
                 lightModeForegroundColor: mapLightModeForegroundColor(for: available.total),
                 lightModeBackgroundColor: mapLightModeBackgroundColor(for: available.total),
