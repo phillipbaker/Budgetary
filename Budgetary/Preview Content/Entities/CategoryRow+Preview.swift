@@ -21,12 +21,12 @@ extension CategoryRow {
             averageAssigned: 900.00,
             averageSpent: 850.00
         )],
-        activity: [.sep2024: Activity(total: 900.00, transactions: [])],
+        activity: [.sep2024: Activity(transactions: [], creditCardAccountIDs: [])],
         available: [.sep2024: Available(
-            total: 0.00,
             cashFromLastMonth: 0.00,
             assignedThisMonth: 0.00,
-            cashSpendingThisMonth: 0.00,
+            cashActivityThisMonth: 0.00,
+            creditActivityThisMonth: 0.00,
             message: ""
         )]
     )

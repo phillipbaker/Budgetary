@@ -99,27 +99,112 @@ struct BudgetRowMapperTests {
             #expect(nextMonth.readyToAssignThisMonth == 150)
         }
 
+        // MARK: - Overspending
+
+        // November's overspending is taken from December's Ready to Assign. December starts
+        // with November's £200 of income, less what was assigned in November.
+
+        @Test("Overspending on a card isn't taken from Ready to Assign")
+        func creditOverspendingIsNotTaken() throws {
+            let budget = budget(spending: [.card(150, .groceries)])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(nextMonth.cashOverspendingLastMonth == 0)
+            #expect(nextMonth.readyToAssignThisMonth == 200)
+        }
+
+        @Test("Overspending in cash is taken from next month's Ready to Assign")
+        func cashOverspendingIsTaken() throws {
+            let budget = budget(categoryAssigned: [november: 50], spending: [.cash(80, .groceries)])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(nextMonth.cashOverspendingLastMonth == 30)
+            #expect(nextMonth.readyToAssignThisMonth == 120)
+        }
+
+        @Test("Only the cash part of mixed overspending is taken from Ready to Assign")
+        func onlyCashPartOfMixedOverspendingIsTaken() throws {
+            // £50 assigned, £70 in cash and £30 on the card: £20 cash and £30 credit overspending
+            let budget = budget(categoryAssigned: [november: 50], spending: [.cash(70, .groceries), .card(30, .groceries)])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(nextMonth.cashOverspendingLastMonth == 20)
+            #expect(nextMonth.readyToAssignThisMonth == 130)
+        }
+
+        @Test("Card spending covered by cash left over isn't taken from Ready to Assign")
+        func cardSpendingCoveredFirstByCashIsNotTaken() throws {
+            // £100 assigned, £70 in cash and £50 on the card: only £20 of credit overspending
+            let budget = budget(categoryAssigned: [november: 100], spending: [.cash(70, .groceries), .card(50, .groceries)])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(nextMonth.cashOverspendingLastMonth == 0)
+            #expect(nextMonth.readyToAssignThisMonth == 100)
+        }
+
+        @Test("Uncategorized card spending isn't taken from Ready to Assign")
+        func uncategorizedCardSpendingIsNotTaken() throws {
+            let budget = budget(spending: [.card(40, nil)])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(nextMonth.cashOverspendingLastMonth == 0)
+            #expect(nextMonth.readyToAssignThisMonth == 200)
+        }
+
+        @Test("Uncategorized cash spending is taken from next month's Ready to Assign")
+        func uncategorizedCashSpendingIsTaken() throws {
+            let budget = budget(spending: [.cash(40, nil)])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(nextMonth.cashOverspendingLastMonth == 40)
+            #expect(nextMonth.readyToAssignThisMonth == 160)
+        }
+
         // MARK: - Helpers
+
+        enum SpendingCategory {
+            case groceries
+        }
+
+        /// A November purchase, in cash or on the card, with a category or uncategorized.
+        enum Spending {
+            case cash(Decimal, SpendingCategory?)
+            case card(Decimal, SpendingCategory?)
+        }
 
         /// A budget with £200 of income in November, one spending category and one card.
         func budget(
             categoryAssigned: [MonthYear: Decimal] = [:],
-            cardAssigned: [MonthYear: Decimal] = [:]
+            cardAssigned: [MonthYear: Decimal] = [:],
+            spending: [Spending] = []
         ) -> BudgetData {
             let cardID = ID<BudgetAccountPlain>()
             let checkingID = ID<BudgetAccountPlain>()
 
             let employer = Plain.payee("Employer", type: .regular)
+            let shop = Plain.payee("Shop", type: .regular)
             let readyToAssign = Plain.category("Ready to Assign")
             let groceries = Plain.category("Groceries", assigned: categoryAssigned)
 
-            let checking = Plain.account(checkingID, "Checking", type: .checking, transactions: [
-                Plain.transaction(.inflow(200), payee: employer, category: readyToAssign, in: november)
-            ])
-            let card = Plain.account(cardID, "Credit Card", type: .creditCard, transactions: [])
+            func purchase(_ amount: Decimal, _ category: SpendingCategory?) -> TransactionPlain {
+                Plain.transaction(.outflow(amount), payee: shop, category: category.map { _ in groceries }, in: november)
+            }
+
+            var cashTransactions = [Plain.transaction(.inflow(200), payee: employer, category: readyToAssign, in: november)]
+            var cardTransactions: [TransactionPlain] = []
+
+            for purchaseSpending in spending {
+                switch purchaseSpending {
+                case let .cash(amount, category): cashTransactions.append(purchase(amount, category))
+                case let .card(amount, category): cardTransactions.append(purchase(amount, category))
+                }
+            }
+
+            let checking = Plain.account(checkingID, "Checking", type: .checking, transactions: cashTransactions)
+            let card = Plain.account(cardID, "Credit Card", type: .creditCard, transactions: cardTransactions)
 
             let data = Plain.budgetData(
-                payees: [employer],
+                payees: [employer, shop],
                 accounts: [checking, card],
                 categoryGroups: [
                     Plain.categoryGroup("Inflow", kind: .inflow, categories: [readyToAssign]),

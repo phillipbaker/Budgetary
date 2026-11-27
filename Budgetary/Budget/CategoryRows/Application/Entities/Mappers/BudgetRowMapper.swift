@@ -32,18 +32,34 @@ public final class BudgetRowMapper: Sendable {
             and: transactions
         )
         
+        let creditCardAccountIDs = Set(
+            data.budgetAccountsPlain
+                .filter { $0.accountType == .creditCard }
+                .map { ID<TransactionAccount>($0.id) }
+        )
+        
         let readyToAssignActivity = activity(
             from: readyToAssignID.flatMap { transactionsByCategory[$0] } ?? [],
+            creditCardAccountIDs: creditCardAccountIDs,
             in: budgetRange
         )
         
-        let categoryGroupRows = map(categoryGroupsPlain: data.categoryGroupsPlain, using: transactionsByCategory, in: budgetRange)
+        let categoryGroupRows = map(
+            categoryGroupsPlain: data.categoryGroupsPlain,
+            using: transactionsByCategory,
+            creditCardAccountIDs: creditCardAccountIDs,
+            in: budgetRange
+        )
 
         let uncategorizedTransactions = transactions
             .filter { $0.category == nil }
             .filteredBySpending // exclude transfers
 
-        let uncategorizedActivity = activity(from: uncategorizedTransactions, in: budgetRange)
+        let uncategorizedActivity = activity(
+            from: uncategorizedTransactions,
+            creditCardAccountIDs: creditCardAccountIDs,
+            in: budgetRange
+        )
 
         let uncategorizedRow = CategoryRow(
             id: .uncategorized,
@@ -173,9 +189,7 @@ public final class BudgetRowMapper: Sendable {
 
     func cashOverspendingLastMonth(for monthYear: MonthYear, in spendingCategories: [CategoryRow]) -> Decimal {
         return spendingCategories
-            .compactMap { $0.available[monthYear.advanced(by: -1)]?.total }
-            .filter { $0 < 0 }
-            .map { abs($0) } // sum of negative ammounts converted to +ve total to add to other outflows
+            .compactMap { $0.available[monthYear.advanced(by: -1)]?.cashOverspending }
             .reduced
     }
 
@@ -383,19 +397,32 @@ public final class BudgetRowMapper: Sendable {
     func map(
         categoryGroupsPlain: [CategoryGroupPlain],
         using transactionsByCategory: TransactionsByCategory,
+        creditCardAccountIDs: Set<ID<TransactionAccount>>,
         in budgetRange: ClosedRange<MonthYear>
     ) -> [CategoryGroupRow] {
         categoryGroupsPlain.map { categoryGroupPlain in
-            map(categoryGroupPlain: categoryGroupPlain, using: transactionsByCategory, in: budgetRange)
+            map(
+                categoryGroupPlain: categoryGroupPlain,
+                using: transactionsByCategory,
+                creditCardAccountIDs: creditCardAccountIDs,
+                in: budgetRange
+            )
         }
     }
     
     func map(
         categoryGroupPlain: CategoryGroupPlain,
         using transactionsByCategory: TransactionsByCategory,
+        creditCardAccountIDs: Set<ID<TransactionAccount>>,
         in budgetRange: ClosedRange<MonthYear>
     ) -> CategoryGroupRow {
-        let categories = map(categoriesPlain: categoryGroupPlain.categories, using: transactionsByCategory, in: budgetRange)
+        let categories = map(
+            categoriesPlain: categoryGroupPlain.categories,
+            using: transactionsByCategory,
+            creditCardAccountIDs: creditCardAccountIDs,
+            in: budgetRange
+        )
+        
         return CategoryGroupRow(
             id: ID<CategoryGroupRow>(categoryGroupPlain.id),
             name: categoryGroupPlain.name,
@@ -418,20 +445,22 @@ public final class BudgetRowMapper: Sendable {
     func map(
         categoriesPlain: [CategoryPlain],
         using transactionsByCategory: TransactionsByCategory,
+        creditCardAccountIDs: Set<ID<TransactionAccount>>,
         in budgetRange: ClosedRange<MonthYear>
     ) -> [CategoryRow] {
         categoriesPlain.map { categoryPlain in
-            map(categoryPlain: categoryPlain, using: transactionsByCategory, in: budgetRange)
+            map(categoryPlain: categoryPlain, using: transactionsByCategory, creditCardAccountIDs: creditCardAccountIDs, in: budgetRange)
         }
     }
     
     func map(
         categoryPlain: CategoryPlain,
         using transactionsByCategory: TransactionsByCategory,
+        creditCardAccountIDs: Set<ID<TransactionAccount>>,
         in budgetRange: ClosedRange<MonthYear>
     ) -> CategoryRow {
         let transactions = transactionsByCategory[ID<TransactionCategory>(categoryPlain.id)] ?? []
-        let activity = activity(from: transactions, in: budgetRange)
+        let activity = activity(from: transactions, creditCardAccountIDs: creditCardAccountIDs, in: budgetRange)
 
         return CategoryRow(
             id: ID<CategoryRow>(categoryPlain.id),
@@ -482,15 +511,18 @@ public final class BudgetRowMapper: Sendable {
 
     func activity(
         from transactions: [BudgetTransaction],
+        creditCardAccountIDs: Set<ID<TransactionAccount>>,
         in budgetRange: ClosedRange<MonthYear>
     ) -> [MonthYear: Activity] {
-        let byMonth = Dictionary(grouping: transactions) { MonthYear(from: $0.date) }
+        let transactionsByMonth = Dictionary(grouping: transactions) { MonthYear(from: $0.date) }
         
         var activity: [MonthYear: Activity] = [:]
         
         for monthYear in budgetRange {
-            let monthly = byMonth[monthYear] ?? []
-            activity[monthYear] = Activity(total: monthly.netAmount, transactions: monthly)
+            activity[monthYear] = Activity(
+                transactions: transactionsByMonth[monthYear] ?? [],
+                creditCardAccountIDs: creditCardAccountIDs
+            )
         }
         return activity
     }
@@ -508,13 +540,12 @@ public final class BudgetRowMapper: Sendable {
             let previous = available[monthYear.advanced(by: -1)]?.total ?? 0.00
             let cashFromLastMonth = max(previous, 0.00)
             let assignedThisMonth = assigned[monthYear] ?? 0.00
-            let cashSpendingThisMonth = activity[monthYear]?.total ?? 0.00
             
             available[monthYear] = Available(
-                total: cashFromLastMonth + assignedThisMonth + cashSpendingThisMonth,
                 cashFromLastMonth: cashFromLastMonth,
                 assignedThisMonth: assignedThisMonth,
-                cashSpendingThisMonth: cashSpendingThisMonth,
+                cashActivityThisMonth: activity[monthYear]?.cashTotal ?? 0.00,
+                creditActivityThisMonth: activity[monthYear]?.creditTotal ?? 0.00,
                 message: ""
             )
         }
