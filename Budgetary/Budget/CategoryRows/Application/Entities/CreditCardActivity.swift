@@ -14,6 +14,7 @@ public struct CreditCardActivity: Equatable, Hashable, Sendable {
     let returnsApplied: Decimal  // net refunds by category, up to what the card owes
     let fundedSpending: Decimal  // net spending covered by category budgets
     let payments: Decimal        // transfer payees, inflows (magnitude)
+    let overpayment: Decimal     // payments that take the card's balance above £0
     let transfersOut: Decimal    // transfer payees, outflows (magnitude)
     let transactions: [BudgetTransaction]
     
