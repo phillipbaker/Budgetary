@@ -14,17 +14,14 @@ public final class BudgetRowMapper: Sendable {
     // MARK: - Budget Data
     
     func mapBudgetData(from data: BudgetDataPlain) -> BudgetData {
-        let readyToAssignID = data.categoryGroupsPlain.readyToAssignCategoryID
-            .map { ID<TransactionCategory>($0) }
+        
+        // MARK: Transactions
         
         let transactions = data.budgetAccountsPlain.flatMap { account in
             TransactionMapper.mapTransactions(for: account, fromPayees: data.payeesPlain, andCategoryGroups: data.categoryGroupsPlain)
         }
         
-        let transactionsByCategory = Dictionary(
-            grouping: transactions.filteredBySpending.filter { $0.category != nil },
-            by: { $0.category!.id }
-        )
+        // MARK: Budget Range
         
         let budgetRange = budgetRange(
             fromCategoryGroups: data.categoryGroupsPlain,
@@ -32,29 +29,42 @@ public final class BudgetRowMapper: Sendable {
             and: transactions
         )
         
+        // MARK: Credit Card Account IDs
+        
         let creditCardAccountIDs = Set(
             data.budgetAccountsPlain
                 .filter { $0.accountType == .creditCard }
                 .map { ID<TransactionAccount>($0.id) }
         )
-        
-        let readyToAssignActivity = activity(
-            from: readyToAssignID.flatMap { transactionsByCategory[$0] } ?? [],
-            creditCardAccountIDs: creditCardAccountIDs,
-            in: budgetRange
+
+        // MARK: Category Group Rows
+
+        let transactionsByCategory = Dictionary(
+            grouping: transactions.filteredBySpending.filter { $0.category != nil },
+            by: { $0.category!.id }
         )
-        
+
         let categoryGroupRows = map(
             categoryGroupsPlain: data.categoryGroupsPlain,
             using: transactionsByCategory,
             creditCardAccountIDs: creditCardAccountIDs,
             in: budgetRange
         )
+        
+        // MARK: Available By Category
 
+        let availableByCategory: AvailableByCategory = Dictionary(
+            categoryGroupRows
+                .flatMap(\.categories)
+                .map { (ID<TransactionCategory>($0.id), $0.available.mapValues(\.total)) }, uniquingKeysWith: { first, _ in first }
+        )
+
+        // MARK: Uncategorized Row
+        
         let uncategorizedTransactions = transactions
             .filter { $0.category == nil }
             .filteredBySpending // exclude transfers
-
+        
         let uncategorizedActivity = activity(
             from: uncategorizedTransactions,
             creditCardAccountIDs: creditCardAccountIDs,
@@ -70,12 +80,8 @@ public final class BudgetRowMapper: Sendable {
             activity: uncategorizedActivity,
             available: available(assigned: [:], using: uncategorizedActivity, in: budgetRange)
         )
-
-        let availableByCategory: AvailableByCategory = Dictionary(
-            categoryGroupRows
-                .flatMap(\.categories)
-                .map { (ID<TransactionCategory>($0.id), $0.available.mapValues(\.total)) }, uniquingKeysWith: { first, _ in first }
-        )
+        
+        // MARK: Ready to Assign
         
         let startingBalanceByAccount: [UUID: Decimal] = Dictionary(
             data.budgetAccountsPlain.map { ($0.id.rawValue, $0.startingBalance) },
@@ -89,6 +95,38 @@ public final class BudgetRowMapper: Sendable {
             availableByCategory: availableByCategory,
             in: budgetRange
         )
+
+        let readyToAssignID = data.categoryGroupsPlain.readyToAssignCategoryID
+            .map { ID<TransactionCategory>($0) }
+
+        let inflows = activity(
+            from: readyToAssignID.flatMap { transactionsByCategory[$0] } ?? [],
+            creditCardAccountIDs: creditCardAccountIDs,
+            in: budgetRange
+        ).mapValues(\.total)
+        
+        let creditCardOverpaymentsByMonth = totalsByMonth(creditCardPaymentRows) { $0.activity.mapValues(\.overpayment) }
+        
+        let inflowsByMonth = inflows.merging(creditCardOverpaymentsByMonth, uniquingKeysWith: +)
+        
+        let spendingRows = [uncategorizedRow] + categoryGroupRows
+            .filter { $0.kind != .inflow }
+            .flatMap(\.categories)
+        
+        let assignedByMonth = totalsByMonth(spendingRows) { $0.assigned.mapValues(\.assignedThisMonth) }
+            .merging(totalsByMonth(creditCardPaymentRows) { $0.assigned.mapValues(\.assignedThisMonth) }, uniquingKeysWith: +)
+        
+        let cashOverspendingByMonth = totalsByMonth(spendingRows) { $0.available.mapValues(\.cashOverspending) }
+            .merging(totalsByMonth(creditCardPaymentRows) { $0.available.mapValues(\.cashOverspending) }, uniquingKeysWith: +)
+        
+        let readyToAssign = readyToAssign(
+            inflowsByMonth: inflowsByMonth,
+            assignedByMonth: assignedByMonth,
+            cashOverspendingByMonth: cashOverspendingByMonth,
+            in: budgetRange
+        )
+        
+        // MARK: Credit Card Payment Group
         
         let creditCardPaymentGroup = creditCardPaymentGroup(
             id: data.creditCardPaymentGroupPlain.id,
@@ -96,13 +134,7 @@ public final class BudgetRowMapper: Sendable {
             creditCardPaymentRows: creditCardPaymentRows
         )
         
-        let readyToAssign = readyToAssign(
-            inflows: readyToAssignActivity,
-            creditCardPaymentRows: creditCardPaymentRows,
-            categoryGroupRows: categoryGroupRows,
-            uncategorizedRow: uncategorizedRow,
-            in: budgetRange
-        )
+        // MARK: Settings
 
         let settings = map(budgetSettingsPlain: data.budgetPlain.settings)
 
@@ -120,20 +152,12 @@ public final class BudgetRowMapper: Sendable {
     // MARK: - Ready To Assign
 
     func readyToAssign(
-        inflows: [MonthYear: Activity],
-        creditCardPaymentRows: [CreditCardPaymentRow],
-        categoryGroupRows: [CategoryGroupRow],
-        uncategorizedRow: CategoryRow,
+        inflowsByMonth: [MonthYear: Decimal],
+        assignedByMonth: [MonthYear: Decimal],
+        cashOverspendingByMonth: [MonthYear: Decimal],
         in budgetRange: ClosedRange<MonthYear>
     ) -> [MonthYear: ReadyToAssign] {
         var readyToAssign: [MonthYear: ReadyToAssign] = [:]
-
-        let spendingRows = [uncategorizedRow] + categoryGroupRows
-            .filter { $0.kind != .inflow }
-            .flatMap(\.categories)
-        
-        let assignedByMonth = totalsByMonth(spendingRows) { $0.assigned.mapValues(\.assignedThisMonth) }
-            .merging(totalsByMonth(creditCardPaymentRows) { $0.assigned.mapValues(\.assignedThisMonth) }, uniquingKeysWith: +)
         
         for monthYear in budgetRange {
             // Inflows for monthYear
@@ -143,11 +167,11 @@ public final class BudgetRowMapper: Sendable {
                 readyToAssignFromLastMonth = lastMonth.availableToAssignFromLastMonth + lastMonth.inflowThisMonth - lastMonth.assignedThisMonth - lastMonth.cashOverspendingLastMonth
             }
             
-            let inflowThisMonth = inflows[monthYear]?.total ?? 0
+            let inflowThisMonth = inflowsByMonth[monthYear] ?? 0
             let totalInflowsThisMonth = readyToAssignFromLastMonth + inflowThisMonth
             
             // Outflows for monthYear
-            let cashOverspendingLastMonth = cashOverspendingLastMonth(for: monthYear, in: spendingRows)
+            let cashOverspendingLastMonth = cashOverspendingByMonth[monthYear.advanced(by: -1)] ?? 0
             let assignedThisMonth = assignedByMonth[monthYear] ?? 0
             let assignedInFuture: Decimal = {
                 // Calculate inflow/outflow balance for current month excluding assignedInFuture
@@ -187,12 +211,6 @@ public final class BudgetRowMapper: Sendable {
         return readyToAssign
     }
 
-    func cashOverspendingLastMonth(for monthYear: MonthYear, in spendingCategories: [CategoryRow]) -> Decimal {
-        return spendingCategories
-            .compactMap { $0.available[monthYear.advanced(by: -1)]?.cashOverspending }
-            .reduced
-    }
-
     // MARK: - Credit Card Payments Plain -> Rows
     
     func creditCardPaymentGroup(
@@ -215,7 +233,7 @@ public final class BudgetRowMapper: Sendable {
             map(paymentPlain: cardPayment, using: transactions, startingBalance: startingBalanceByAccount[cardPayment.accountID] ?? 0, availableByCategory: availableByCategory, in: budgetRange)
         }
     }
-    
+
     func map(paymentPlain: CreditCardPaymentPlain, using transactions: [BudgetTransaction], startingBalance: Decimal, availableByCategory: AvailableByCategory, in budgetRange: ClosedRange<MonthYear>) -> CreditCardPaymentRow {
         let activity = activity(
             for: paymentPlain,
@@ -314,10 +332,15 @@ public final class BudgetRowMapper: Sendable {
             var fundedSpending: Decimal = 0.00
             var netRefunds: Decimal = 0.00
             
+            var netRefundCategoryIDs: Set<ID<TransactionCategory>> = []
+            
             for (category, netSpending) in spendingByCategory {
                 guard let categoryID = category?.id else { continue }
                 guard netSpending > 0 else {
-                    netRefunds += -netSpending
+                    if netSpending < 0 {
+                        netRefunds += -netSpending
+                        netRefundCategoryIDs.insert(categoryID)
+                    }
                     continue
                 }
                 
@@ -344,9 +367,23 @@ public final class BudgetRowMapper: Sendable {
                 .mappedToMagnitudes
                 .reduced
             
-            let monthNet = monthlyCardTransactions.netAmount
-            let balanceBeforeRefunds = balance + monthNet - netRefunds
-            let returnsApplied = min(netRefunds, max(-balanceBeforeRefunds, 0))
+            var overpayment: Decimal = 0
+            var debtPaidByRefunds: Decimal = 0
+            
+            for transaction in monthlyCardTransactions.sorted(by: cardOrder) {
+                let before = balance
+                balance += transaction.amount.signedValue
+
+                if transaction.isPayment {
+                    overpayment += max(balance, 0) - max(before, 0)       // how far above £0 it went
+                } else if transaction.isRefund,
+                          let categoryID = transaction.category?.id,
+                          netRefundCategoryIDs.contains(categoryID) {
+                    debtPaidByRefunds += min(balance, 0) - min(before, 0) // how much debt it cleared
+                }
+            }
+            
+            let returnsApplied = min(netRefunds, debtPaidByRefunds)
             
             activity[monthYear] = CreditCardActivity(
                 spending: spending,
@@ -354,16 +391,28 @@ public final class BudgetRowMapper: Sendable {
                 returnsApplied: returnsApplied,
                 fundedSpending: fundedSpending,
                 payments: payments,
+                overpayment: overpayment,
                 transfersOut: transfersOut,
                 transactions: monthlyCardTransactions
             )
-            
-            balance += monthNet
         }
         
         return activity
     }
     
+    /// Sorts a card's transactions by date. On the same day, charges and transfers out
+    /// come first, then payments, then refunds.
+    private func cardOrder(_ lhs: BudgetTransaction, _ rhs: BudgetTransaction) -> Bool {
+        if lhs.date != rhs.date { return lhs.date < rhs.date }
+        return sameDayRank(lhs) < sameDayRank(rhs)
+    }
+    
+    private func sameDayRank(_ transaction: BudgetTransaction) -> Int {
+        if transaction.isPayment { 1 }
+        else if transaction.isRefund { 2 }
+        else { 0 } // charges and transfers out
+    }
+
     // MARK: Available
 
     func available(for cardPaymentPlain: CreditCardPaymentPlain, using activity: [MonthYear: CreditCardActivity], in budgetRange: ClosedRange<MonthYear>) -> [MonthYear: CreditCardAvailable] {
@@ -391,7 +440,7 @@ public final class BudgetRowMapper: Sendable {
         
         return available
     }
-
+    
     // MARK: - Category Groups Plain -> Rows
     
     func map(

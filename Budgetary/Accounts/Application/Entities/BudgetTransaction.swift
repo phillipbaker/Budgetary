@@ -19,6 +19,14 @@ public struct BudgetTransaction: Equatable, Hashable, Sendable {
     let linkedTransactionID: ID<BudgetTransaction>? // only when payee type is .transfer
 }
 
+extension BudgetTransaction {
+    var isInflow: Bool { if case .inflow = amount { true } else { false } }
+    var isTransfer: Bool { if case .transfer = payee?.type { true } else { false } }
+    
+    var isPayment: Bool { isInflow && isTransfer }
+    var isRefund: Bool { isInflow && !isTransfer }
+}
+
 enum TransactionCategoryType: Equatable {
     case inflow
     case category(TransactionCategory)

@@ -66,6 +66,7 @@ struct BudgetRowMapperTests {
     struct ReadyToAssignTests {
         let mapper = BudgetRowMapper()
 
+        let october = MonthYear(month: 10, year: 2026)
         let november = MonthYear(month: 11, year: 2026)
         let december = MonthYear(month: 12, year: 2026)
 
@@ -160,12 +161,71 @@ struct BudgetRowMapperTests {
             #expect(nextMonth.readyToAssignThisMonth == 160)
         }
 
-        // MARK: - Helpers
+        // MARK: - Card payment overspending and overpayments
+
+        // Each case starts with £200 of income in October and checks November and December.
+        // In every case December's Ready to Assign equals the cash on hand, less what
+        // categories have left over.
+
+        @Test("A payment beyond what's owed is added to Ready to Assign, and the payment row's overspending is taken")
+        func overpaymentIsInflowAndPaymentOverspendingIsTaken() throws {
+            // £40 funded in October and £40 unfunded in November. The £100 payment clears
+            // the £80 owed and leaves the card £20 in credit.
+            let budget = cardBudget(
+                [.charge(40, october), .charge(40, november), .payment(100, november)],
+                groceriesAssigned: [october: 40]
+            )
+            let thisMonth = try #require(budget.readyToAssign[november])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(paymentAvailable(in: budget, november) == -60)
+            #expect(thisMonth.inflowThisMonth == 20)
+            #expect(thisMonth.readyToAssignThisMonth == 180)
+            #expect(nextMonth.cashOverspendingLastMonth == 60)
+            #expect(nextMonth.readyToAssignThisMonth == 120)
+        }
+
+        @Test("A refund that pays down unfunded spending is taken from next month's Ready to Assign")
+        func refundOfUnfundedSpendingIsTaken() throws {
+            // The refund clears the £40 owed and leaves the card £20 in credit. Groceries gets
+            // the whole £60, so none of it is added to Ready to Assign.
+            let budget = cardBudget([.charge(40, october), .refund(60, november)])
+            let thisMonth = try #require(budget.readyToAssign[november])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(paymentAvailable(in: budget, november) == -40)
+            #expect(thisMonth.inflowThisMonth == 0)
+            #expect(thisMonth.readyToAssignThisMonth == 200)
+            #expect(nextMonth.cashOverspendingLastMonth == 40)
+            #expect(nextMonth.readyToAssignThisMonth == 160)
+        }
+
+        @Test("A refund before a payment clears the debt, so the whole payment is an overpayment")
+        func refundBeforePaymentMakesWholePaymentOverpayment() throws {
+            let budget = cardBudget([.charge(40, october), .refund(60, november, day: 10), .payment(50, november, day: 20)])
+            let thisMonth = try #require(budget.readyToAssign[november])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(paymentAvailable(in: budget, november) == -90)
+            #expect(thisMonth.readyToAssignThisMonth == 250)
+            #expect(nextMonth.readyToAssignThisMonth == 160)
+        }
+
+        @Test("A payment before a refund clears the debt, so only the excess is an overpayment")
+        func paymentBeforeRefundMakesExcessOverpayment() throws {
+            let budget = cardBudget([.charge(40, october), .payment(50, november, day: 10), .refund(60, november, day: 20)])
+            let thisMonth = try #require(budget.readyToAssign[november])
+            let nextMonth = try #require(budget.readyToAssign[december])
+
+            #expect(paymentAvailable(in: budget, november) == -50)
+            #expect(thisMonth.readyToAssignThisMonth == 210)
+            #expect(nextMonth.readyToAssignThisMonth == 160)
+        }
 
         enum SpendingCategory {
             case groceries
         }
-
+        
         /// A November purchase, in cash or on the card, with a category or uncategorized.
         enum Spending {
             case cash(Decimal, SpendingCategory?)
@@ -214,6 +274,60 @@ struct BudgetRowMapperTests {
             )
 
             return mapper.mapBudgetData(from: data)
+        }
+
+        /// A transaction on the card in Groceries, or a payment from checking to the card.
+        enum CardTransaction {
+            case charge(Decimal, MonthYear, day: Int = 15)
+            case refund(Decimal, MonthYear, day: Int = 15)
+            case payment(Decimal, MonthYear, day: Int = 15)
+        }
+
+        /// A budget with £200 of income in October, one spending category and one card.
+        func cardBudget(_ cardTransactions: [CardTransaction], groceriesAssigned: [MonthYear: Decimal] = [:]) -> BudgetData {
+            let cardID = ID<BudgetAccountPlain>()
+            let checkingID = ID<BudgetAccountPlain>()
+
+            let employer = Plain.payee("Employer", type: .regular)
+            let shop = Plain.payee("Shop", type: .regular)
+            let fromChecking = Plain.payee("Checking", type: .transfer(checkingID))
+            let toCard = Plain.payee("Credit Card", type: .transfer(cardID))
+            let readyToAssign = Plain.category("Ready to Assign")
+            let groceries = Plain.category("Groceries", assigned: groceriesAssigned)
+
+            var checkingTransactions = [Plain.transaction(.inflow(200), payee: employer, category: readyToAssign, in: october)]
+            var cardSide: [TransactionPlain] = []
+
+            for transaction in cardTransactions {
+                switch transaction {
+                case let .charge(amount, monthYear, day):
+                    cardSide.append(Plain.transaction(.outflow(amount), payee: shop, category: groceries, in: monthYear, day: day))
+                case let .refund(amount, monthYear, day):
+                    cardSide.append(Plain.transaction(.inflow(amount), payee: shop, category: groceries, in: monthYear, day: day))
+                case let .payment(amount, monthYear, day):
+                    cardSide.append(Plain.transaction(.inflow(amount), payee: fromChecking, in: monthYear, day: day))
+                    checkingTransactions.append(Plain.transaction(.outflow(amount), payee: toCard, in: monthYear, day: day))
+                }
+            }
+
+            let data = Plain.budgetData(
+                payees: [employer, shop, fromChecking, toCard],
+                accounts: [
+                    Plain.account(checkingID, "Checking", type: .checking, transactions: checkingTransactions),
+                    Plain.account(cardID, "Credit Card", type: .creditCard, transactions: cardSide)
+                ],
+                categoryGroups: [
+                    Plain.categoryGroup("Inflow", kind: .inflow, categories: [readyToAssign]),
+                    Plain.categoryGroup("Spending", categories: [groceries])
+                ],
+                cardPayments: [Plain.cardPayment("Credit Card", accountID: cardID)]
+            )
+
+            return mapper.mapBudgetData(from: data)
+        }
+
+        func paymentAvailable(in budget: BudgetData, _ monthYear: MonthYear) -> Decimal? {
+            budget.creditCardPaymentGroup.creditCardPayments.first?.available[monthYear]?.total
         }
     }
 
@@ -444,6 +558,128 @@ struct BudgetRowMapperTests {
             #expect(activity[november]?.returnsApplied == 60)
         }
 
+        @Test("An uncategorized refund that clears what's owed leaves nothing for later refunds")
+        func uncategorizedRefundClearsDebtFirst() {
+            let activity = activity([
+                charge(40, kidsClothes, in: october),
+                refund(40, nil, in: november, day: 10),
+                refund(30, kidsClothes, in: november, day: 20)
+            ])
+
+            #expect(activity[november]?.returnsApplied == 0)
+        }
+
+        @Test("A refund netted against a charge in its category doesn't pay down the card")
+        func nettedRefundIsNotApplied() {
+            // Groceries nets to £10 of spending, so only the Gifts refund is a net refund.
+            // It clears the last £10 the card owes, and the rest is a credit balance.
+            let activity = activity([
+                charge(40, groceries, in: november, day: 5),
+                refund(30, groceries, in: november, day: 10),
+                refund(20, gifts, in: november, day: 20)
+            ])
+
+            #expect(activity[november]?.returnsApplied == 10)
+        }
+
+        @Test("A refund that nets a category to zero doesn't pay down the card")
+        func refundNettingToZeroIsNotApplied() {
+            // Gifts nets to £0, so its refund only cancels its own charge. The card owes
+            // nothing after that, so the Kids Clothes refund has no debt to clear.
+            let activity = activity([
+                charge(35, gifts, in: november, day: 5),
+                refund(35, gifts, in: november, day: 10),
+                refund(30, kidsClothes, in: november, day: 20)
+            ])
+
+            #expect(activity[november]?.returnsApplied == 0)
+        }
+
+        // MARK: - Order within a month
+
+        @Test("A refund before a payment pays down the card first")
+        func refundBeforePaymentIsApplied() {
+            let activity = activity([
+                charge(40, kidsClothes, in: october),
+                refund(60, kidsClothes, in: november, day: 10),
+                payment(50, in: november, day: 20)
+            ])
+
+            #expect(activity[november]?.returnsApplied == 40)
+            #expect(activity[november]?.overpayment == 50)
+            #expect(activity[november]?.totalActivity == -90)
+        }
+
+        @Test("A payment before a refund pays down the card first")
+        func paymentBeforeRefundIsApplied() {
+            let activity = activity([
+                charge(40, kidsClothes, in: october),
+                payment(50, in: november, day: 10),
+                refund(60, kidsClothes, in: november, day: 20)
+            ])
+
+            #expect(activity[november]?.returnsApplied == 0)
+            #expect(activity[november]?.overpayment == 10)
+            #expect(activity[november]?.totalActivity == -50)
+        }
+
+        @Test("On the same day, a payment comes before a refund")
+        func sameDayPaymentComesBeforeRefund() {
+            let activity = activity([
+                charge(40, kidsClothes, in: october),
+                refund(60, kidsClothes, in: november),
+                payment(50, in: november)
+            ])
+
+            #expect(activity[november]?.returnsApplied == 0)
+            #expect(activity[november]?.overpayment == 10)
+        }
+
+        // MARK: - Overpayments
+
+        @Test("A payment within what's owed isn't an overpayment")
+        func paymentWithinDebtIsNotOverpayment() {
+            let activity = activity([charge(100, kidsClothes, in: october), payment(60, in: november)])
+
+            #expect(activity[november]?.overpayment == 0)
+        }
+
+        @Test("A payment beyond what's owed is an overpayment by the difference")
+        func paymentBeyondDebtIsOverpayment() {
+            let activity = activity([charge(80, kidsClothes, in: october), payment(100, in: november)])
+
+            #expect(activity[november]?.overpayment == 20)
+        }
+
+        @Test("A payment to a card that owes nothing is all overpayment")
+        func paymentWithNoDebtIsOverpayment() {
+            let activity = activity([payment(50, in: november)])
+
+            #expect(activity[november]?.overpayment == 50)
+        }
+
+        @Test("A payment to a card already in credit is all overpayment")
+        func paymentInCreditIsOverpayment() {
+            let activity = activity([payment(30, in: november)], startingBalance: 20)
+
+            #expect(activity[november]?.overpayment == 30)
+        }
+
+        @Test("A transfer out of the card reduces an overpayment")
+        func transferOutReducesOverpayment() {
+            let activity = activity([transferOut(30, in: november), payment(50, in: november)])
+
+            #expect(activity[november]?.overpayment == 20)
+        }
+
+        @Test("A refund that puts the card in credit isn't an overpayment")
+        func refundIntoCreditIsNotOverpayment() {
+            let activity = activity([charge(40, kidsClothes, in: october), refund(60, kidsClothes, in: november)])
+
+            #expect(activity[november]?.returnsApplied == 40)
+            #expect(activity[november]?.overpayment == 0)
+        }
+
         // MARK: - Payment category available
 
         @Test("Money assigned to the card adds to what's set aside")
@@ -457,16 +693,18 @@ struct BudgetRowMapperTests {
             #expect(available[november]?.total == 100)
         }
 
-        // Current behaviour. A negative balance should probably be taken from
-        // Ready to Assign the next month instead.
-        @Test("A negative balance doesn't carry into the next month")
+        // The negative balance is cash overspending, taken from next month's
+        // Ready to Assign instead (#48).
+        @Test("A negative balance is cash overspending and doesn't carry into the next month")
         func negativeAvailableDoesNotCarryForward() {
             let activity = activity([payment(50, in: october)])
             let available = available(using: activity)
 
             #expect(available[october]?.total == -50)
+            #expect(available[october]?.cashOverspending == 50)
             #expect(available[november]?.cashFromLastMonth == 0)
             #expect(available[november]?.total == 0)
+            #expect(available[november]?.cashOverspending == 0)
         }
 
         @Test("A refund of funded spending and a payment reduce what's set aside")
@@ -594,23 +832,24 @@ struct BudgetRowMapperTests {
             _ amount: Decimal,
             _ category: TransactionCategory?,
             in monthYear: MonthYear,
-            on account: TransactionAccount? = nil
+            on account: TransactionAccount? = nil,
+            day: Int = 15
         ) -> BudgetTransaction {
-            transaction(.outflow(amount), payee: .regular(name: "Shop"), category: category, in: monthYear, on: account ?? card)
+            transaction(.outflow(amount), payee: .regular(name: "Shop"), category: category, in: monthYear, day: day, on: account ?? card)
         }
 
-        func refund(_ amount: Decimal, _ category: TransactionCategory?, in monthYear: MonthYear) -> BudgetTransaction {
-            transaction(.inflow(amount), payee: .regular(name: "Shop"), category: category, in: monthYear)
+        func refund(_ amount: Decimal, _ category: TransactionCategory?, in monthYear: MonthYear, day: Int = 15) -> BudgetTransaction {
+            transaction(.inflow(amount), payee: .regular(name: "Shop"), category: category, in: monthYear, day: day)
         }
 
         /// A payment from checking to the card.
-        func payment(_ amount: Decimal, in monthYear: MonthYear) -> BudgetTransaction {
-            transaction(.inflow(amount), payee: checkingPayee, category: nil, in: monthYear)
+        func payment(_ amount: Decimal, in monthYear: MonthYear, day: Int = 15) -> BudgetTransaction {
+            transaction(.inflow(amount), payee: checkingPayee, category: nil, in: monthYear, day: day)
         }
 
         /// A transfer from the card to checking, such as a cash advance.
-        func transferOut(_ amount: Decimal, in monthYear: MonthYear) -> BudgetTransaction {
-            transaction(.outflow(amount), payee: checkingPayee, category: nil, in: monthYear)
+        func transferOut(_ amount: Decimal, in monthYear: MonthYear, day: Int = 15) -> BudgetTransaction {
+            transaction(.outflow(amount), payee: checkingPayee, category: nil, in: monthYear, day: day)
         }
 
         var checkingPayee: Payee {
@@ -622,11 +861,12 @@ struct BudgetRowMapperTests {
             payee: Payee,
             category: TransactionCategory?,
             in monthYear: MonthYear,
+            day: Int = 15,
             on account: TransactionAccount? = nil
         ) -> BudgetTransaction {
             BudgetTransaction(
                 id: ID<BudgetTransaction>(),
-                date: Calendar.current.date(from: DateComponents(year: monthYear.year, month: monthYear.month, day: 15))!,
+                date: Calendar.current.date(from: DateComponents(year: monthYear.year, month: monthYear.month, day: day))!,
                 memo: "",
                 amount: amount,
                 isCleared: false,
@@ -715,16 +955,17 @@ private enum Plain {
         )
     }
 
-    /// A transaction on the 15th of `monthYear`.
+    /// A transaction on `day` of `monthYear`, the 15th unless given.
     static func transaction(
         _ amount: Amount,
         payee: PayeePlain,
         category: CategoryPlain? = nil,
-        in monthYear: MonthYear
+        in monthYear: MonthYear,
+        day: Int = 15
     ) -> TransactionPlain {
         TransactionPlain(
             id: ID<TransactionPlain>(),
-            date: Calendar.current.date(from: DateComponents(year: monthYear.year, month: monthYear.month, day: 15))!,
+            date: Calendar.current.date(from: DateComponents(year: monthYear.year, month: monthYear.month, day: day))!,
             memo: "",
             amount: amount,
             isCleared: false,
